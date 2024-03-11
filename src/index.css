@@ -1,0 +1,164 @@
+.hide {
+  display: none;
+}
+
+.playing {
+  width: 300px;
+  height: 60px;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+.playing_opp {
+  height: 60px;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0.1rem;
+  box-sizing: border-box;
+  transform: rotate(3.142rad);
+  position: absolute;
+  bottom: 0;
+}
+
+.playing__bar {
+  display: inline-block;
+  width: 2.567px;
+
+  animation: up-and-down 1.3s ease infinite alternate;
+}
+
+.playing__bar1 {
+  background: linear-gradient(
+    90deg,
+    #73dd24 -1265.13%,
+    #00bbe4 5589.67%,
+    #46d77d 12029.02%
+  );
+}
+
+.playing__bar2 {
+  background: linear-gradient(
+    90deg,
+    #73dd24 -4156.88%,
+    #00bbe4 2697.95%,
+    #46d77d 9137.33%
+  );
+}
+
+.playing__bar3 {
+  background: linear-gradient(
+    90deg,
+    #73dd24 -7590.87%,
+    #00bbe4 -736%,
+    #46d77d 5703.42%
+  );
+}
+
+.playing__bar4 {
+  background: linear-gradient(
+    90deg,
+    #73dd24 -9580.32%,
+    #00bbe4 -2724.47%,
+    #46d77d 3715.87%
+  );
+}
+.playing__bar5 {
+  background: linear-gradient(90deg, #00bbe4 -5434.97%, #46d77d 1004.29%);
+}
+
+.playing__bar5 {
+  background: linear-gradient(90deg, #00bbe4 -5434.97%, #46d77d 1004.29%);
+}
+
+@keyframes up-and-down {
+  10% {
+    height: 30%;
+  }
+
+  30% {
+    height: 100%;
+  }
+
+  60% {
+    height: 50%;
+  }
+
+  80% {
+    height: 75%;
+  }
+
+  100% {
+    height: 60%;
+  }
+}
+
+.audioSelectedWord {
+  border-radius: 12px;
+  border-top: 1px solid var(--Button-Green, #58cc02);
+  border-right: 1px solid var(--Button-Green, #58cc02);
+  border-bottom: 3px solid var(--Button-Green, #58cc02);
+  border-left: 1px solid var(--Button-Green, #58cc02);
+  background: var(--Text-White, #fff);
+}
+
+.successHeader {
+  color: #1cc871;
+  -webkit-text-stroke-width: 0.5;
+  -webkit-text-stroke-color: #00b359;
+  font-family: Quicksand;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110.6%; /* 55.3px */
+  letter-spacing: 2px;
+}
+
+.shakeImage {
+  animation: Shake 0.5s linear infinite;
+}
+
+/*Using keyframes for shaking an image*/
+@keyframes Shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0eg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.plane {
+  /* bottom: 15%; */
+  /* position: absolute; */
+  animation: run 5s linear infinite;
+}
+
+@keyframes run {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+.assesmentCompleteLevelText {
+  transform: rotate(-12deg);
+}
