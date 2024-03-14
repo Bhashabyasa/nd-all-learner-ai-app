@@ -32,10 +32,11 @@ import desktopLevel2 from "../../assets/images/desktopLevel2.png";
 import desktopLevel3 from "../../assets/images/desktopLevel3.jpg";
 import desktopLevel4 from "../../assets/images/desktopLevel4.png";
 import desktopLevel5 from "../../assets/images/desktopLevel5.png";
-import profilePic from "../../assets/images/profile_url.svg";
+import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
-import scoreView from "../../assets/images/scoreView.svg";
-import back from "../../assets/images/back-arrow.svg";
+import scoreView from "../../assets/images/scoreView.png";
+import back from "../../assets/images/back-arrow.png";
+import { jwtDecode } from 'jwt-decode';
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -318,8 +319,13 @@ export const ProfileHeader = ({
 };
 
 const Assesment = ({ discoverStart }) => {
+  let username;
+  if (localStorage.getItem('token') !== null) {
+    let jwtToken = localStorage.getItem('token');
+    var userDetails = jwtDecode(jwtToken);
+    username=  userDetails.student_name
+  }
   const [searchParams, setSearchParams] = useSearchParams();
-  let username = searchParams.get("username");
   const [profileName, setProfileName] = useState(username);
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
@@ -332,6 +338,8 @@ const Assesment = ({ discoverStart }) => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
     setLocalData("lang", lang);
+     dispatch(setVirtualId(localStorage.getItem('virtualId')));
+     let session_id = localStorage.setItem("sessionId", localStorage.getItem('contentSessionId'));
     if (discoverStart && username) {
       (async () => {
         setLocalData("profileName", username);
@@ -350,8 +358,7 @@ const Assesment = ({ discoverStart }) => {
           getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
         );
         localStorage.setItem("virtualId", usernameDetails.data.virtualID);
-        let session_id = `${usernameDetails.data.virtualID}${Date.now()}`;
-        localStorage.setItem("sessionId", `${session_id}`);
+        let session_id = localStorage.setItem("sessionId", localStorage.getItem('contentSessionId'));
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
