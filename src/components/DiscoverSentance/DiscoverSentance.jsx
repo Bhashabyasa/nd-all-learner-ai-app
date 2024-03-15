@@ -59,15 +59,17 @@ const SpeakSentenceComponent = () => {
   }, [currentQuestion]);
 
   useEffect(() => {
-    (async () => {
-      const sessionId = getLocalData("sessionId");
-      const virtualId = getLocalData("virtualId");
-      const lang = getLocalData("lang");
-      const getPointersDetails = await axios.get(
-        `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
-      );
-      setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
-    })();
+    if(!(localStorage.getItem("contentSessionId") !== null)){
+      (async () => {
+        const sessionId = getLocalData("sessionId");
+        const virtualId = getLocalData("virtualId");
+        const lang = getLocalData("lang");
+        const getPointersDetails = await axios.get(
+          `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+          );
+          setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+        })();
+      }
   }, []);
 
   useEffect(() => {
@@ -90,12 +92,22 @@ const SpeakSentenceComponent = () => {
     //eslint-disable-next-line
   }, [voiceText]);
 
+  const send = (score) => {
+      if (window && window.parent) {
+        window.parent.postMessage({
+          score: score,
+          message: 'all-test-rig-score',
+        });
+      }
+  };
+
   const handleNext = async () => {
     setEnableNext(false);
 
     try {
       const lang = getLocalData("lang");
 
+      if(!(localStorage.getItem("contentSessionId") !== null)){
       const pointsRes = await axios.post(
         `${BASE_API}lp-tracker/api/pointer/addPointer/`,
         {
@@ -107,6 +119,11 @@ const SpeakSentenceComponent = () => {
         }
       );
       setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
+      }
+      else{
+        send(1)
+        // setPoints(localStorage.getItem("currentLessonScoreCount"));
+      }
 
       await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
         userId: localStorage.getItem("virtualId"),
