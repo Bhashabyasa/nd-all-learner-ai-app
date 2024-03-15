@@ -2,6 +2,7 @@
   "name": "new",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.388.0",
     "@emotion/react": "^11.7.0",
