@@ -91,12 +91,26 @@ const Practice = () => {
     //eslint-disable-next-line
   }, [voiceText]);
 
+  const send = (score) => {
+    if (window && window.parent) {
+      window.parent.postMessage({
+        score: score,
+        message: 'all-test-rig-score',
+      });
+    }
+};
+
   const handleNext = async () => {
     setEnableNext(false);
 
     try {
       const lang = getLocalData("lang");
-      const pointsRes = await axios.post(
+      if(localStorage.getItem("contentSessionId") !== null){
+
+       setPoints(1);
+       send(1)
+      }else {
+         const pointsRes = await axios.post(
         `${BASE_API}lp-tracker/api/pointer/addPointer/`,
         {
           userId: localStorage.getItem("virtualId"),
@@ -107,6 +121,7 @@ const Practice = () => {
         }
       );
       setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
+      }
 
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
