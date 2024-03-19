@@ -144,7 +144,7 @@ const Practice = () => {
 
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
+      await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: isShowCase ? "showcase" : `practice`,
@@ -191,9 +191,19 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          await axios.post(
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
+            {
+              userId: virtualId,
+              sessionId: sessionId,
+              subSessionId: sub_session_id,
+              milestoneLevel: getSetData?.data?.currentLevel,
+              language: localStorage.getItem("lang"),
+            }
+          );
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult == "pass") {
-            await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
+            await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
               userId: virtualId,
               sessionId: sessionId,
               milestone: `practice`,
@@ -215,7 +225,7 @@ const Practice = () => {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
-        await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
+        await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
           userId: virtualId,
           sessionId: sessionId,
           milestone: `practice`,
@@ -316,7 +326,7 @@ const Practice = () => {
         setLevel(level);
 
         const resLessons = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
         );
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
@@ -359,7 +369,7 @@ const Practice = () => {
         setIsShowCase(showcaseLevel);
 
         if (showcaseLevel) {
-          await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
+          await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
             userId: virtualId,
             sessionId: sessionId,
             milestone: "showcase",
@@ -397,7 +407,7 @@ const Practice = () => {
         fromBack: true,
       };
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
+      await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: "practice",

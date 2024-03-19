@@ -3144,8 +3144,8 @@ export const levelConfig = {
 };
 
 export const languages = [
-  { name: "Tamil", lang: "ta", symbol: "இ" },
+  { name: "தமிழ்", lang: "ta", symbol: "இ" },
   { name: "English", lang: "en", symbol: "A" },
-  { name: "Hindi", lang: "hi", symbol: "क" },
+  //{ name: "Hindi", lang: "hi", symbol: "क" },
   ,
 ];

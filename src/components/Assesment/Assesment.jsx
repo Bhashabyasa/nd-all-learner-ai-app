@@ -82,7 +82,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           </span>
         </Box>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Grid container justifyContent={"flex-start"} sx={{ width: "80%" }}>
+          <Grid container justifyContent={"space-evenly"} sx={{ width: "80%" }}>
             {languages.map((elem) => {
               const isSelectedLang = elem.lang == selectedLang;
               return (
@@ -339,15 +339,16 @@ const Assesment = ({ discoverStart }) => {
     // setLevel(level);
     setLocalData("lang", lang);
      dispatch(setVirtualId(localStorage.getItem('virtualId')));
-     let session_id = localStorage.setItem("sessionId", localStorage.getItem('contentSessionId'));
-    if (discoverStart && username && !localStorage.getItem('token')) {
+    let contentSessionId = localStorage.getItem('contentSessionId')
+    localStorage.setItem("sessionId", contentSessionId);
+    if (discoverStart && username && localStorage.getItem('token')) {
       (async () => {
         setLocalData("profileName", username);
-        const usernameDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}&password=${username}`
+        const usernameDetails = await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails.data.virtualID}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -357,16 +358,16 @@ const Assesment = ({ discoverStart }) => {
         setLevel(
           getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
         );
-        localStorage.setItem("virtualId", usernameDetails.data.virtualID);
-        let session_id = localStorage.setItem("sessionId", localStorage.getItem('contentSessionId'));
+        localStorage.setItem("virtualId", usernameDetails?.data?.result?.virtualID);
+        let session_id = localStorage.getItem("sessionId");
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
-        dispatch(setVirtualId(usernameDetails.data.virtualID));
+        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
       })();
     } else {
       (async () => {
