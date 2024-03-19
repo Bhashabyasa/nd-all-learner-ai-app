@@ -17,6 +17,7 @@ import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 import confetti from "canvas-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import useSound from "use-sound";
+import config from '../../utils/urlConstants.json';
 
 const sectionStyle = {
   backgroundImage: `url(${textureImage})`,
@@ -43,7 +44,7 @@ const SpeakSentenceComponent = () => {
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${lang}`
+        `${BASE_API}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);

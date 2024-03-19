@@ -26,6 +26,7 @@ import {
   getLocalData,
   replaceAll,
 } from "./constants";
+import config from "./urlConstants.json"
 // import S3Client from '../config/awsS3';
 /* eslint-disable */
 
@@ -249,7 +250,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${BASE_API}lais/scores/updateLearnerProfile/${lang}`,
+          `${BASE_API}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
             audio: base64Data,

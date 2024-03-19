@@ -37,6 +37,7 @@ import textureImage from "../../assets/images/textureImage.png";
 import scoreView from "../../assets/images/scoreView.png";
 import back from "../../assets/images/back-arrow.png";
 import { jwtDecode } from 'jwt-decode';
+import config from '../../utils/urlConstants.json';
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -344,10 +345,10 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.get(
-          `${BASE_API}v1/vid/generateVirtualID?username=${username}&password=${username}`
+          `${BASE_API}${config.URLS.GET_VIRTUAL_ID}?username=${username}&password=${username}`
         );
         const getMilestoneDetails = await axios.get(
-          `${BASE_API}lais/scores/getMilestone/user/${usernameDetails.data.virtualID}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_MILESTONE}/${usernameDetails.data.virtualID}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -362,7 +363,7 @@ const Assesment = ({ discoverStart }) => {
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${BASE_API}lp-tracker/api/pointer/getPointers/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_POINTER}/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -373,7 +374,7 @@ const Assesment = ({ discoverStart }) => {
         const virtualId = getLocalData("virtualId");
         const language = lang;
         const getMilestoneDetails = await axios.get(
-          `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${language}`
+          `${BASE_API}${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
         localStorage.setItem(
           "getMilestone",
@@ -387,7 +388,7 @@ const Assesment = ({ discoverStart }) => {
         const sessionId = getLocalData("sessionId");
         if (virtualId) {
           const getPointersDetails = await axios.get(
-            `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+            `${BASE_API}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }

@@ -18,6 +18,7 @@ import WordsOrImage from "../../components/Mechanism/WordsOrImage";
 import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
+import config from '../../utils/urlConstants.json';
 
 const Practice = () => {
   const [page, setPage] = useState(0);
@@ -111,7 +112,7 @@ const Practice = () => {
        send(1)
       }else {
          const pointsRes = await axios.post(
-        `${BASE_API}lp-tracker/api/pointer/addPointer/`,
+        `${BASE_API}${config.URLS.ADD_POINTER}/`,
         {
           userId: localStorage.getItem("virtualId"),
           sessionId: localStorage.getItem("sessionId"),
@@ -144,7 +145,7 @@ const Practice = () => {
 
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
 
-      await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+      await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: isShowCase ? "showcase" : `practice`,
@@ -180,7 +181,7 @@ const Practice = () => {
 
           const sub_session_id = getLocalData("sub_session_id");
           const getSetResultRes = await axios.post(
-            `${BASE_API}lais/scores/getSetResult`,
+            `${BASE_API}${config.URLS.GET_SET_RESULT}`,
             {
               sub_session_id: sub_session_id,
               contentType: currentContentType,
@@ -193,7 +194,7 @@ const Practice = () => {
           const { data: getSetData } = getSetResultRes;
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult == "pass") {
-            await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+            await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
               userId: virtualId,
               sessionId: sessionId,
               milestone: `practice`,
@@ -215,7 +216,7 @@ const Practice = () => {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
-        await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+        await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
           userId: virtualId,
           sessionId: sessionId,
           milestone: `practice`,
@@ -229,7 +230,7 @@ const Practice = () => {
           navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
-          `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${BASE_API}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
         let showcaseLevel =
@@ -301,7 +302,7 @@ const Practice = () => {
         const sessionId = getLocalData("sessionId");
 
         const getMilestoneDetails = await axios.get(
-          `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
         );
         setLocalData(
           "getMilestone",
@@ -316,10 +317,10 @@ const Practice = () => {
         setLevel(level);
 
         const resLessons = await axios.get(
-          `${BASE_API}lp-tracker/api/lesson/getLessonProgressByUserId/${virtualId}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
         );
         const getPointersDetails = await axios.get(
-          `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -343,7 +344,7 @@ const Practice = () => {
         );
 
         const resWord = await axios.get(
-          `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${BASE_API}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
         quesArr = [...quesArr, ...(resWord?.data?.content || [])];
         setCurrentContentType(currentGetContent.criteria);
@@ -359,7 +360,7 @@ const Practice = () => {
         setIsShowCase(showcaseLevel);
 
         if (showcaseLevel) {
-          await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+          await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
             userId: virtualId,
             sessionId: sessionId,
             milestone: "showcase",
@@ -397,7 +398,7 @@ const Practice = () => {
         fromBack: true,
       };
 
-      await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+      await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: "practice",
@@ -414,7 +415,7 @@ const Practice = () => {
       );
       let quesArr = [];
       const resWord = await axios.get(
-        `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${BASE_API}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);

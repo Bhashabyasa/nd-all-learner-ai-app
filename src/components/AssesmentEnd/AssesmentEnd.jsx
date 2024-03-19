@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { ProfileHeader } from "../Assesment/Assesment";
 import desktopLevel5 from "../../assets/images/assesmentComplete.png";
+import config from '../../utils/urlConstants.json';
 
 const AssesmentEnd = () => {
   const [shake, setShake] = useState(true);
@@ -37,14 +38,14 @@ const AssesmentEnd = () => {
       const previous_level = getLocalData("previous_level");
       setPreviousLevel(previous_level?.replace("m", ""));
       const getMilestoneDetails = await axios.get(
-        `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${lang}`
+        `${BASE_API}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
       const sessionId = getLocalData("sessionId");
       const getPointersDetails = await axios.get(
-        `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+        `${BASE_API}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
     })();

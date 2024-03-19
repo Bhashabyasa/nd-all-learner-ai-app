@@ -17,6 +17,7 @@ import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
 import confetti from "canvas-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
+import config from '../../utils/urlConstants.json';
 
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -65,7 +66,7 @@ const SpeakSentenceComponent = () => {
         const virtualId = getLocalData("virtualId");
         const lang = getLocalData("lang");
         const getPointersDetails = await axios.get(
-          `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+          `${BASE_API}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         })();
@@ -109,7 +110,7 @@ const SpeakSentenceComponent = () => {
 
       if(!(localStorage.getItem("contentSessionId") !== null)){
       const pointsRes = await axios.post(
-        `${BASE_API}lp-tracker/api/pointer/addPointer/`,
+        `${BASE_API}${config.URLS.ADD_POINTER}/`,
         {
           userId: localStorage.getItem("virtualId"),
           sessionId: localStorage.getItem("sessionId"),
@@ -125,7 +126,7 @@ const SpeakSentenceComponent = () => {
         // setPoints(localStorage.getItem("currentLessonScoreCount"));
       }
 
-      await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
+      await axios.post(`${BASE_API}${config.URLS.ADD_LESSON}`, {
         userId: localStorage.getItem("virtualId"),
         sessionId: localStorage.getItem("sessionId"),
         milestone: `discoveryList/discovery/${currentCollectionId}`,
@@ -140,7 +141,7 @@ const SpeakSentenceComponent = () => {
       } else if (currentQuestion == questions.length - 1) {
         const sub_session_id = getLocalData("sub_session_id");
         const getSetResultRes = await axios.post(
-          `${BASE_API}lais/scores/getSetResult`,
+          `${BASE_API}${config.URLS.GET_SET_RESULT}`,
           {
             sub_session_id: sub_session_id,
             contentType: currentContentType,
@@ -165,7 +166,7 @@ const SpeakSentenceComponent = () => {
             (elem) => elem.category == "Sentence"
           );
           const resSentencesPagination = await axios.get(
-            `${BASE_API}content-service/v1/content/pagination?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
+            `${BASE_API}${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Sentence");
           setCurrentCollectionId(
@@ -188,7 +189,7 @@ const SpeakSentenceComponent = () => {
             (elem) => elem.category == "Word"
           );
           const resWordsPagination = await axios.get(
-            `${BASE_API}content-service/v1/content/pagination?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
+            `${BASE_API}${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Word");
           setCurrentCollectionId(words?.content?.[0]?.collectionId);
@@ -233,7 +234,7 @@ const SpeakSentenceComponent = () => {
         // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
         const resAssessment = await axios.post(
-          `${BASE_API}content-service/v1/content/getAssessment`,
+          `${BASE_API}${config.URLS.GET_ASSESSMENT}`,
           {
             ...{ tags: ["ASER"], language: lang },
           }
@@ -244,7 +245,7 @@ const SpeakSentenceComponent = () => {
         );
 
         const resPagination = await axios.get(
-          `${BASE_API}content-service/v1/content/pagination?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
+          `${BASE_API}${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
         );
         setCurrentContentType("Sentence");
         setCurrentCollectionId(sentences?.content?.[0]?.collectionId);
