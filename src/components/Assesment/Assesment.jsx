@@ -272,7 +272,7 @@ export const ProfileHeader = ({
             alignItems: "center",
           }}
         >
-          <Box sx={{ position: "relative" }}>
+          {/* <Box sx={{ position: "relative" }}>
             <img
               src={scoreView}
               alt="scoreView"
@@ -291,7 +291,7 @@ export const ProfileHeader = ({
                 {points}
               </span>
             </Box>
-          </Box>
+          </Box> */}
 
           <Box mr={"90px"} onClick={() => setOpenLangModal(true)}>
             <Box sx={{ position: "relative", cursor: "pointer" }}>
@@ -340,7 +340,7 @@ const Assesment = ({ discoverStart }) => {
     setLocalData("lang", lang);
      dispatch(setVirtualId(localStorage.getItem('virtualId')));
      let session_id = localStorage.setItem("sessionId", localStorage.getItem('contentSessionId'));
-    if (discoverStart && username) {
+    if (discoverStart && username && !localStorage.getItem('token')) {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.get(

@@ -2979,10 +2979,10 @@ export const practiceSteps = [
 
 export const levelGetContent = {
   0: [
-    { title: "P1", criteria: "char", template: "simple" },
-    { title: "P2", criteria: "char", template: "simple" },
-    { title: "P3", criteria: "char", template: "simple" },
-    { title: "P4", criteria: "char", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple" },
+    { title: "P2", criteria: "word", template: "simple" },
+    { title: "P3", criteria: "word", template: "simple" },
+    { title: "P4", criteria: "word", template: "simple" },
     { title: "S1", criteria: "word", template: "simple" },
     { title: "P5", criteria: "word", template: "simple" },
     { title: "P6", criteria: "word", template: "simple" },
@@ -3003,8 +3003,8 @@ export const levelGetContent = {
     { title: "S2", criteria: "word", template: "simple" },
   ],
   2: [
-    { title: "P1", criteria: "char", template: "simple" },
-    { title: "P2", criteria: "char", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple" },
+    { title: "P2", criteria: "word", template: "simple" },
     { title: "P3", criteria: "word", template: "simple" },
     { title: "P4", criteria: "word", template: "simple" },
     { title: "S1", criteria: "word", template: "simple" },
