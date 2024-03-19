@@ -5,7 +5,6 @@ import discoverEndTop from "../../assets/images/discover-end-top.svg";
 import discoverEndRight from "../../assets/images/discover-end-right.svg";
 import textureImage from "../../assets/images/textureImage.png";
 import {
-  BASE_API,
   LetsStart,
   getLocalData,
   setLocalData,
@@ -44,7 +43,7 @@ const SpeakSentenceComponent = () => {
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${BASE_API}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);

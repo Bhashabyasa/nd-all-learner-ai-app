@@ -20,7 +20,6 @@ import v8 from "../assets/audio/V8.m4a";
 import { response } from "../services/telementryService";
 import AudioCompare from "./AudioCompare";
 import {
-  BASE_API,
   SpeakButton,
   compareArrays,
   getLocalData,
@@ -250,7 +249,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${BASE_API}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
             audio: base64Data,
