@@ -2963,7 +2963,6 @@ export const AssesmentCompletePlane = (props) => (
 
 export const SessionID = "13900744731701973109305";
 export const UserID = "1390074473";
-export const BASE_API = "https://www.learnerai-dev.theall.ai/";
 
 export const practiceSteps = [
   { name: "P1", fullName: "Practice 1" },

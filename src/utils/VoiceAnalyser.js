@@ -20,12 +20,12 @@ import v8 from "../assets/audio/V8.m4a";
 import { response } from "../services/telementryService";
 import AudioCompare from "./AudioCompare";
 import {
-  BASE_API,
   SpeakButton,
   compareArrays,
   getLocalData,
   replaceAll,
 } from "./constants";
+import config from "./urlConstants.json"
 // import S3Client from '../config/awsS3';
 /* eslint-disable */
 
@@ -249,7 +249,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${BASE_API}lais/scores/updateLearnerProfile/${lang}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
             audio: base64Data,
