@@ -344,10 +344,10 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_VIRTUAL_ID}?username=${username}&password=${username}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}&password=${username}`
         );
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_MILESTONE}/${usernameDetails.data.virtualID}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails.data.virtualID}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -362,7 +362,7 @@ const Assesment = ({ discoverStart }) => {
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_POINTER}/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -373,7 +373,7 @@ const Assesment = ({ discoverStart }) => {
         const virtualId = getLocalData("virtualId");
         const language = lang;
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
         localStorage.setItem(
           "getMilestone",
@@ -387,7 +387,7 @@ const Assesment = ({ discoverStart }) => {
         const sessionId = getLocalData("sessionId");
         if (virtualId) {
           const getPointersDetails = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }

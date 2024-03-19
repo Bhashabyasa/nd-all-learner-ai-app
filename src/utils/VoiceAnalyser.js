@@ -249,7 +249,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
             audio: base64Data,

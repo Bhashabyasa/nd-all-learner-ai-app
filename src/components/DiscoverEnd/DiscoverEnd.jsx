@@ -43,7 +43,7 @@ const SpeakSentenceComponent = () => {
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);

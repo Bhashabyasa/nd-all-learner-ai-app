@@ -111,7 +111,7 @@ const Practice = () => {
        send(1)
       }else {
          const pointsRes = await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_POINTER}/`,
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
         {
           userId: localStorage.getItem("virtualId"),
           sessionId: localStorage.getItem("sessionId"),
@@ -144,7 +144,7 @@ const Practice = () => {
 
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_LESSON}`, {
+      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: isShowCase ? "showcase" : `practice`,
@@ -180,7 +180,7 @@ const Practice = () => {
 
           const sub_session_id = getLocalData("sub_session_id");
           const getSetResultRes = await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_SET_RESULT}`,
+            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
             {
               sub_session_id: sub_session_id,
               contentType: currentContentType,
@@ -193,7 +193,7 @@ const Practice = () => {
           const { data: getSetData } = getSetResultRes;
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult == "pass") {
-            await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_LESSON}`, {
+            await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
               userId: virtualId,
               sessionId: sessionId,
               milestone: `practice`,
@@ -215,7 +215,7 @@ const Practice = () => {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
-        await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_LESSON}`, {
+        await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
           userId: virtualId,
           sessionId: sessionId,
           milestone: `practice`,
@@ -229,7 +229,7 @@ const Practice = () => {
           navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
         let showcaseLevel =
@@ -301,7 +301,7 @@ const Practice = () => {
         const sessionId = getLocalData("sessionId");
 
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
         );
         setLocalData(
           "getMilestone",
@@ -316,10 +316,10 @@ const Practice = () => {
         setLevel(level);
 
         const resLessons = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
         );
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -343,7 +343,7 @@ const Practice = () => {
         );
 
         const resWord = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
         quesArr = [...quesArr, ...(resWord?.data?.content || [])];
         setCurrentContentType(currentGetContent.criteria);
@@ -359,7 +359,7 @@ const Practice = () => {
         setIsShowCase(showcaseLevel);
 
         if (showcaseLevel) {
-          await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_LESSON}`, {
+          await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
             userId: virtualId,
             sessionId: sessionId,
             milestone: "showcase",
@@ -397,7 +397,7 @@ const Practice = () => {
         fromBack: true,
       };
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.ADD_LESSON}`, {
+      await axios.post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_LESSON}`, {
         userId: virtualId,
         sessionId: sessionId,
         milestone: "practice",
@@ -414,7 +414,7 @@ const Practice = () => {
       );
       let quesArr = [];
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
