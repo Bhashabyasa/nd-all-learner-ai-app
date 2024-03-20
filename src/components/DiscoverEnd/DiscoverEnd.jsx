@@ -1,7 +1,11 @@
 import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
+import axios from "../../../node_modules/axios/index";
+import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
+import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import back from "../../assets/images/back-arrow.svg";
 import discoverEndLeft from "../../assets/images/discover-end-left.svg";
-import discoverEndTop from "../../assets/images/discover-end-top.svg";
 import discoverEndRight from "../../assets/images/discover-end-right.svg";
 import textureImage from "../../assets/images/textureImage.png";
 import {
@@ -9,13 +13,6 @@ import {
   getLocalData,
   setLocalData,
 } from "../../utils/constants";
-import { useEffect, useState } from "react";
-import Confetti from "react-confetti";
-import axios from "../../../node_modules/axios/index";
-import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
-import confetti from "canvas-confetti";
-import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
-import useSound from "use-sound";
 import config from '../../utils/urlConstants.json';
 
 const sectionStyle = {
