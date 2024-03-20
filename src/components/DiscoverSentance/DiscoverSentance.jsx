@@ -300,6 +300,7 @@ const SpeakSentenceComponent = () => {
         callUpdateLearner: true,
         disableScreen,
         handleBack,
+        setEnableNext,
       }}
     />
   );

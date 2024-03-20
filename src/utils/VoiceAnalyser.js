@@ -17,6 +17,9 @@ import v5 from "../assets/audio/V5.m4a";
 import v6 from "../assets/audio/V6.m4a";
 import v7 from "../assets/audio/V7.m4a";
 import v8 from "../assets/audio/V8.m4a";
+import livesAdd from "../assets/audio/livesAdd.wav";
+import livesCut from "../assets/audio/livesCut.wav";
+
 import { response } from "../services/telementryService";
 import AudioCompare from "./AudioCompare";
 import {
@@ -51,7 +54,6 @@ const AudioPath = {
   },
 };
 const currentIndex = localStorage.getItem("index") || 1;
-console.log("get current index", currentIndex);
 function VoiceAnalyser(props) {
   const [loadCnt, setLoadCnt] = useState(0);
   const [loader, setLoader] = useState(false);
@@ -64,6 +66,7 @@ function VoiceAnalyser(props) {
   const [temp_audio, set_temp_audio] = useState(null);
   const { callUpdateLearner } = props;
 
+  const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
@@ -94,7 +97,6 @@ function VoiceAnalyser(props) {
   };
 
   useEffect(() => {
-    console.log("check temp audio", temp_audio && temp_audio.play());
     if (temp_audio !== null) {
       if (!pauseAudio) {
         temp_audio.pause();
@@ -174,9 +176,7 @@ function VoiceAnalyser(props) {
         var reader = new FileReader();
         reader.readAsDataURL(request.response);
         reader.onload = function (e) {
-          console.log("DataURL:", e.target.result);
           var base64Data = e.target.result.split(",")[1];
-          // hasVoice(base64Data).then((res) => console.log("testAudio", res));
           setRecordedAudioBase64(base64Data);
         };
       };
@@ -264,6 +264,61 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
+
+        if (livesData) {
+          let newLivesData = {
+            ...livesData,
+            scoreData: {
+              ...livesData?.scoreData,
+              [props.currentLine]: data.createScoreData.session,
+            },
+          };
+
+          let missing_token_scores = [];
+          let confidence_scores = [];
+
+          Object.values(newLivesData.scoreData)?.forEach((elem) => {
+            // elem.missing_token_scores confidence_scores
+            elem.confidence_scores.forEach((ecs) => {
+              if (!confidence_scores.find((cs) => cs == ecs.token)) {
+                confidence_scores.push(ecs.token);
+              }
+            });
+            elem.missing_token_scores.forEach((emts) => {
+              if (!missing_token_scores.find((mts) => mts == emts.token)) {
+                missing_token_scores.push(emts.token);
+              }
+            });
+          });
+
+          newLivesData = {
+            ...newLivesData,
+            missing_token_scores,
+            confidence_scores,
+          };
+
+          const blackLivesToShow =
+            Math.round(
+              newLivesData?.missing_token_scores?.length /
+                newLivesData?.targetPerLive
+            ) || 0;
+          const redLivesToShow = newLivesData?.lives - blackLivesToShow;
+
+          newLivesData = {
+            ...newLivesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+
+          var audio = new Audio(
+            newLivesData.redLivesToShow <
+            (livesData?.redLivesToShow || livesData?.lives)
+              ? livesCut
+              : livesAdd
+          );
+          audio.play();
+          setLivesData(newLivesData);
+        }
       }
 
       const responseEndTime = new Date().getTime();
@@ -349,13 +404,7 @@ function VoiceAnalyser(props) {
         try {
           const response = await S3Client.send(command);
         } catch (err) {
-          console.log(
-            "here",
-            err,
-            err.message,
-            { err: err.name, errtype: "CONTENT" },
-            "ET"
-          );
+ 
         }
       }
 
@@ -415,7 +464,6 @@ function VoiceAnalyser(props) {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        console.log("Permission Granted");
         setAudioPermission(true);
       })
       .catch((error) => {
@@ -447,6 +495,8 @@ function VoiceAnalyser(props) {
                     }
                     isAudioPreprocessing={isAudioPreprocessing}
                     recordedAudio={recordedAudio}
+                    setEnableNext={props.setEnableNext}
+                    showOnlyListen={props.showOnlyListen}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>
