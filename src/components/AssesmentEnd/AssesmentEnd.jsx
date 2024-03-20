@@ -67,7 +67,7 @@ const AssesmentEnd = () => {
   };
 
   const handleRedirect = () => {
-    navigate("/");
+    navigate("/practice");
   };
   return true ? (
     <Box style={sectionStyle}>
@@ -177,7 +177,7 @@ const AssesmentEnd = () => {
             alignItems: "center",
           }}
         >
-          <Box>
+          {/* <Box>
             <span
               style={{
                 color: "#FFFFFF",
@@ -200,7 +200,7 @@ const AssesmentEnd = () => {
             <Box ml={3}>
               <BadMood />
             </Box>
-          </Box>
+          </Box> */}
         </Box>
         <Box
           mr={8}
@@ -208,7 +208,7 @@ const AssesmentEnd = () => {
             display: "flex",
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               cursor: "pointer",
               background: "linear-gradient(90deg, #8585A2 0%, #39394F 85%)",
@@ -232,7 +232,7 @@ const AssesmentEnd = () => {
             >
               {"Home"}
             </span>
-          </Box>
+          </Box> */}
           <Box
             ml={3}
             sx={{

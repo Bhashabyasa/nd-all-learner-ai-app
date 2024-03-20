@@ -18,9 +18,12 @@ import WordsOrImage from "../../components/Mechanism/WordsOrImage";
 import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
+import { splitGraphemes } from "split-graphemes";
+import { Image } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 
 const Practice = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState("");
   const [recordedAudio, setRecordedAudio] = useState("");
   const [Story, setStory] = useState([]);
   const [voiceText, setVoiceText] = useState("");
@@ -40,10 +43,26 @@ const Practice = () => {
   const [progressData, setProgressData] = useState({});
   const [level, setLevel] = useState(1);
   const [isShowCase, setIsShowCase] = useState(false);
+  const [startShowCase, setStartShowCase] = useState(false);
   const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
-
+  const [mechanism, setMechanism] = useState("");
   const [play] = useSound(LevelCompleteAudio);
+  const [livesData, setLivesData] = useState();
+  const [gameOverData, setGameOverData] = useState();
+  const LIVES = 5;
+  const TARGETS_PERCENTAGE = 0.3;
+
+  const gameOver = (data) => {
+    let userWon = livesData?.redLivesToShow > 0;
+    setGameOverData({ gameOver: true, userWon, ...data });
+  };
+
+  useEffect(() => {
+    if (startShowCase) {
+      setLivesData({ ...livesData, lives: LIVES });
+    }
+  }, [startShowCase]);
 
   const callConfettiAndPlay = () => {
     play();
@@ -53,7 +72,6 @@ const Practice = () => {
   useEffect(() => {
     let currentPracticeStep = progressData.currentPracticeStep;
     let fromBack = progressData.fromBack;
-    console.log("from");
     if (
       questions?.length &&
       Number(currentPracticeStep + 1) > 0 &&
@@ -91,7 +109,7 @@ const Practice = () => {
     //eslint-disable-next-line
   }, [voiceText]);
 
-  const handleNext = async () => {
+  const handleNext = async (isGameOver) => {
     setEnableNext(false);
 
     try {
@@ -140,27 +158,18 @@ const Practice = () => {
       });
 
       let newPracticeStep =
-        currentQuestion == questions.length - 1
+        currentQuestion == questions.length - 1 || isGameOver
           ? currentPracticeStep + 1
           : currentPracticeStep;
       let newQuestionIndex =
         currentQuestion == questions.length - 1 ? 0 : currentQuestion + 1;
 
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-        practiceProgress[virtualId] = {
-          currentQuestion: newQuestionIndex,
-          currentPracticeProgress,
-          currentPracticeStep: newPracticeStep,
-        };
-        setLocalData("practiceProgress", JSON.stringify(practiceProgress));
-        setProgressData(practiceProgress[virtualId]);
-      } else if (currentQuestion == questions.length - 1) {
+      if (currentQuestion == questions.length - 1 || isGameOver) {
         // navigate or setNextPracticeLevel
         let currentPracticeStep =
           practiceProgress[virtualId].currentPracticeStep;
         let isShowCase = currentPracticeStep == 4 || currentPracticeStep == 9; // P4 or P8
-        if (isShowCase) {
+        if (isShowCase && !isGameOver) {
           // assesment
 
           const sub_session_id = getLocalData("sub_session_id");
@@ -187,19 +196,24 @@ const Practice = () => {
               language: lang,
               milestoneLevel: getSetData.data.currentLevel,
             });
+            gameOver({ link: "/assesment-end" });
+            return;
           }
-          navigate("/assesment-end");
+
+          // navigate("/assesment-end");
         }
 
         let quesArr = [];
 
-        const currentGetContent = levelGetContent?.[level]?.find(
-          (elem) => elem.title == practiceSteps?.[currentPracticeStep].name
-        );
         if (newPracticeStep == 10) {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
+
+        const currentGetContent = levelGetContent?.[level]?.find(
+          (elem) => elem.title == practiceSteps?.[newPracticeStep].name
+        );
+
         await axios.post(`${BASE_API}lp-tracker/api/lesson/addLesson`, {
           userId: virtualId,
           sessionId: sessionId,
@@ -210,12 +224,23 @@ const Practice = () => {
           milestoneLevel: `m${level}`,
         });
 
-        if (newPracticeStep == 0) {
-          navigate("/assesment-end");
+        if (newPracticeStep == 0 || newPracticeStep == 5 || isGameOver) {
+          gameOver();
+          return;
+          // navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
           `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
+
+        setLivesData({
+          ...livesData,
+          totalTargets: resGetContent?.data?.totalTargets,
+          targetsForLives:
+            resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE,
+          targetPerLive:
+            (resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+        });
 
         let showcaseLevel =
           currentPracticeStep == 3 || currentPracticeStep == 8;
@@ -235,8 +260,19 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
         localStorage.setItem("storyTitle", resGetContent?.name);
 
-        console.log("quesArr", quesArr);
         setQuestions(quesArr);
+        setTimeout(() => {
+          setMechanism(currentGetContent.mechanism);
+        }, 1000);
+      } else if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        practiceProgress[virtualId] = {
+          currentQuestion: newQuestionIndex,
+          currentPracticeProgress,
+          currentPracticeStep: newPracticeStep,
+        };
+        setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+        setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
       console.log(error);
@@ -330,6 +366,13 @@ const Practice = () => {
         const resWord = await axios.get(
           `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
+        setLivesData({
+          ...livesData,
+          totalTargets: resWord?.data?.totalTargets,
+          targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+          targetPerLive:
+            (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+        });
         quesArr = [...quesArr, ...(resWord?.data?.content || [])];
         setCurrentContentType(currentGetContent.criteria);
         setCurrentCollectionId(resWord?.data?.content?.[0]?.collectionId);
@@ -337,8 +380,8 @@ const Practice = () => {
 
         localStorage.setItem("storyTitle", resWord?.name);
 
-        console.log("quesArr", quesArr);
         setQuestions(quesArr);
+        setMechanism(currentGetContent.mechanism);
 
         let showcaseLevel = userState == 4 || userState == 9;
         setIsShowCase(showcaseLevel);
@@ -401,6 +444,13 @@ const Practice = () => {
       const resWord = await axios.get(
         `${BASE_API}lais/scores/GetContent/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
+      setLivesData({
+        ...livesData,
+        totalTargets: resWord?.data?.totalTargets,
+        targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+        targetPerLive:
+          (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+      });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
       setCurrentCollectionId(resWord?.data?.content?.[0]?.collectionId);
@@ -408,7 +458,9 @@ const Practice = () => {
 
       localStorage.setItem("storyTitle", resWord?.name);
       setQuestions(quesArr);
-
+      setTimeout(() => {
+        setMechanism(currentGetContent.mechanism);
+      }, 1000);
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
@@ -416,8 +468,134 @@ const Practice = () => {
     }
   };
 
+  useEffect(() => {
+    if (livesData?.scoreData) {
+      if (livesData?.redLivesToShow <= 0) {
+        handleNext(true);
+      }
+    }
+  }, [livesData]);
+
+  function highlightWords(sentence, matchedChar) {
+    let isFirstImageDisplayed = false;
+    const words = sentence.split(" ");
+    matchedChar.sort(function (str1, str2) {
+      return str2.length - str1.length;
+    });
+
+    let type = currentContentType?.toLowerCase();
+    if (type == "char" || type == "word") {
+      const word = splitGraphemes(words[0].toLowerCase()).filter(
+        (item) => item !== "‌" && item !== "" && item !== " "
+      );
+      let highlightedString = [];
+      for (let i = 0; i < word.length; i++) {
+        let matchFound = false;
+        for (let j = 0; j < matchedChar.length; j++) {
+          let length = splitGraphemes(matchedChar[j]).filter(
+            (item) => item !== "‌" && item !== "" && item !== " "
+          ).length;
+          const substr = word.slice(i, i + length).join("");
+          if (substr.includes(matchedChar[j])) {
+            highlightedString.push(
+              <React.Fragment key={i}>
+                <Typography
+                  variant="h5"
+                  component="h4"
+                  sx={{
+                    color: "#FF4830",
+                    fontSize: "40px",
+                    lineHeight: "normal",
+                    fontWeight: 700,
+                    fontFamily: "Quicksand",
+                    lineHeight: "50px",
+                    background: "#FFF0BD",
+                  }}
+                >
+                  {substr}
+                </Typography>
+              </React.Fragment>
+            );
+            i += length - 1;
+            matchFound = true;
+            break;
+          }
+        }
+        if (!matchFound) {
+          highlightedString.push(
+            <React.Fragment key={i}>
+              <Typography
+                variant="h5"
+                component="h4"
+                sx={{
+                  color: "#333F61",
+                  fontSize: "40px",
+                  lineHeight: "normal",
+                  fontWeight: 700,
+                  fontFamily: "Quicksand",
+                  lineHeight: "50px",
+                }}
+              >
+                {word[i]}
+              </Typography>
+            </React.Fragment>
+          );
+        }
+      }
+      return highlightedString;
+    } else {
+      const highlightedSentence = words.map((word, index) => {
+        const isMatched = matchedChar.some((char) =>
+          word.toLowerCase().includes(char)
+        );
+        if (isMatched) {
+          return (
+            <React.Fragment key={index}>
+              <Typography
+                variant="h5"
+                component="h4"
+                ml={1}
+                sx={{
+                  color: "#FF4830",
+                  fontSize: "40px",
+                  lineHeight: "normal",
+                  fontWeight: 700,
+                  fontFamily: "Quicksand",
+                  lineHeight: "50px",
+                  background: "#FFF0BD",
+                }}
+              >
+                {word}
+              </Typography>{" "}
+            </React.Fragment>
+          );
+        } else {
+          return (
+            <Typography
+              variant="h5"
+              component="h4"
+              ml={1}
+              sx={{
+                color: "#333F61",
+                fontSize: "40px",
+                lineHeight: "normal",
+                fontWeight: 700,
+                fontFamily: "Quicksand",
+                lineHeight: "50px",
+              }}
+              key={index}
+            >
+              {word + " "}
+            </Typography>
+          );
+        }
+      });
+      return highlightedSentence;
+    }
+  }
+
   const renderMechanics = () => {
-    if (page == 0) {
+    if (!mechanism) {
       return (
         <WordsOrImage
           {...{
@@ -450,26 +628,103 @@ const Practice = () => {
             callUpdateLearner: isShowCase,
             disableScreen,
             isShowCase,
+            startShowCase,
+            setStartShowCase,
             handleBack: !isShowCase && handleBack,
+            livesData,
+            setLivesData,
+            gameOverData,
+            highlightWords,
+            matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
           }}
         />
       );
-    } else if (page == 1) {
-      return <Mechanics2 page={page} setPage={setPage} />;
-    } else if (page == 2) {
-      return <Mechanics3 page={page} setPage={setPage} />;
-    } else if (page == 3) {
-      return <Mechanics3 page={page} setPage={setPage} type="audio" />;
-    } else if (page == 4) {
+    } else if (mechanism == "fillInTheBlank" || mechanism == "audio") {
+      return (
+        <Mechanics3
+          page={page}
+          setPage={setPage}
+          {...{
+            level: !isShowCase && level,
+            header:
+              questions[currentQuestion]?.contentType == "image"
+                ? `Guess the below image`
+                : `Speak the below ${questions[currentQuestion]?.contentType}`,
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            type: mechanism,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            // image: elephant,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            allWords:
+              questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
+              [],
+          }}
+        />
+      );
+    } else if (mechanism == "formAWord") {
       return (
         <Mechanics4
           page={page}
           setPage={setPage}
-          type="char"
-          {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
+          {...{
+            level: !isShowCase && level,
+            header:
+              questions[currentQuestion]?.contentType == "image"
+                ? `Guess the below image`
+                : `Speak the below ${questions[currentQuestion]?.contentType}`,
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            type: "word",
+            // image: elephant,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+          }}
         />
       );
-    } else if (page == 5) {
+    } else if (mechanism == "readTheImage") {
       return (
         <Mechanics5
           page={page}
@@ -477,7 +732,7 @@ const Practice = () => {
           {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
         />
       );
-    } else if (page == 6) {
+    } else if (mechanism == "FormASentence") {
       return (
         <Mechanics4
           page={page}
@@ -485,6 +740,8 @@ const Practice = () => {
           {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
         />
       );
+    } else if (page == 1) {
+      return <Mechanics2 page={page} setPage={setPage} />;
     }
   };
 

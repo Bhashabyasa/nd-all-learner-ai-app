@@ -33,6 +33,14 @@ const WordsOrImage = ({
   disableScreen,
   isShowCase,
   handleBack,
+  setEnableNext,
+  startShowCase,
+  setStartShowCase,
+  livesData,
+  setLivesData,
+  gameOverData,
+  highlightWords,
+  matchedChar,
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -69,7 +77,13 @@ const WordsOrImage = ({
         progressData,
         showProgress,
         playTeacherAudio,
-        handleBack
+        handleBack,
+        isShowCase,
+        startShowCase,
+        setStartShowCase,
+        disableScreen,
+        livesData,
+        gameOverData,
       }}
     >
       <CardContent
@@ -183,23 +197,34 @@ const WordsOrImage = ({
                 <CircularProgress size="3rem" sx={{ color: "#E15404" }} />
               </Box>
             )}
-            <Typography
-              variant="h5"
-              component="h4"
-              sx={{
-                mb: 4,
-                color: "#333F61",
-                textAlign: "center",
-                fontSize: "40px",
-                paddingX: "140px",
-                lineHeight: "normal",
-                fontWeight: 700,
-                fontFamily: "Quicksand",
-                lineHeight: "50px",
-              }}
-            >
-              {words || ""}
-            </Typography>
+            {words && !matchedChar && (
+              <Typography
+                variant="h5"
+                component="h4"
+                sx={{
+                  mb: 4,
+                  color: "#333F61",
+                  textAlign: "center",
+                  fontSize: "40px",
+                  paddingX: "140px",
+                  lineHeight: "normal",
+                  fontWeight: 700,
+                  fontFamily: "Quicksand",
+                  lineHeight: "50px",
+                }}
+              >
+                {words || ""}
+              </Typography>
+            )}
+            {matchedChar && (
+              <Box
+                display={"flex"}
+                mb={4}
+                sx={{ width: "100%", justifyContent: "center" }}
+              >
+                {highlightWords(words, matchedChar)}
+              </Box>
+            )}
           </>
         )}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -218,6 +243,9 @@ const WordsOrImage = ({
               playTeacherAudio,
               callUpdateLearner,
               isShowCase,
+              setEnableNext,
+              livesData,
+              setLivesData,
             }}
           />
         </Box>

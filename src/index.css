@@ -105,6 +105,14 @@
   border-left: 1px solid var(--Button-Green, #58cc02);
   background: var(--Text-White, #fff);
 }
+.audioSelectedWrongWord {
+  border-radius: 12px;
+  border-top: 1px solid var(--Button-Green, #c30303);
+  border-right: 1px solid var(--Button-Green, #c30303);
+  border-bottom: 3px solid var(--Button-Green, #c30303);
+  border-left: 1px solid var(--Button-Green, #c30303);
+  background: var(--Text-White, #fff);
+}
 
 .successHeader {
   color: #1cc871;

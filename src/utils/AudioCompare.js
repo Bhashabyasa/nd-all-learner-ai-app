@@ -39,6 +39,10 @@ export default class AudioRecorderCompair extends Component {
   }
 
   handleMic() {
+    if (this.props.setEnableNext) {
+      this.props.setEnableNext(false);
+    }
+
     if (this.props.isAudioPreprocessing) {
       this.setState({ soundDetected: false, stopDetection: false });
       document.getElementById("startaudio_compair").click();
@@ -49,6 +53,10 @@ export default class AudioRecorderCompair extends Component {
   }
 
   handleStop() {
+    if (this.props.setEnableNext) {
+      this.props.setEnableNext(true);
+    }
+
     if (this.props.isAudioPreprocessing) {
       document.getElementById("stopaudio_compair").click();
       this.setState({ stopDetection: true });
@@ -108,7 +116,6 @@ export default class AudioRecorderCompair extends Component {
           const audio = new Audio(audioUrl);
           audio.play();
 
-          console.log("working", { soundDetected });
         });
       });
     } catch (error) {
@@ -128,13 +135,11 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: "",
         });
         this.props.setRecordedAudio("");
-        console.log("succ start", e);
         this.setState({
           recordingInitialized: true,
         });
       },
       pauseCallback: (e) => {
-        console.log("succ pause", e);
       },
       stopCallback: (e) => {
         let temp_audioSrc = window.URL.createObjectURL(e);
@@ -152,16 +157,13 @@ export default class AudioRecorderCompair extends Component {
           }
         }
 
-        console.log("succ stop", e);
         this.setState({
           recordingInitialized: false,
         });
       },
       onRecordCallback: (e) => {
-        console.log("recording", e);
       },
       errorCallback: (err) => {
-        console.log("error", err);
       },
       backgroundColor: "hsla(0, 100%, 0%, 0)",
       strokeColor: "#73DD24",
@@ -238,21 +240,23 @@ export default class AudioRecorderCompair extends Component {
                   )}
 
                   <div>
-                    <Box
-                      marginLeft={
-                        !this.props.dontShowListen || this.props.recordedAudio
-                          ? "32px"
-                          : "0px"
-                      }
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => this.handleMic()}
-                    >
-                      {!this.props.recordedAudio ? (
-                        <SpeakButton />
-                      ) : (
-                        <RetryIcon />
-                      )}
-                    </Box>
+                    {!this.props.showOnlyListen && (
+                      <Box
+                        marginLeft={
+                          !this.props.dontShowListen || this.props.recordedAudio
+                            ? "32px"
+                            : "0px"
+                        }
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => this.handleMic()}
+                      >
+                        {!this.props.recordedAudio ? (
+                          <SpeakButton />
+                        ) : (
+                          <RetryIcon />
+                        )}
+                      </Box>
+                    )}
                     {/* <img
                                             src={mic}
                                             className="micimg mic_record"
