@@ -118,7 +118,7 @@ const Practice = () => {
     }
 };
 
-  const handleNext = async () => {
+  const handleNext = async (isGameOver) => {
     setEnableNext(false);
 
     try {
