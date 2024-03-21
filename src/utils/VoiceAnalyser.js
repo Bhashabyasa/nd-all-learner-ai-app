@@ -64,6 +64,8 @@ function VoiceAnalyser(props) {
   const [apiResponse, setApiResponse] = useState("");
   const [currentIndex, setCurrentIndex] = useState();
   const [temp_audio, set_temp_audio] = useState(null);
+  let blackLivesToShow = parseInt(localStorage.getItem('blackLivesToShow')) || 0;
+  let redLivesToShow = parseInt(localStorage.getItem('redLivesToShow')) || 5;
   const { callUpdateLearner } = props;
 
   const { livesData, setLivesData } = props;
@@ -277,19 +279,19 @@ function VoiceAnalyser(props) {
           let missing_token_scores = [];
           let confidence_scores = [];
 
-          Object.values(newLivesData.scoreData)?.forEach((elem) => {
-            // elem.missing_token_scores confidence_scores
-            elem.confidence_scores.forEach((ecs) => {
-              if (!confidence_scores.find((cs) => cs == ecs.token)) {
-                confidence_scores.push(ecs.token);
-              }
-            });
-            elem.missing_token_scores.forEach((emts) => {
-              if (!missing_token_scores.find((mts) => mts == emts.token)) {
-                missing_token_scores.push(emts.token);
-              }
-            });
-          });
+          // Object.values(newLivesData.scoreData)?.forEach((elem) => {
+          //   // elem.missing_token_scores confidence_scores
+          //   elem.confidence_scores.forEach((ecs) => {
+          //     if (!confidence_scores.find((cs) => cs == ecs.token)) {
+          //       confidence_scores.push(ecs.token);
+          //     }
+          //   });
+          //   elem.missing_token_scores.forEach((emts) => {
+          //     if (!missing_token_scores.find((mts) => mts == emts.token)) {
+          //       missing_token_scores.push(emts.token);
+          //     }
+          //   });
+          // });
 
           newLivesData = {
             ...newLivesData,
@@ -297,18 +299,19 @@ function VoiceAnalyser(props) {
             confidence_scores,
           };
 
-          const blackLivesToShow =
-            Math.round(
-              newLivesData?.missing_token_scores?.length /
-                newLivesData?.targetPerLive
-            ) || 0;
-          const redLivesToShow = newLivesData?.lives - blackLivesToShow;
+          if (data.targetsPercentage && data.targetsPercentage > 30) {
+            blackLivesToShow = blackLivesToShow + 1;
+            redLivesToShow = redLivesToShow - 1;
+          }
 
           newLivesData = {
             ...newLivesData,
             blackLivesToShow,
             redLivesToShow,
           };
+
+          localStorage.setItem('blackLivesToShow', blackLivesToShow);
+          localStorage.setItem('redLivesToShow', redLivesToShow);
 
           var audio = new Audio(
             newLivesData.redLivesToShow <
