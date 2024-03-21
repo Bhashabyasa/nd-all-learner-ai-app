@@ -195,7 +195,6 @@ const Practice = () => {
               contentType: currentContentType,
               session_id: sessionId,
               user_id: virtualId,
-              collectionId: currentCollectionId,
               language: localStorage.getItem("lang"),
             }
           );

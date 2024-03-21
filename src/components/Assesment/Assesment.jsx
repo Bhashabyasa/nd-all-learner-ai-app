@@ -163,9 +163,9 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           </Grid>
         </Box>
         <Box
-          sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+          sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           mt="60px"
-          mr="110px"
+          // mr="110px"
         >
           <Box
             onClick={() => {
@@ -190,6 +190,8 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
                 fontWeight: 600,
                 fontSize: "20px",
                 fontFamily: "Quicksand",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               {"Confirm"}
