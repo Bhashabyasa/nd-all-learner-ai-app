@@ -294,7 +294,7 @@ const MainLayout = (props) => {
               })}
             </Box>
           )}
-          {startShowCase && (
+          {false && (
             <Box
               position={"absolute"}
               top={20}
@@ -837,7 +837,7 @@ const MainLayout = (props) => {
                         if (gameOverData) {
                           gameOverData.link
                             ? navigate(gameOverData.link)
-                            : window.location.reload();
+                            : navigate("/");
                         }
                       }}
                     >
