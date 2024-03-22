@@ -54,7 +54,7 @@ const Practice = () => {
   const TARGETS_PERCENTAGE = 0.3;
 
   const gameOver = (data) => {
-    let userWon = livesData?.redLivesToShow > 0;
+    let userWon = parseInt(localStorage.getItem('redLivesToShow')) > 0;
     setGameOverData({ gameOver: true, userWon, ...data });
   };
 
@@ -494,7 +494,7 @@ const Practice = () => {
 
   useEffect(() => {
     if (livesData?.scoreData) {
-      if (livesData?.redLivesToShow <= 0) {
+      if (parseInt(localStorage.getItem('redLivesToShow')) <= 0) {
         handleNext(true);
       }
     }
