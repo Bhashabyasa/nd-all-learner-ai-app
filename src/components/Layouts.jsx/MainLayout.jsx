@@ -831,13 +831,15 @@ const MainLayout = (props) => {
                         padding: "0px 24px 0px 20px",
                       }}
                       onClick={() => {
+                        localStorage.setItem('blackLivesToShow', 0);
+                        localStorage.setItem('redLivesToShow', 5);
                         if (isShowCase && !startShowCase && !gameOverData) {
                           setStartShowCase(true);
                         }
                         if (gameOverData) {
                           gameOverData.link
                             ? navigate(gameOverData.link)
-                            : window.location.reload();
+                            : navigate("/");
                         }
                       }}
                     >
