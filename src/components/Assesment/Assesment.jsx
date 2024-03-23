@@ -31,6 +31,10 @@ import desktopLevel2 from "../../assets/images/desktopLevel2.png";
 import desktopLevel3 from "../../assets/images/desktopLevel3.jpg";
 import desktopLevel4 from "../../assets/images/desktopLevel4.png";
 import desktopLevel5 from "../../assets/images/desktopLevel5.png";
+import desktopLevel6 from "../../assets/images/desktopLevel6.png";
+import desktopLevel7 from "../../assets/images/desktopLevel7.png";
+import desktopLevel8 from "../../assets/images/desktopLevel8.png";
+import desktopLevel9 from "../../assets/images/desktopLevel9.png";
 import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
 import scoreView from "../../assets/images/scoreView.png";
@@ -274,14 +278,14 @@ export const ProfileHeader = ({
             alignItems: "center",
           }}
         >
-          {/* <Box sx={{ position: "relative" }}>
+         {/* <Box sx={{ position: "relative" }} mr="10px">
             <img
               src={scoreView}
               alt="scoreView"
-              width={"144px"}
+              width={"86px"}
               height={"35px"}
             />
-            <Box sx={{ position: "absolute", top: "6px", right: "46px" }}>
+            <Box sx={{ position: "absolute", top: "6px", right: "16px" }}>
               <span
                 style={{
                   color: "#FFDD39",
@@ -420,6 +424,10 @@ const Assesment = ({ discoverStart }) => {
     desktopLevel3,
     desktopLevel4,
     desktopLevel5,
+    desktopLevel6,
+    desktopLevel7,
+    desktopLevel8,
+    desktopLevel9,
   };
 
   const sectionStyle = {

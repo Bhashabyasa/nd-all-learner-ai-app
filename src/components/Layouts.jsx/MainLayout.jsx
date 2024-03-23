@@ -637,9 +637,9 @@ const MainLayout = (props) => {
                   }}
                 >
                   {gameOverData?.userWon ? (
-                    <img src={gameWon} alt="gameWon" style={{ zIndex: 9999 }} />
+                    <img src={gameWon} alt="gameWon" style={{ zIndex: 9999, height : 340 }} />
                   ) : (
-                    <img src={gameLost} alt="gameLost" />
+                    <img src={gameLost} alt="gameLost" style={{height : 340}}/>
                   )}
                 </Box>
               </>
