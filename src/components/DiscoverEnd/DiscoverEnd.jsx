@@ -34,6 +34,7 @@ const SpeakSentenceComponent = () => {
   const [level, setLevel] = useState("");
 
   useEffect(() => {
+    
     (async () => {
       let audio = new Audio(LevelCompleteAudio);
       audio.play();
