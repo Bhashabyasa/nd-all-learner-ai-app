@@ -837,7 +837,7 @@ const MainLayout = (props) => {
                         if (gameOverData) {
                           gameOverData.link
                             ? navigate(gameOverData.link)
-                            : navigate("/");
+                            : navigate("/_practice");
                         }
                       }}
                     >
