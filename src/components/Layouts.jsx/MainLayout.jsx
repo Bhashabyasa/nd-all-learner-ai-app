@@ -294,7 +294,7 @@ const MainLayout = (props) => {
               })}
             </Box>
           )}
-          {false && (
+          {startShowCase && (
             <Box
               position={"absolute"}
               top={20}
