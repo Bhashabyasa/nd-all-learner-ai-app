@@ -57,8 +57,8 @@ const Practice = () => {
   const TARGETS_PERCENTAGE = 0.3;
   const { state } = useLocation();
 
-  const gameOver = (data, isPass) => {
-    let userWon = isPass;
+  const gameOver = (data) => {
+    let userWon = livesData?.redLivesToShow > 0;
     setGameOverData({ gameOver: true, userWon, ...data });
   };
 
@@ -225,7 +225,7 @@ const Practice = () => {
               language: lang,
               milestoneLevel: getSetData.data.currentLevel,
             });
-            gameOver({ link: "/assesment-end" }, true);
+            gameOver({ link: "/assesment-end" });
             return;
           }
 
@@ -254,7 +254,7 @@ const Practice = () => {
         });
 
         if (newPracticeStep == 0 || newPracticeStep == 5 || isGameOver) {
-          gameOver(undefined , false);
+          gameOver();
           return;
           // navigate("/assesment-end");
         }
@@ -501,9 +501,9 @@ const Practice = () => {
 
   useEffect(() => {
     if (livesData?.scoreData) {
-      // if (parseInt(localStorage.getItem('redLivesToShow')) <= 0) {
-      //   handleNext(true);
-      // }
+      if (livesData?.redLivesToShow <= 0) {
+        handleNext(true);
+      }
     }
   }, [livesData]);
 
