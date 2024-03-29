@@ -137,7 +137,9 @@ const Practice = () => {
       const lang = getLocalData("lang");
       if (localStorage.getItem("contentSessionId") !== null) {
         setPoints(1);
-        send(1);
+        if (isShowCase) {
+          send(1);
+        }
       } else {
         const pointsRes = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
