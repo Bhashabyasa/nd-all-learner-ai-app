@@ -40,7 +40,7 @@ reviews:
       - "dev"
       - "feat/*"
       - "feat-*"
-      - "release-*"
+      - "all-*"
 
 chat:
   auto_reply: true
