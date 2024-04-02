@@ -19,7 +19,6 @@ import desktopLevel5 from "../../assets/images/assesmentComplete.png";
 import config from '../../utils/urlConstants.json';
 
 const AssesmentEnd = () => {
-  // eslint-disable-next-line no-unused-vars
   const [shake, setShake] = useState(true);
   const [level, setLevel] = useState("");
   const [previousLevel, setPreviousLevel] = useState("");

@@ -6,7 +6,6 @@ import {
 } from "../../../node_modules/react-router-dom/dist/index";
 
 const HomePage = () => {
-  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const images = {
     desktopLevel1,

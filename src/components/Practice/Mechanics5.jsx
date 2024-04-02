@@ -19,7 +19,6 @@ import v11 from '../../assets/audio/V10.mp3';
 // };
 
 const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }) => {
-    // eslint-disable-next-line no-unused-vars
     const [sentences, setSentences] = useState([
         'What is the boy doing in picture.?',
         'Kids are eating breakfast',
@@ -28,7 +27,6 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
     ]);
 
     const audioRef = createRef(null);
-    // eslint-disable-next-line no-unused-vars
     const [duration, setDuration] = useState(0);
     const [isReady, setIsReady] = React.useState(false);
 
@@ -43,7 +41,6 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
             setIsPlaying(true);
         }
     };
-    // eslint-disable-next-line no-unused-vars
     const [currrentProgress, setCurrrentProgress] = React.useState(0);
     // const progressBarWidth = isNaN(currrentProgress / duration) ? 0 : currrentProgress / duration;
 

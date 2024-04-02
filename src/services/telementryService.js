@@ -11,8 +11,6 @@ let isBuddyLogin = checkTokenInLocalStorage();
 if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
     var userDetails = jwtDecode(jwtToken);
-    // eslint-disable-next-line no-unused-vars
-    var emis_username = userDetails.emis_username;
 }
 
 function checkTokenInLocalStorage() {

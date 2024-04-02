@@ -25,19 +25,14 @@ import { MessageDialog } from "../../components/Assesment/Assesment";
 
 const Practice = () => {
   const [page, setPage] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [recordedAudio, setRecordedAudio] = useState("");
   const [voiceText, setVoiceText] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [storyLine, setStoryLine] = useState(0);
-  // eslint-disable-next-line no-unused-vars
   const [voiceAnimate, setVoiceAnimate] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
-  const [assessmentResponse, setAssessmentResponse] = useState(undefined);
+  const [, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [currentCollectionId, setCurrentCollectionId] = useState("");
 
   const [points, setPoints] = useState(0);
@@ -530,7 +525,6 @@ const Practice = () => {
         handleNext(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [livesData]);
 
   function highlightWords(sentence, matchedChar) {

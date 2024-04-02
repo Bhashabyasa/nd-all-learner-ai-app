@@ -45,7 +45,6 @@ const WordsOrImage = ({
   setOpenMessageDialog
 }) => {
   const audioRef = createRef(null);
-  // eslint-disable-next-line no-unused-vars
   const [duration, setDuration] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
@@ -60,7 +59,6 @@ const WordsOrImage = ({
       setIsPlaying(true);
     }
   };
-   // eslint-disable-next-line no-unused-vars
   const [currrentProgress, setCurrrentProgress] = useState(0);
 
   return (

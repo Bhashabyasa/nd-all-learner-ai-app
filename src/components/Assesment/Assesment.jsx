@@ -469,10 +469,8 @@ const Assesment = ({ discoverStart }) => {
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
   }
-  // eslint-disable-next-line no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
-  // eslint-disable-next-line no-unused-vars
-  const [profileName, setProfileName] = useState(username);
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const [profileName, setProfileName] = useState(username);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
