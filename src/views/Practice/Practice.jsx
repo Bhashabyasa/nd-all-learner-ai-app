@@ -31,7 +31,7 @@ const Practice = () => {
   const [voiceAnimate, setVoiceAnimate] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const navigate = useNavigate();
-  const [, setAssessmentResponse] = useState(undefined);
+  const [assessmentResponse, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
   const [currentCollectionId, setCurrentCollectionId] = useState("");
 
