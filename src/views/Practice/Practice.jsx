@@ -543,8 +543,6 @@ const Practice = () => {
     let fontSize =
       questions[currentQuestion]?.contentType?.toLowerCase() == "paragraph"
         ? 30
-        : 40;
-    // console.log("fontSize", fontSize);
     let type = currentContentType?.toLowerCase();
     if (type == "char" || type == "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
