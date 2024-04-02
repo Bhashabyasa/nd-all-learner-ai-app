@@ -378,7 +378,7 @@ export const ProfileHeader = ({
                 sx={{ cursor: "pointer" }}
                 onClick={() => navigate("/")}
               >
-                <img src={profilePic} alt=""></img>
+                <img src={profilePic} alt="profile-pic"></img>
               </Box>
               <Box ml="12px">
                 <span

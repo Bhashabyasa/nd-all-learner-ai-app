@@ -119,7 +119,9 @@ const Mechanics2 = ({
 
       if (type !== "audio") {
         let index = wordsArr?.findIndex((elem) => elem === word);
+        if (index !== -1) {
         wordsArr?.splice(index, 1);
+        }
       }
 
       if (selectedWord && type !== "audio") {
@@ -267,7 +269,7 @@ const Mechanics2 = ({
         ) : (
           <>
             {sentences?.map((elem, index) => (
-              <>
+             <React.Fragment key={index}>
                 {elem === "dash" ? (
                   <Box
                     sx={{
@@ -353,7 +355,7 @@ const Mechanics2 = ({
                     </Typography>
                   </Box>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </>
         )}
