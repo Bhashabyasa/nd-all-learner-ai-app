@@ -43,6 +43,7 @@ import back from "../../assets/images/back-arrow.png";
 import { jwtDecode } from "jwt-decode";
 import config from "../../utils/urlConstants.json";
 import panda from "../../assets/images/panda.svg";
+import cryPanda from "../../assets/images/cryPanda.svg";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -209,7 +210,12 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   );
 };
 
-export const MessageDialog = ({ message, closeDialog }) => {
+export const MessageDialog = ({
+  message,
+  closeDialog,
+  isError,
+  dontShowHeader,
+}) => {
   return (
     <Box
       sx={{
@@ -219,6 +225,8 @@ export const MessageDialog = ({ message, closeDialog }) => {
         width: "100vw",
         height: "100vh",
         position: "fixed",
+        top: 0,
+        left: 0,
         background: "rgba(0, 0, 0, 0.5)",
         zIndex: 9999,
       }}
@@ -240,20 +248,34 @@ export const MessageDialog = ({ message, closeDialog }) => {
         }}
       >
         <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
-          <img src={panda} alt="panda" />
+          {isError ? (
+            <img src={cryPanda} alt="cryPanda" />
+          ) : (
+            <img src={panda} alt="panda" />
+          )}
         </Box>
+
         <Box mt="32px">
-          <Typography
-            className="successHeader"
-            sx={{
-              mt: 3,
-              textAlign: "center",
-            }}
-          >
-            Hurray!!!
-          </Typography>
+          {!dontShowHeader && (
+            <Typography
+              className={isError ? "failureHeader" : "successHeader"}
+              sx={{
+                mt: 3,
+                textAlign: "center",
+              }}
+            >
+              {isError ? "Oops..." : "Hurray!!!"}
+            </Typography>
+          )}
         </Box>
-        <Box mt="28px" display={"flex"} flexWrap={"wrap"}>
+
+        <Box
+          mt="28px"
+          display={"flex"}
+          flexWrap={"wrap"}
+          padding={"0px 10px 0px 10px"}
+          width={"80%"}
+        >
           <span
             style={{
               color: "#000000",
@@ -264,13 +286,14 @@ export const MessageDialog = ({ message, closeDialog }) => {
               textAlign: "center",
             }}
           >
-            {message || `You have successfully completed Level 1`}
+            {message || ``}
           </span>
         </Box>
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           mt="60px"
           // mr="110px"
+          mb={2}
         >
           <Box
             onClick={() => {
@@ -306,9 +329,7 @@ export const MessageDialog = ({ message, closeDialog }) => {
 };
 
 export const ProfileHeader = ({
-  setOpenLangModal = () => {
-    alert("go to homescreen to change language");
-  },
+  setOpenLangModal,
   lang,
   profileName,
   points = 0,
@@ -317,8 +338,19 @@ export const ProfileHeader = ({
   const language = lang || getLocalData("lang");
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
   return (
     <>
+      {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )}
       <Box
         sx={{
           position: "absolute",
@@ -397,7 +429,17 @@ export const ProfileHeader = ({
             </Box>
           </Box> */}
 
-          <Box mr={"90px"} onClick={() => setOpenLangModal(true)}>
+          <Box
+            mr={"90px"}
+            onClick={() =>
+              setOpenLangModal
+                ? setOpenLangModal(true)
+                : setOpenMessageDialog({
+                    message: "go to homescreen to change language",
+                    dontShowHeader: true,
+                  })
+            }
+          >
             <Box sx={{ position: "relative", cursor: "pointer" }}>
               <SelectLanguageButton />
               <Box sx={{ position: "absolute", top: 9, left: 20 }}>
@@ -431,6 +473,7 @@ const Assesment = ({ discoverStart }) => {
   }
   const [searchParams, setSearchParams] = useSearchParams();
   const [profileName, setProfileName] = useState(username);
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
@@ -509,7 +552,11 @@ const Assesment = ({ discoverStart }) => {
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
     if (!username && !profileName && !virtualId && level == 0) {
-      alert("please add username in query param");
+      // alert("please add username in query param");
+      setOpenMessageDialog({
+        message: "please add username in query param",
+        isError: true,
+      });
       return;
     }
     if (level == 0) {
@@ -542,12 +589,24 @@ const Assesment = ({ discoverStart }) => {
 
   return (
     <>
+      {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )}
       {openLangModal && (
         <LanguageModal {...{ lang, setLang, setOpenLangModal }} />
       )}
       {level > 0 ? (
         <Box style={sectionStyle}>
-          <ProfileHeader {...{ level, lang, setOpenLangModal, points }} />
+          <ProfileHeader
+            {...{ level, lang, setOpenLangModal, points, setOpenMessageDialog }}
+          />
           <Box
             sx={{
               position: "absolute",
