@@ -58,7 +58,7 @@ const Mechanics2 = ({
   const [shake, setShake] = useState(false);
   const [wordToFill, setWordToFill] = useState("");
   const [disabledWords, setDisabledWords] = useState(false);
-
+  const lang = getLocalData("lang");
   let wordToCheck = type == "audio" ? parentWords : wordToFill;
 
   useEffect(() => {
@@ -231,7 +231,7 @@ const Mechanics2 = ({
                   type="audio/mp3"
                   src={
                     contentId
-                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
                       : ""
                   }
                 />

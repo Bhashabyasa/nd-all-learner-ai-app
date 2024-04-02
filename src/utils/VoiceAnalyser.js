@@ -65,7 +65,7 @@ function VoiceAnalyser(props) {
   const [currentIndex, setCurrentIndex] = useState();
   const [temp_audio, set_temp_audio] = useState(null);
   const { callUpdateLearner } = props;
-
+  const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
@@ -86,7 +86,7 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${props.contentId}.wav`
+          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
           : AudioPath[1][10]
       );
       set_temp_audio(audio);
