@@ -70,7 +70,7 @@
       "react-app",
       "react-app/jest"
     ],
-    "ignorePatterns": ["build/", "/public/js/jquery-3.7.0.min.js"]
+    "ignorePatterns": ["build/", "public/js/jquery-3.7.0.min.js"]
   },
   "browserslist": {
     "production": [
