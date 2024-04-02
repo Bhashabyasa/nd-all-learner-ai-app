@@ -57,6 +57,7 @@ const Practice = () => {
   const LIVES = 5;
   const TARGETS_PERCENTAGE = 0.3;
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+  const lang = getLocalData("lang");
 
   const gameOver = (data) => {
     let userWon = livesData?.redLivesToShow > 0;
@@ -346,12 +347,12 @@ const Practice = () => {
   const playTeacherAudio = () => {
     const contentId = questions[currentQuestion]?.contentId;
     var audio = new Audio(
-      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
     );
     audio.addEventListener("canplaythrough", () => {
       set_temp_audio(
         new Audio(
-          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
         )
       );
     });
