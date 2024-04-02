@@ -48,6 +48,7 @@ const Mechanics2 = ({
   allWords,
   setEnableNext,
   loading,
+  setOpenMessageDialog,
 }) => {
   const [words, setWords] = useState([]);
   const [sentences, setSentences] = useState([]);
@@ -427,6 +428,7 @@ const Mechanics2 = ({
               callUpdateLearner,
               isShowCase,
               setEnableNext,
+              setOpenMessageDialog,
             }}
           />
         </Box>

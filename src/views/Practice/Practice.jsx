@@ -93,9 +93,9 @@ const Practice = () => {
         // alert(
         //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
         // );
-        setOpenMessageDialog(
-          `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        );
+        setOpenMessageDialog({
+          message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
+        });
         // setDisableScreen(false);
       }, 1200);
     }
@@ -540,6 +540,10 @@ const Practice = () => {
       return str2.length - str1.length;
     });
 
+    let fontSize =
+      questions[currentQuestion]?.contentType?.toLowerCase() == "paragraph"
+        ? 30
+        : 40;
     let type = currentContentType?.toLowerCase();
     if (type == "char" || type == "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
@@ -560,7 +564,8 @@ const Practice = () => {
                   variant="h5"
                   component="h4"
                   sx={{
-                    fontSize: "40px",
+                    color: "#FF4830",
+                    fontSize: `${fontSize}px`,
                     lineHeight: "normal",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
@@ -585,7 +590,7 @@ const Practice = () => {
                 component="h4"
                 sx={{
                   color: "#333F61",
-                  fontSize: "40px",
+                  fontSize: `${fontSize}px`,
                   lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
@@ -612,7 +617,8 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  fontSize: "40px",
+                  color: "#FF4830",
+                  fontSize: `${fontSize}px`,
                   lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
@@ -632,7 +638,7 @@ const Practice = () => {
               ml={1}
               sx={{
                 color: "#333F61",
-                fontSize: "40px",
+                fontSize: `${fontSize}px`,
                 lineHeight: "normal",
                 fontWeight: 700,
                 fontFamily: "Quicksand",
@@ -692,6 +698,7 @@ const Practice = () => {
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
             loading,
+            setOpenMessageDialog,
           }}
         />
       );
@@ -737,6 +744,7 @@ const Practice = () => {
               questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
               [],
             loading,
+            setOpenMessageDialog,
           }}
         />
       );
@@ -779,6 +787,7 @@ const Practice = () => {
             handleBack: !isShowCase && handleBack,
             setEnableNext,
             loading,
+            setOpenMessageDialog,
           }}
         />
       );
@@ -807,11 +816,13 @@ const Practice = () => {
     <>
       {!!openMessageDialog && (
         <MessageDialog
-          message={openMessageDialog}
+          message={openMessageDialog.message}
           closeDialog={() => {
             setOpenMessageDialog("");
             setDisableScreen(false);
           }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
         />
       )}
       {renderMechanics()}

@@ -28,7 +28,7 @@ import {
   getLocalData,
   replaceAll,
 } from "./constants";
-import config from "./urlConstants.json"
+import config from "./urlConstants.json";
 // import S3Client from '../config/awsS3';
 /* eslint-disable */
 
@@ -266,8 +266,7 @@ function VoiceAnalyser(props) {
         data = updateLearnerData;
         responseText = data.responseText;
         newThresholdPercentage = data?.targetsPercentage || 0;
-        handlePercentageForLife(newThresholdPercentage)
-
+        handlePercentageForLife(newThresholdPercentage);
       }
 
       const responseEndTime = new Date().getTime();
@@ -352,9 +351,7 @@ function VoiceAnalyser(props) {
         });
         try {
           const response = await S3Client.send(command);
-        } catch (err) {
- 
-        }
+        } catch (err) {}
       }
 
       response(
@@ -392,13 +389,12 @@ function VoiceAnalyser(props) {
 
   const handlePercentageForLife = (percentage) => {
     try {
-      const THRESHOLD_PERCENTAGE = 30
+      const THRESHOLD_PERCENTAGE = 30;
       let newLivesData = {};
 
       if (livesData) {
-
         if (percentage > THRESHOLD_PERCENTAGE) {
-          let redLivesToShow = 0
+          let redLivesToShow = 0;
           let blackLivesToShow = 5;
           newLivesData = {
             ...livesData,
@@ -406,9 +402,8 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 5 black , 0 red
-
         } else if (percentage >= 0 && percentage <= 5) {
-          let redLivesToShow = 5
+          let redLivesToShow = 5;
           let blackLivesToShow = 0;
           newLivesData = {
             ...livesData,
@@ -416,9 +411,8 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 5 red , 0 black
-        }
-        else if (percentage >= 6 && percentage <= 11) {
-          let redLivesToShow = 4
+        } else if (percentage >= 6 && percentage <= 11) {
+          let redLivesToShow = 4;
           let blackLivesToShow = 1;
           newLivesData = {
             ...livesData,
@@ -427,7 +421,7 @@ function VoiceAnalyser(props) {
           };
           // 4 red , 1 black
         } else if (percentage >= 12 && percentage <= 17) {
-          let redLivesToShow = 3
+          let redLivesToShow = 3;
           let blackLivesToShow = 2;
           newLivesData = {
             ...livesData,
@@ -435,7 +429,6 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 3 red , 2 black
-
         } else if (percentage >= 18 && percentage <= 23) {
           let redLivesToShow = 2;
           let blackLivesToShow = 3;
@@ -445,7 +438,6 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 2 red , 3 black
-
         } else if (percentage >= 24 && percentage <= 29) {
           let redLivesToShow = 1;
           let blackLivesToShow = 4;
@@ -459,7 +451,7 @@ function VoiceAnalyser(props) {
 
         var audio = new Audio(
           newLivesData.redLivesToShow <
-            (livesData?.redLivesToShow || livesData?.lives)
+          (livesData?.redLivesToShow || livesData?.lives)
             ? livesCut
             : livesAdd
         );
@@ -467,9 +459,9 @@ function VoiceAnalyser(props) {
         setLivesData(newLivesData);
       }
     } catch {
-        // for exception
+      // for exception
     }
-  }
+  };
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
@@ -527,6 +519,7 @@ function VoiceAnalyser(props) {
                     recordedAudio={recordedAudio}
                     setEnableNext={props.setEnableNext}
                     showOnlyListen={props.showOnlyListen}
+                    setOpenMessageDialog={props.setOpenMessageDialog}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>
@@ -536,9 +529,14 @@ function VoiceAnalyser(props) {
                 <Box
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    alert(
-                      "Microphone is blocked. Enable microphone to continue."
-                    );
+                    // alert(
+                    //   "Microphone is blocked. Enable microphone to continue."
+                    // );
+                    props.setOpenMessageDialog({
+                      message:
+                        "Microphone is blocked. Enable microphone to continue.",
+                      isError: true,
+                    });
                   }}
                 >
                   <SpeakButton />
