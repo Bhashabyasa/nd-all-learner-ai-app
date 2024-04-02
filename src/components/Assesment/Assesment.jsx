@@ -22,7 +22,6 @@ import {
 } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
-import { uniqueId } from "../../services/utilService";
 // import { useDispatch } from 'react-redux';
 import { setVirtualId } from "../../store/slices/user.slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +37,6 @@ import desktopLevel8 from "../../assets/images/desktopLevel8.png";
 import desktopLevel9 from "../../assets/images/desktopLevel9.png";
 import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
-import scoreView from "../../assets/images/scoreView.png";
 import back from "../../assets/images/back-arrow.png";
 import { jwtDecode } from "jwt-decode";
 import config from "../../utils/urlConstants.json";
@@ -91,7 +89,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <Grid container justifyContent={"space-evenly"} sx={{ width: "80%" }}>
             {languages.map((elem) => {
-              const isSelectedLang = elem.lang == selectedLang;
+              const isSelectedLang = elem.lang === selectedLang;
               return (
                 <Grid xs={4} item>
                   <Box
@@ -380,7 +378,7 @@ export const ProfileHeader = ({
                 sx={{ cursor: "pointer" }}
                 onClick={() => navigate("/")}
               >
-                <img src={profilePic}></img>
+                <img src={profilePic} alt=""></img>
               </Box>
               <Box ml="12px">
                 <span
@@ -452,7 +450,7 @@ export const ProfileHeader = ({
                     lineHeight: "25px",
                   }}
                 >
-                  {languages?.find((elem) => elem.lang == language).name ||
+                  {languages?.find((elem) => elem.lang === language).name ||
                     `Select Language`}
                 </span>
               </Box>
@@ -471,7 +469,9 @@ const Assesment = ({ discoverStart }) => {
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
   }
+  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
+  // eslint-disable-next-line no-unused-vars
   const [profileName, setProfileName] = useState(username);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
@@ -551,7 +551,7 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    if (!username && !profileName && !virtualId && level == 0) {
+    if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",
@@ -559,7 +559,7 @@ const Assesment = ({ discoverStart }) => {
       });
       return;
     }
-    if (level == 0) {
+    if (level === 0) {
       navigate("/discover");
     } else {
       navigate("/practice");

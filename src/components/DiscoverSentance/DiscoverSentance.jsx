@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../node_modules/axios/index";
-import coin from "../../assets/audio/coin.mp3";
 import elephant from "../../assets/images/elephant.svg";
 import {
-  UserID,
   callConfetti,
   getLocalData,
-  questionsList,
   setLocalData,
 } from "../../utils/constants";
 import WordsOrImage from "../Mechanism/WordsOrImage";
-import { useSearchParams } from "../../../node_modules/react-router-dom/dist/index";
 import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
-import confetti from "canvas-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../Assesment/Assesment";
@@ -22,13 +17,15 @@ import { MessageDialog } from "../Assesment/Assesment";
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [recordedAudio, setRecordedAudio] = useState("");
-  const [Story, setStory] = useState([]);
   const [voiceText, setVoiceText] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [storyLine, setStoryLine] = useState(0);
   const [assessmentResponse, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
   const [currentCollectionId, setCurrentCollectionId] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [voiceAnimate, setVoiceAnimate] = useState(false);
   const [points, setPoints] = useState(0);
   const [questions, setQuestions] = useState([]);
@@ -50,7 +47,7 @@ const SpeakSentenceComponent = () => {
   }, [questions]);
 
   useEffect(() => {
-    if (questions?.length && !initialAssesment && currentQuestion == 0) {
+    if (questions?.length && !initialAssesment && currentQuestion === 0) {
       setDisableScreen(true);
       callConfettiAndPlay();
       setTimeout(() => {
@@ -94,7 +91,7 @@ const SpeakSentenceComponent = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText == "success") {
+    if (voiceText === "success") {
       setEnableNext(true);
       // go_to_result(voiceText);
       setVoiceText("");
@@ -149,7 +146,7 @@ const SpeakSentenceComponent = () => {
 
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
-      } else if (currentQuestion == questions.length - 1) {
+      } else if (currentQuestion === questions.length - 1) {
         const sub_session_id = getLocalData("sub_session_id");
         const getSetResultRes = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
@@ -175,8 +172,8 @@ const SpeakSentenceComponent = () => {
           }
         );
         if (
-          getSetData.data.sessionResult == "pass" &&
-          currentContentType == "Sentence" &&
+          getSetData.data.sessionResult === "pass" &&
+          currentContentType === "Sentence" &&
           sentencePassedCounter < 2
         ) {
           if (getSetData.data.currentLevel !== "m0") {
@@ -184,7 +181,7 @@ const SpeakSentenceComponent = () => {
           }
           const newSentencePassedCounter = sentencePassedCounter + 1;
           const sentences = assessmentResponse?.data?.data?.filter(
-            (elem) => elem.category == "Sentence"
+            (elem) => elem.category === "Sentence"
           );
           const resSentencesPagination = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
@@ -197,17 +194,17 @@ const SpeakSentenceComponent = () => {
           setCurrentQuestion(0);
           setSentencePassedCounter(newSentencePassedCounter);
           setQuestions(quesArr);
-        } else if (getSetData.data.sessionResult == "pass") {
+        } else if (getSetData.data.sessionResult === "pass") {
           navigate("/discover-end");
         } else if (
-          getSetData.data.sessionResult == "fail" &&
-          currentContentType == "Sentence"
+          getSetData.data.sessionResult === "fail" &&
+          currentContentType === "Sentence"
         ) {
           if (getSetData.data.currentLevel !== "m0") {
             navigate("/discover-end");
           }
           const words = assessmentResponse?.data?.data?.find(
-            (elem) => elem.category == "Word"
+            (elem) => elem.category === "Word"
           );
           const resWordsPagination = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
@@ -218,13 +215,13 @@ const SpeakSentenceComponent = () => {
           setCurrentQuestion(0);
           setQuestions(quesArr);
         } else if (
-          getSetData.data.sessionResult == "fail" &&
-          currentContentType == "Word"
+          getSetData.data.sessionResult === "fail" &&
+          currentContentType === "Word"
         ) {
           navigate("/discover-end");
 
           // const char = assessmentResponse?.data?.data?.find(
-          //   (elem) => elem.category == "Char"
+          //   (elem) => elem.category === "Char"
           // );
           // const resCharPagination = await axios.get(
           //   `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/pagination?page=1&limit=5&collectionId=${char?.content?.[0]?.collectionId}`
@@ -262,7 +259,7 @@ const SpeakSentenceComponent = () => {
         );
 
         const sentences = resAssessment?.data?.data?.find(
-          (elem) => elem.category == "Sentence"
+          (elem) => elem.category === "Sentence"
         );
 
         const resPagination = await axios.get(
@@ -302,7 +299,7 @@ const SpeakSentenceComponent = () => {
         {...{
           background: "linear-gradient(45deg, #FF730E 30%, #FFB951 90%)",
           header:
-            questions[currentQuestion]?.contentType == "image"
+            questions[currentQuestion]?.contentType === "image"
               ? `Guess the below image`
               : `Speak the below ${questions[currentQuestion]?.contentType}`,
           words: questions[currentQuestion]?.contentSourceData?.[0]?.text,

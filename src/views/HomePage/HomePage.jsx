@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
 import desktopLevel1 from "../../assets/images/desktopLevel1.png";
 import desktopLevel2 from "../../assets/images/desktopLevel2.png";
 import desktopLevel3 from "../../assets/images/desktopLevel3.jpg";
 import {
-  useNavigate,
   useSearchParams,
 } from "../../../node_modules/react-router-dom/dist/index";
 
 const HomePage = () => {
+  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const images = {
     desktopLevel1,
@@ -25,8 +24,8 @@ const HomePage = () => {
     position: "relative",
   };
 
-  let level = searchParams.get("level");
-  const navigate = useNavigate();
+  // let level = searchParams.get("level");
+  // const navigate = useNavigate();
   //   useEffect(() => {
   //     if (level) {
   //       setTimeout(() => {
