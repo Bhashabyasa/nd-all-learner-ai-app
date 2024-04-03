@@ -2,9 +2,9 @@
     "URLS": {
         "GET_VIRTUAL_ID": "api/virtualId/generateVirtualID",
         "GET_MILESTONE": "lais/scores/getMilestone/user",
-        "GET_POINTER": "lp-tracker/api/pointer/getPointers",
+        "GET_POINTER": "api/pointer/getPoints",
         "GET_ASSESSMENT": "content-service/v1/content/getAssessment",
-        "ADD_POINTER": "lp-tracker/api/pointer/addPointer",
+        "ADD_POINTER": "api/pointer/addPoints",
         "ADD_LESSON": "api/lesson/addLesson",
         "GET_SET_RESULT": "lais/scores/getSetResult",
         "GET_PAGINATION": "content-service/v1/content/pagination",

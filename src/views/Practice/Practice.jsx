@@ -136,13 +136,13 @@ const Practice = () => {
         }
       } else {
         const pointsRes = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
           {
             userId: localStorage.getItem("virtualId"),
             sessionId: localStorage.getItem("sessionId"),
             points: 1,
             language: lang,
-            milestoneLevel: `m${level}`,
+            milestone: `m${level}`,
           }
         );
         setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
@@ -385,7 +385,7 @@ const Practice = () => {
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
       );
       const getPointersDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
