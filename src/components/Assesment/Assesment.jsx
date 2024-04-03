@@ -513,7 +513,7 @@ const Assesment = ({ discoverStart }) => {
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -538,7 +538,7 @@ const Assesment = ({ discoverStart }) => {
         const sessionId = getLocalData("sessionId");
         if (virtualId) {
           const getPointersDetails = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }

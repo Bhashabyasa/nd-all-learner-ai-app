@@ -438,7 +438,7 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 2 red , 3 black
-        } else if (percentage >= 24 && percentage <= 29) {
+        } else if (percentage >= 24 && percentage <= 30) {
           let redLivesToShow = 1;
           let blackLivesToShow = 4;
           newLivesData = {
