@@ -60,6 +60,7 @@ const Practice = () => {
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const { state } = useLocation();
   const lang = getLocalData("lang");
+  const [totalSyllableCount, setTotalSyllableCount] = useState('');
 
   const gameOver = (data) => {
     let userWon = livesData?.redLivesToShow > 0;
@@ -223,6 +224,7 @@ const Practice = () => {
               sessionId: sessionId,
               subSessionId: sub_session_id,
               milestoneLevel: getSetData?.data?.currentLevel,
+              totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
             }
           );
@@ -280,9 +282,10 @@ const Practice = () => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
+        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
         setLivesData({
           ...livesData,
-          totalTargets: resGetContent?.data?.totalTargets,
+          totalTargets: resGetContent?.data?.totalSyllableCount,
           targetsForLives:
             resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE,
           targetPerLive:
@@ -413,9 +416,10 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
+      setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
-        totalTargets: resWord?.data?.totalTargets,
+        totalTargets: resWord?.data?.totalSyllableCount,
         targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
@@ -502,9 +506,10 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
+      setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
-        totalTargets: resWord?.data?.totalTargets,
+        totalTargets: resWord?.data?.totalSyllableCount,
         targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,

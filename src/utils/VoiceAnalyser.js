@@ -265,7 +265,7 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
-        newThresholdPercentage = data?.targetsPercentage || 0;
+        newThresholdPercentage = data?.subsessionTargetsCount || 0;
         handlePercentageForLife(newThresholdPercentage);
       }
 
@@ -388,21 +388,12 @@ function VoiceAnalyser(props) {
   };
 
   const handlePercentageForLife = (percentage) => {
+    percentage = (percentage / livesData.totalTargets) * 100;
     try {
-      const THRESHOLD_PERCENTAGE = 30;
       let newLivesData = {};
 
       if (livesData) {
-        if (percentage > THRESHOLD_PERCENTAGE) {
-          let redLivesToShow = 0;
-          let blackLivesToShow = 5;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 5 black , 0 red
-        } else if (percentage >= 0 && percentage <= 5) {
+        if (percentage >= 0 && percentage <= 5) {
           let redLivesToShow = 5;
           let blackLivesToShow = 0;
           newLivesData = {
@@ -447,6 +438,14 @@ function VoiceAnalyser(props) {
             redLivesToShow,
           };
           // 1 red , 4 black
+        }else{
+          let redLivesToShow = 0;
+          let blackLivesToShow = 5;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
         }
 
         var audio = new Audio(

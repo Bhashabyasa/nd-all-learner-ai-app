@@ -39,6 +39,8 @@ const SpeakSentenceComponent = () => {
   const [disableScreen, setDisableScreen] = useState(false);
   const [play] = useSound(LevelCompleteAudio);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+  const [totalSyllableCount, setTotalSyllableCount] = useState('');
+
 
   const callConfettiAndPlay = () => {
     play();
@@ -159,6 +161,7 @@ const SpeakSentenceComponent = () => {
             session_id: localStorage.getItem("sessionId"),
             user_id: localStorage.getItem("virtualId"),
             collectionId: currentCollectionId,
+            totalSyllableCount: totalSyllableCount,
             language: localStorage.getItem("lang"),
           }
         );
@@ -269,6 +272,7 @@ const SpeakSentenceComponent = () => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
         );
         setCurrentContentType("Sentence");
+        setTotalSyllableCount(resPagination?.data?.totalSyllableCount)
         setCurrentCollectionId(sentences?.content?.[0]?.collectionId);
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
