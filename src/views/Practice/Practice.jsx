@@ -416,7 +416,7 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
@@ -506,7 +506,7 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
