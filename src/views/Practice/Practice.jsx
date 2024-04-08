@@ -288,9 +288,9 @@ const Practice = () => {
           ...livesData,
           totalTargets: resGetContent?.data?.totalSyllableCount,
           targetsForLives:
-            resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE,
+            resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
           targetPerLive:
-            (resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
         });
 
         let showcaseLevel =
@@ -421,9 +421,9 @@ const Practice = () => {
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
-          (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+          (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
@@ -511,9 +511,9 @@ const Practice = () => {
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
-          (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+          (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
