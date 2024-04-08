@@ -392,7 +392,7 @@ function VoiceAnalyser(props) {
       let newLivesData = {};
 
       if (livesData) {
-        percentage = (percentage / livesData.subsessionTargetsCount) * 100;
+        percentage = Math.round((percentage / livesData.totalTargets) * 100);
         if (percentage >= 0 && percentage <= 5) {
           let redLivesToShow = 5;
           let blackLivesToShow = 0;
