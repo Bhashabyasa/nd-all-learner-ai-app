@@ -570,8 +570,7 @@ const Practice = () => {
                 <Typography
                   variant="h5"
                   component="h4"
-                  sx={{
-                    color: "#FF4830",
+                  sx={{                  
                     fontSize: `${fontSize}px`,
                     lineHeight: "normal",
                     fontWeight: 700,
@@ -624,7 +623,6 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  color: "#FF4830",
                   fontSize: `${fontSize}px`,
                   lineHeight: "normal",
                   fontWeight: 700,
