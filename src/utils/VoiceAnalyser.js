@@ -259,7 +259,6 @@ function VoiceAnalyser(props) {
             language: lang,
             date: new Date(),
             sub_session_id,
-            totalSyllableCount: totalSyllableCount,
             contentId,
             contentType,
           }
@@ -389,11 +388,11 @@ function VoiceAnalyser(props) {
   };
 
   const handlePercentageForLife = (percentage) => {
-    percentage = (percentage / livesData.subsessionTargetsCount) * 100;
     try {
       let newLivesData = {};
 
       if (livesData) {
+        percentage = (percentage / livesData.subsessionTargetsCount) * 100;
         if (percentage >= 0 && percentage <= 5) {
           let redLivesToShow = 5;
           let blackLivesToShow = 0;
