@@ -397,8 +397,8 @@ function VoiceAnalyser(props) {
         
         // Define the total number of lives and the threshold for lives calculation.
         const totalLives = 5;
-        const threshold = 30;
-        let totalSyllables = livesData.totalTargets;
+        let threshold = 30;
+        const totalSyllables = livesData.totalTargets;
         
         if(totalSyllables <= 85){
           threshold = 25;
