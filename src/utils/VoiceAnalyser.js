@@ -390,75 +390,53 @@ function VoiceAnalyser(props) {
   const handlePercentageForLife = (percentage) => {
     try {
       let newLivesData = {};
-
+  
       if (livesData) {
+        // Calculate the current percentage based on total targets.
         percentage = Math.round((percentage / livesData.totalTargets) * 100);
-        if (percentage >= 0 && percentage <= 5) {
-          let redLivesToShow = 5;
-          let blackLivesToShow = 0;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 5 red , 0 black
-        } else if (percentage >= 6 && percentage <= 11) {
-          let redLivesToShow = 4;
-          let blackLivesToShow = 1;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 4 red , 1 black
-        } else if (percentage >= 12 && percentage <= 17) {
-          let redLivesToShow = 3;
-          let blackLivesToShow = 2;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 3 red , 2 black
-        } else if (percentage >= 18 && percentage <= 23) {
-          let redLivesToShow = 2;
-          let blackLivesToShow = 3;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 2 red , 3 black
-        } else if (percentage >= 24 && percentage <= 30) {
-          let redLivesToShow = 1;
-          let blackLivesToShow = 4;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 1 red , 4 black
-        }else{
-          let redLivesToShow = 0;
-          let blackLivesToShow = 5;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-        }
-
+        
+        // Define the total number of lives and the threshold for lives calculation.
+        const totalLives = 5;
+        const threshold = 30;
+        const totalSyllables = livesData.totalTargets;
+        
+        if(totalSyllables <= 85){
+          threshold = 30;
+         }else if(totalSyllables > 85 && totalSyllables <= 130){
+          threshold = 20
+         }else if(totalSyllables > 130 && totalSyllables <= 250){
+          threshold = 15
+         }else if(totalSyllables > 250 && totalSyllables <= 500){
+          threshold = 10;
+         }else if(totalSyllables > 500){
+          threshold = 5
+         }
+         
+         
+        // Calculate which "life" the current percentage falls into.
+        const livesLost = Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives);
+        
+        // Determine the number of red and black lives to show.
+        const redLivesToShow = totalLives - livesLost;
+        const blackLivesToShow = livesLost;
+  
+        newLivesData = {
+          ...livesData,
+          blackLivesToShow,
+          redLivesToShow,
+        };
+  
+        // Play the audio based on the lives change.
         var audio = new Audio(
-          newLivesData.redLivesToShow <
-          (livesData?.redLivesToShow || livesData?.lives)
-            ? livesCut
-            : livesAdd
+          newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
         );
         audio.play();
+  
+        // Update the state or data structure with the new lives data.
         setLivesData(newLivesData);
       }
-    } catch {
-      // for exception
+    } catch (e){
+      console.log("error", e)
     }
   };
 
