@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
 import back from "../../assets/images/back-arrow.svg";
+import Stack from '@mui/material/Stack';
 
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
@@ -688,11 +689,17 @@ const MainLayout = (props) => {
                           style={{ zIndex: 9999, height: 340 }}
                         />
                       ) : (
+                        <Stack justifyContent="center"
+                        alignItems="center">
+                        {!gameOverData.meetsFluencyCriteria && (<Typography textAlign="center" sx={{ mt: 2 }}>
+                          Well done! Next, try to read it more confidently.
+                        </Typography>)}
                         <img
                           src={gameLost}
                           alt="gameLost"
                           style={{ height: 340 }}
                         />
+                        </Stack>
                       )}
                     </Box>
                   </>

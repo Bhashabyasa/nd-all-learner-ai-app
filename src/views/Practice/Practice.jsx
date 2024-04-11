@@ -64,7 +64,8 @@ const Practice = () => {
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
-    setGameOverData({ gameOver: true, userWon, ...data });
+    const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
+    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
   useEffect(() => {
