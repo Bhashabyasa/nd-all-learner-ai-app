@@ -416,7 +416,7 @@ function VoiceAnalyser(props) {
 
         // Fluency criteria adjustment
         let meetsFluencyCriteria = false;
-        switch (contentType) {
+        switch (contentType.toLowerCase()) {
           case 'word':
             meetsFluencyCriteria = fluencyScore < 2;
             break;
