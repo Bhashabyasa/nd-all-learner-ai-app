@@ -86,8 +86,8 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
-          : AudioPath[1][10]
+            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+            : AudioPath[1][10]
       );
       set_temp_audio(audio);
       setPauseAudio(val);
@@ -337,9 +337,8 @@ function VoiceAnalyser(props) {
       var audioFileName = "";
       if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
         let getContentId = currentLine;
-        audioFileName = `${
-          process.env.REACT_APP_CHANNEL
-        }/${sessionId}-${Date.now()}-${getContentId}.wav`;
+        audioFileName = `${process.env.REACT_APP_CHANNEL
+          }/${sessionId}-${Date.now()}-${getContentId}.wav`;
 
         const command = new PutObjectCommand({
           Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
@@ -351,7 +350,7 @@ function VoiceAnalyser(props) {
         });
         try {
           const response = await S3Client.send(command);
-        } catch (err) {}
+        } catch (err) { }
       }
 
       response(
@@ -390,52 +389,55 @@ function VoiceAnalyser(props) {
   const handlePercentageForLife = (percentage) => {
     try {
       let newLivesData = {};
-  
+
       if (livesData) {
         // Calculate the current percentage based on total targets.
         percentage = Math.round((percentage / livesData.totalTargets) * 100);
-        
+
         // Define the total number of lives and the threshold for lives calculation.
         const totalLives = 5;
         let threshold = 30;
         const totalSyllables = livesData.totalTargets;
-        
-        if(totalSyllables <= 85){
+
+        if (totalSyllables <= 100) {
+          threshold = 30;
+        }
+        else if (totalSyllables > 100 && totalSyllables <= 150) {
           threshold = 25;
-         }else if(totalSyllables > 85 && totalSyllables <= 130){
+        } else if (totalSyllables > 150 && totalSyllables <= 175) {
           threshold = 20
-         }else if(totalSyllables > 130 && totalSyllables <= 250){
+        } else if (totalSyllables > 175 && totalSyllables <= 250) {
           threshold = 15
-         }else if(totalSyllables > 250 && totalSyllables <= 500){
+        } else if (totalSyllables > 250 && totalSyllables <= 500) {
           threshold = 10;
-         }else if(totalSyllables > 500){
+        } else if (totalSyllables > 500) {
           threshold = 5
-         }
-         
-         
+        }
+
+
         // Calculate which "life" the current percentage falls into.
         const livesLost = Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives);
-        
+
         // Determine the number of red and black lives to show.
         const redLivesToShow = totalLives - livesLost;
         const blackLivesToShow = livesLost;
-  
+
         newLivesData = {
           ...livesData,
           blackLivesToShow,
           redLivesToShow,
         };
-  
+
         // Play the audio based on the lives change.
         var audio = new Audio(
           newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
         );
         audio.play();
-  
+
         // Update the state or data structure with the new lives data.
         setLivesData(newLivesData);
       }
-    } catch (e){
+    } catch (e) {
       console.log("error", e)
     }
   };
