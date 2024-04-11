@@ -266,7 +266,7 @@ function VoiceAnalyser(props) {
         data = updateLearnerData;
         responseText = data.responseText;
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
-        handlePercentageForLife(newThresholdPercentage);
+        handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
       }
 
       const responseEndTime = new Date().getTime();
@@ -386,7 +386,7 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage) => {
+  const handlePercentageForLife = (percentage, contentType, fluencyScore) => {
     try {
       let newLivesData = {};
 
@@ -399,24 +399,39 @@ function VoiceAnalyser(props) {
         let threshold = 30;
         const totalSyllables = livesData.totalTargets;
 
+        // Adjust threshold based on total syllables.
         if (totalSyllables <= 100) {
           threshold = 30;
-        }
-        else if (totalSyllables > 100 && totalSyllables <= 150) {
+        } else if (totalSyllables > 100 && totalSyllables <= 150) {
           threshold = 25;
         } else if (totalSyllables > 150 && totalSyllables <= 175) {
-          threshold = 20
+          threshold = 20;
         } else if (totalSyllables > 175 && totalSyllables <= 250) {
-          threshold = 15
+          threshold = 15;
         } else if (totalSyllables > 250 && totalSyllables <= 500) {
           threshold = 10;
         } else if (totalSyllables > 500) {
-          threshold = 5
+          threshold = 5;
         }
 
+        // Fluency criteria adjustment
+        let meetsFluencyCriteria = false;
+        switch (contentType) {
+          case 'word':
+            meetsFluencyCriteria = fluencyScore < 2;
+            break;
+          case 'sentence':
+            meetsFluencyCriteria = fluencyScore < 6;
+            break;
+          case 'paragraph':
+            meetsFluencyCriteria = fluencyScore < 10;
+            break;
+          default:
+            meetsFluencyCriteria = false;
+        }
 
-        // Calculate which "life" the current percentage falls into.
-        const livesLost = Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives);
+        // Calculate which "life" the current percentage falls into, adjusted for fluency.
+        const livesLost = meetsFluencyCriteria ? Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives) : totalLives;
 
         // Determine the number of red and black lives to show.
         const redLivesToShow = totalLives - livesLost;
@@ -438,9 +453,10 @@ function VoiceAnalyser(props) {
         setLivesData(newLivesData);
       }
     } catch (e) {
-      console.log("error", e)
+      console.log("error", e);
     }
-  };
+};
+
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
