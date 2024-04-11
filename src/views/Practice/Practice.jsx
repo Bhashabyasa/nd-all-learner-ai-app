@@ -62,8 +62,8 @@ const Practice = () => {
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
 
-  const gameOver = (data) => {
-    let userWon = livesData?.redLivesToShow > 0;
+  const gameOver = (data, isUserPass) => {
+    let userWon = isUserPass ? true : false;
     setGameOverData({ gameOver: true, userWon, ...data });
   };
 
@@ -243,7 +243,7 @@ const Practice = () => {
                 milestoneLevel: getSetData.data.currentLevel,
               }
             );
-            gameOver({ link: "/assesment-end" });
+            gameOver({ link: "/assesment-end" }, true);
             return;
           }
 

@@ -431,7 +431,8 @@ function VoiceAnalyser(props) {
         }
 
         // Calculate which "life" the current percentage falls into, adjusted for fluency.
-        const livesLost = meetsFluencyCriteria ? Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives) : totalLives;
+        let livesLost = Math.min(Math.floor(percentage / (threshold / totalLives)), totalLives);
+        livesLost = meetsFluencyCriteria ? livesLost : livesLost + 1;
 
         // Determine the number of red and black lives to show.
         const redLivesToShow = totalLives - livesLost;
