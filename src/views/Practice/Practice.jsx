@@ -225,20 +225,25 @@ const Practice = () => {
           );
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult == "pass") {
-            await axios.post(
-              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
-              {
-                userId: virtualId,
-                sessionId: sessionId,
-                milestone: `practice`,
-                lesson: "0",
-                progress: 0,
-                language: lang,
-                milestoneLevel: getSetData.data.currentLevel,
-              }
-            );
-            gameOver({ link: "/assesment-end" }, true);
-            return;
+            try{
+              await axios.post(
+                `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+                {
+                  userId: virtualId,
+                  sessionId: sessionId,
+                  milestone: `practice`,
+                  lesson: "0",
+                  progress: 0,
+                  language: lang,
+                  milestoneLevel: getSetData.data.currentLevel,
+                }
+              );
+              gameOver({ link: "/assesment-end" }, true);
+              return;
+            }
+            catch(e){
+              // catch error
+            }
           }
 
           // navigate("/assesment-end");
