@@ -53,10 +53,12 @@ const Practice = () => {
   const TARGETS_PERCENTAGE = 0.3;
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const lang = getLocalData("lang");
+  const [totalSyllableCount, setTotalSyllableCount] = useState('');
 
-  const gameOver = (data) => {
-    let userWon = livesData?.redLivesToShow > 0;
-    setGameOverData({ gameOver: true, userWon, ...data });
+  const gameOver = (data, isUserPass) => {
+    let userWon = isUserPass ? true : false;
+    const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
+    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
   useEffect(() => {
@@ -136,13 +138,13 @@ const Practice = () => {
         }
       } else {
         const pointsRes = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
           {
             userId: localStorage.getItem("virtualId"),
             sessionId: localStorage.getItem("sessionId"),
             points: 1,
             language: lang,
-            milestoneLevel: `m${level}`,
+            milestone: `m${level}`,
           }
         );
         setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
@@ -205,6 +207,7 @@ const Practice = () => {
               contentType: currentContentType,
               session_id: sessionId,
               user_id: virtualId,
+              totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
             }
           );
@@ -216,30 +219,26 @@ const Practice = () => {
               sessionId: sessionId,
               subSessionId: sub_session_id,
               milestoneLevel: getSetData?.data?.currentLevel,
+              totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
             }
           );
           setLocalData("previous_level", getSetData.data.previous_level);
-          if (getSetData.data.sessionResult === "pass") {
-            try{
-              await axios.post(
-                `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
-                {
-                  userId: virtualId,
-                  sessionId: sessionId,
-                  milestone: `practice`,
-                  lesson: "0",
-                  progress: 0,
-                  language: lang,
-                  milestoneLevel: getSetData.data.currentLevel,
-                }
-              );
-              gameOver({ link: "/assesment-end" });
-              return;
-            }
-            catch(e){
-              // catch error
-            }
+          if (getSetData.data.sessionResult == "pass") {
+            await axios.post(
+              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+              {
+                userId: virtualId,
+                sessionId: sessionId,
+                milestone: `practice`,
+                lesson: "0",
+                progress: 0,
+                language: lang,
+                milestoneLevel: getSetData.data.currentLevel,
+              }
+            );
+            gameOver({ link: "/assesment-end" }, true);
+            return;
           }
 
           // navigate("/assesment-end");
@@ -278,13 +277,14 @@ const Practice = () => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
+        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
         setLivesData({
           ...livesData,
-          totalTargets: resGetContent?.data?.totalTargets,
+          totalTargets: resGetContent?.data?.totalSyllableCount,
           targetsForLives:
-            resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE,
+            resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
           targetPerLive:
-            (resGetContent?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
         });
 
         let showcaseLevel =
@@ -385,7 +385,7 @@ const Practice = () => {
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
       );
       const getPointersDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -411,12 +411,13 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
-        totalTargets: resWord?.data?.totalTargets,
-        targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+        totalTargets: resWord?.data?.totalSyllableCount,
+        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
-          (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+          (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
@@ -500,12 +501,13 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
         ...livesData,
-        totalTargets: resWord?.data?.totalTargets,
-        targetsForLives: resWord?.data?.totalTargets * TARGETS_PERCENTAGE,
+        totalTargets: resWord?.data?.totalSyllableCount,
+        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
-          (resWord?.data?.totalTargets * TARGETS_PERCENTAGE) / LIVES,
+          (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
@@ -561,8 +563,7 @@ const Practice = () => {
                 <Typography
                   variant="h5"
                   component="h4"
-                  sx={{
-                    color: "#FF4830",
+                  sx={{                  
                     fontSize: `${fontSize}px`,
                     fontWeight: 700,
                     fontFamily: "Quicksand",
@@ -613,7 +614,6 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  color: "#FF4830",
                   fontSize: `${fontSize}px`,
                   fontWeight: 700,
                   fontFamily: "Quicksand",

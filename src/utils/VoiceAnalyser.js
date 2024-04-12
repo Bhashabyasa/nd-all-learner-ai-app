@@ -86,8 +86,8 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
-          : AudioPath[1][10]
+            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+            : AudioPath[1][10]
       );
       set_temp_audio(audio);
       setPauseAudio(val);
@@ -265,8 +265,8 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
-        newThresholdPercentage = data?.targetsPercentage || 0;
-        handlePercentageForLife(newThresholdPercentage);
+        newThresholdPercentage = data?.subsessionTargetsCount || 0;
+        handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
       }
 
       const responseEndTime = new Date().getTime();
@@ -337,9 +337,8 @@ function VoiceAnalyser(props) {
       var audioFileName = "";
       if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
         let getContentId = currentLine;
-        audioFileName = `${
-          process.env.REACT_APP_CHANNEL
-        }/${sessionId}-${Date.now()}-${getContentId}.wav`;
+        audioFileName = `${process.env.REACT_APP_CHANNEL
+          }/${sessionId}-${Date.now()}-${getContentId}.wav`;
 
         const command = new PutObjectCommand({
           Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
@@ -351,7 +350,7 @@ function VoiceAnalyser(props) {
         });
         try {
           const response = await S3Client.send(command);
-        } catch (err) {}
+        } catch (err) { }
       }
 
       response(
@@ -387,81 +386,76 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage) => {
+  const handlePercentageForLife = (percentage, contentType, fluencyScore) => {
     try {
-      const THRESHOLD_PERCENTAGE = 30;
-      let newLivesData = {};
+        if (livesData) {
+            // Calculate the current percentage based on total targets.
+            percentage = Math.round((percentage / livesData.totalTargets) * 100);
 
-      if (livesData) {
-        if (percentage > THRESHOLD_PERCENTAGE) {
-          let redLivesToShow = 0;
-          let blackLivesToShow = 5;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 5 black , 0 red
-        } else if (percentage >= 0 && percentage <= 5) {
-          let redLivesToShow = 5;
-          let blackLivesToShow = 0;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 5 red , 0 black
-        } else if (percentage >= 6 && percentage <= 11) {
-          let redLivesToShow = 4;
-          let blackLivesToShow = 1;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 4 red , 1 black
-        } else if (percentage >= 12 && percentage <= 17) {
-          let redLivesToShow = 3;
-          let blackLivesToShow = 2;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 3 red , 2 black
-        } else if (percentage >= 18 && percentage <= 23) {
-          let redLivesToShow = 2;
-          let blackLivesToShow = 3;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 2 red , 3 black
-        } else if (percentage >= 24 && percentage <= 29) {
-          let redLivesToShow = 1;
-          let blackLivesToShow = 4;
-          newLivesData = {
-            ...livesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-          // 1 red , 4 black
+            // Define the total number of lives and adjust the threshold based on syllables.
+            const totalLives = 5;
+            let threshold = 30; // Default threshold
+            const totalSyllables = livesData.totalTargets;
+
+            // Adjust the threshold based on total syllables.
+            if (totalSyllables <= 100) threshold = 30;
+            else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
+            else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
+            else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
+            else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
+            else if (totalSyllables > 500) threshold = 5;
+
+            // Calculate lives lost based on percentage.
+            let livesLost = Math.floor(percentage / (threshold / totalLives));
+            
+            // Check fluency criteria and adjust lives lost accordingly.
+            let meetsFluencyCriteria;
+            switch (contentType.toLowerCase()) {
+                case 'word':
+                    meetsFluencyCriteria = fluencyScore < 2;
+                    break;
+                case 'sentence':
+                    meetsFluencyCriteria = fluencyScore < 6;
+                    break;
+                case 'paragraph':
+                    meetsFluencyCriteria = fluencyScore < 10;
+                    break;
+                default:
+                    meetsFluencyCriteria = true; // Assume criteria met if not specified.
+            }
+
+            // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
+            if (!meetsFluencyCriteria && livesLost < totalLives) {
+                livesLost = Math.min(livesLost + 1, totalLives);
+            }
+
+            // Determine the number of red and black lives to show.
+            const redLivesToShow = totalLives - livesLost;
+            const blackLivesToShow = livesLost;
+
+            // Prepare the new lives data.
+            let newLivesData = {
+                ...livesData,
+                blackLivesToShow,
+                redLivesToShow,
+                meetsFluencyCriteria: meetsFluencyCriteria,
+            };
+
+            // Play audio based on the change in lives.
+            var audio = new Audio(
+                newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
+            );
+            audio.play();
+
+            // Update the state or data structure with the new lives data.
+            setLivesData(newLivesData);
         }
-
-        var audio = new Audio(
-          newLivesData.redLivesToShow <
-          (livesData?.redLivesToShow || livesData?.lives)
-            ? livesCut
-            : livesAdd
-        );
-        audio.play();
-        setLivesData(newLivesData);
-      }
-    } catch {
-      // for exception
+    } catch (e) {
+        console.log("error", e);
     }
-  };
+};
+
+
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
