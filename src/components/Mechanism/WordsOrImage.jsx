@@ -97,7 +97,6 @@ const WordsOrImage = ({
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <img
               src={image}
-              alt="image"
               style={{
                 maxWidth: "450px",
                 maxHeight: "130px",

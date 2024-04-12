@@ -18,7 +18,6 @@ import {
 import practicebg from "../../assets/images/practice-bg.svg";
 import {
   useNavigate,
-  useSearchParams,
 } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";

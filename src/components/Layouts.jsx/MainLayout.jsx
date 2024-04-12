@@ -1,5 +1,4 @@
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import back from "../../assets/images/back-arrow.svg";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
 
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";

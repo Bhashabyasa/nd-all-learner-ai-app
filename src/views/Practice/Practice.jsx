@@ -224,7 +224,7 @@ const Practice = () => {
             }
           );
           setLocalData("previous_level", getSetData.data.previous_level);
-          if (getSetData.data.sessionResult == "pass") {
+          if (getSetData.data.sessionResult === "pass") {
             try{
               await axios.post(
                 `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
