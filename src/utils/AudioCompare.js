@@ -115,7 +115,6 @@ export default class AudioRecorderCompair extends Component {
           const audioUrl = URL.createObjectURL(audioBlob);
           const audio = new Audio(audioUrl);
           audio.play();
-
         });
       });
     } catch (error) {
@@ -139,8 +138,7 @@ export default class AudioRecorderCompair extends Component {
           recordingInitialized: true,
         });
       },
-      pauseCallback: (e) => {
-      },
+      pauseCallback: (e) => {},
       stopCallback: (e) => {
         let temp_audioSrc = window.URL.createObjectURL(e);
         this.setState({
@@ -153,7 +151,11 @@ export default class AudioRecorderCompair extends Component {
           if (this.state.soundDetected) {
             this.props.setRecordedAudio(temp_audioSrc);
           } else {
-            alert("Please Speak Louder and Clear");
+            // alert();
+            this.props?.setOpenMessageDialog({
+              message: "Please Speak Louder and Clear",
+              isError: true,
+            });
           }
         }
 
@@ -161,10 +163,8 @@ export default class AudioRecorderCompair extends Component {
           recordingInitialized: false,
         });
       },
-      onRecordCallback: (e) => {
-      },
-      errorCallback: (err) => {
-      },
+      onRecordCallback: (e) => {},
+      errorCallback: (err) => {},
       backgroundColor: "hsla(0, 100%, 0%, 0)",
       strokeColor: "#73DD24",
       /* path76 */

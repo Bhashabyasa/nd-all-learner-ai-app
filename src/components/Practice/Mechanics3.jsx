@@ -47,16 +47,18 @@ const Mechanics2 = ({
   handleBack,
   allWords,
   setEnableNext,
+  loading,
+  setOpenMessageDialog,
 }) => {
   const [words, setWords] = useState([]);
   const [sentences, setSentences] = useState([]);
 
   const [selectedWord, setSelectedWord] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [shake, setShake] = useState(false);
   const [wordToFill, setWordToFill] = useState("");
   const [disabledWords, setDisabledWords] = useState(false);
-
+  const lang = getLocalData("lang");
   let wordToCheck = type == "audio" ? parentWords : wordToFill;
 
   useEffect(() => {
@@ -188,6 +190,7 @@ const Mechanics2 = ({
         playTeacherAudio,
         handleBack,
         disableScreen,
+        loading,
       }}
     >
       <Box
@@ -228,7 +231,7 @@ const Mechanics2 = ({
                   type="audio/mp3"
                   src={
                     contentId
-                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
                       : ""
                   }
                 />
@@ -425,6 +428,7 @@ const Mechanics2 = ({
               callUpdateLearner,
               isShowCase,
               setEnableNext,
+              setOpenMessageDialog,
             }}
           />
         </Box>

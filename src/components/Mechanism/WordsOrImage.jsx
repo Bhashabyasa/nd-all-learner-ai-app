@@ -41,6 +41,8 @@ const WordsOrImage = ({
   gameOverData,
   highlightWords,
   matchedChar,
+  loading,
+  setOpenMessageDialog
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -84,6 +86,7 @@ const WordsOrImage = ({
         disableScreen,
         livesData,
         gameOverData,
+        loading,
       }}
     >
       <CardContent
@@ -250,6 +253,7 @@ const WordsOrImage = ({
               setEnableNext,
               livesData,
               setLivesData,
+              setOpenMessageDialog
             }}
           />
         </Box>

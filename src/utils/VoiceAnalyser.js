@@ -28,7 +28,7 @@ import {
   getLocalData,
   replaceAll,
 } from "./constants";
-import config from "./urlConstants.json"
+import config from "./urlConstants.json";
 // import S3Client from '../config/awsS3';
 /* eslint-disable */
 
@@ -65,7 +65,7 @@ function VoiceAnalyser(props) {
   const [currentIndex, setCurrentIndex] = useState();
   const [temp_audio, set_temp_audio] = useState(null);
   const { callUpdateLearner } = props;
-
+  const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
@@ -86,8 +86,8 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${props.contentId}.wav`
-          : AudioPath[1][10]
+            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+            : AudioPath[1][10]
       );
       set_temp_audio(audio);
       setPauseAudio(val);
@@ -245,6 +245,7 @@ function VoiceAnalyser(props) {
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
+      let newThresholdPercentage = 0;
       let data = {};
 
       if (callUpdateLearner) {
@@ -264,61 +265,8 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
-
-        if (livesData) {
-          let newLivesData = {
-            ...livesData,
-            scoreData: {
-              ...livesData?.scoreData,
-              [props.currentLine]: data.createScoreData.session,
-            },
-          };
-
-          let missing_token_scores = [];
-          let confidence_scores = [];
-
-          Object.values(newLivesData.scoreData)?.forEach((elem) => {
-            // elem.missing_token_scores confidence_scores
-            elem.confidence_scores.forEach((ecs) => {
-              if (!confidence_scores.find((cs) => cs == ecs.token)) {
-                confidence_scores.push(ecs.token);
-              }
-            });
-            elem.missing_token_scores.forEach((emts) => {
-              if (!missing_token_scores.find((mts) => mts == emts.token)) {
-                missing_token_scores.push(emts.token);
-              }
-            });
-          });
-
-          newLivesData = {
-            ...newLivesData,
-            missing_token_scores,
-            confidence_scores,
-          };
-
-          const blackLivesToShow =
-            Math.round(
-              newLivesData?.missing_token_scores?.length /
-                newLivesData?.targetPerLive
-            ) || 0;
-          const redLivesToShow = newLivesData?.lives - blackLivesToShow;
-
-          newLivesData = {
-            ...newLivesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-
-          var audio = new Audio(
-            newLivesData.redLivesToShow <
-            (livesData?.redLivesToShow || livesData?.lives)
-              ? livesCut
-              : livesAdd
-          );
-          audio.play();
-          setLivesData(newLivesData);
-        }
+        newThresholdPercentage = data?.subsessionTargetsCount || 0;
+        handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
       }
 
       const responseEndTime = new Date().getTime();
@@ -389,9 +337,8 @@ function VoiceAnalyser(props) {
       var audioFileName = "";
       if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
         let getContentId = currentLine;
-        audioFileName = `${
-          process.env.REACT_APP_CHANNEL
-        }/${sessionId}-${Date.now()}-${getContentId}.wav`;
+        audioFileName = `${process.env.REACT_APP_CHANNEL
+          }/${sessionId}-${Date.now()}-${getContentId}.wav`;
 
         const command = new PutObjectCommand({
           Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
@@ -403,9 +350,7 @@ function VoiceAnalyser(props) {
         });
         try {
           const response = await S3Client.send(command);
-        } catch (err) {
- 
-        }
+        } catch (err) { }
       }
 
       response(
@@ -440,6 +385,77 @@ function VoiceAnalyser(props) {
       console.log("err", error);
     }
   };
+
+  const handlePercentageForLife = (percentage, contentType, fluencyScore) => {
+    try {
+        if (livesData) {
+            // Calculate the current percentage based on total targets.
+            percentage = Math.round((percentage / livesData.totalTargets) * 100);
+
+            // Define the total number of lives and adjust the threshold based on syllables.
+            const totalLives = 5;
+            let threshold = 30; // Default threshold
+            const totalSyllables = livesData.totalTargets;
+
+            // Adjust the threshold based on total syllables.
+            if (totalSyllables <= 100) threshold = 30;
+            else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
+            else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
+            else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
+            else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
+            else if (totalSyllables > 500) threshold = 5;
+
+            // Calculate lives lost based on percentage.
+            let livesLost = Math.floor(percentage / (threshold / totalLives));
+            
+            // Check fluency criteria and adjust lives lost accordingly.
+            let meetsFluencyCriteria;
+            switch (contentType.toLowerCase()) {
+                case 'word':
+                    meetsFluencyCriteria = fluencyScore < 2;
+                    break;
+                case 'sentence':
+                    meetsFluencyCriteria = fluencyScore < 6;
+                    break;
+                case 'paragraph':
+                    meetsFluencyCriteria = fluencyScore < 10;
+                    break;
+                default:
+                    meetsFluencyCriteria = true; // Assume criteria met if not specified.
+            }
+
+            // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
+            if (!meetsFluencyCriteria && livesLost < totalLives) {
+                livesLost = Math.min(livesLost + 1, totalLives);
+            }
+
+            // Determine the number of red and black lives to show.
+            const redLivesToShow = totalLives - livesLost;
+            const blackLivesToShow = livesLost;
+
+            // Prepare the new lives data.
+            let newLivesData = {
+                ...livesData,
+                blackLivesToShow,
+                redLivesToShow,
+                meetsFluencyCriteria: meetsFluencyCriteria,
+            };
+
+            // Play audio based on the change in lives.
+            var audio = new Audio(
+                newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
+            );
+            audio.play();
+
+            // Update the state or data structure with the new lives data.
+            setLivesData(newLivesData);
+        }
+    } catch (e) {
+        console.log("error", e);
+    }
+};
+
+
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
@@ -497,6 +513,7 @@ function VoiceAnalyser(props) {
                     recordedAudio={recordedAudio}
                     setEnableNext={props.setEnableNext}
                     showOnlyListen={props.showOnlyListen}
+                    setOpenMessageDialog={props.setOpenMessageDialog}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>
@@ -506,9 +523,14 @@ function VoiceAnalyser(props) {
                 <Box
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    alert(
-                      "Microphone is blocked. Enable microphone to continue."
-                    );
+                    // alert(
+                    //   "Microphone is blocked. Enable microphone to continue."
+                    // );
+                    props.setOpenMessageDialog({
+                      message:
+                        "Microphone is blocked. Enable microphone to continue.",
+                      isError: true,
+                    });
                   }}
                 >
                   <SpeakButton />
