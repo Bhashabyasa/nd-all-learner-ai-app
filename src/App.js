@@ -61,12 +61,12 @@ const App = () => {
             const fp = await FingerprintJS.load();
 
             const { visitorId } = await fp.get();
-            if(!localStorage.getItem('did')){
+            if (!localStorage.getItem('did')) {
                 localStorage.setItem('did', visitorId);
             }
             initService();
         };
-        
+
         setFp();
      }, []);
 
