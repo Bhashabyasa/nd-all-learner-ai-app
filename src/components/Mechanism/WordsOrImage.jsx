@@ -59,11 +59,7 @@ const WordsOrImage = ({
       setIsPlaying(true);
     }
   };
-
   const [currrentProgress, setCurrrentProgress] = useState(0);
-  const progressBarWidth = isNaN(currrentProgress / duration)
-    ? 0
-    : currrentProgress / duration;
 
   return (
     <MainLayout
@@ -97,11 +93,10 @@ const WordsOrImage = ({
           pointerEvents: disableScreen ? "none" : "initial",
         }}
       >
-        {type == "image" ? (
+        {type === "image" ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <img
               src={image}
-              alt="image"
               style={{
                 maxWidth: "450px",
                 maxHeight: "130px",
@@ -109,7 +104,7 @@ const WordsOrImage = ({
               }}
             />
           </Box>
-        ) : type == "phonics" ? (
+        ) : type === "phonics" ? (
           <Box
             position="relative"
             sx={{
@@ -180,7 +175,6 @@ const WordsOrImage = ({
                   sx={{
                     color: "#333F61",
                     fontSize: "44px",
-                    lineHeight: "normal",
                     letterSpacing: "2.2px",
                     lineHeight: "normal",
                     fontWeight: 600,
@@ -210,7 +204,7 @@ const WordsOrImage = ({
                   textAlign: "center",
                   fontSize: "40px",
                   paddingX: "140px",
-                  lineHeight: "normal",
+                  // lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -240,7 +234,7 @@ const WordsOrImage = ({
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
-            dontShowListen={type == "image" || isDiscover}
+            dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={words}
             {...{

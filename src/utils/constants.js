@@ -18,7 +18,7 @@ export function compareArrays(arr1, arr2) {
 
   // Iterate over each element and compare
   for (var k in arr1) {
-    if (arr2[k] == "" || arr2[k] == undefined) {
+    if (arr2[k] === "" || arr2[k] === undefined) {
       // Element not available on the same key
       words_result.push("-1");
     } else if (arr1[k] === arr2[k]) {
@@ -3441,11 +3441,11 @@ export const levelGetContent = {
 export function callConfettiSnow() {
   var duration = 3 * 1000;
   var animationEnd = Date.now() + duration;
-  var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  // var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-  function randomInRange(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+  // function randomInRange(min, max) {
+  //   return Math.random() * (max - min) + min;
+  // }
 
   var interval = setInterval(function () {
     var timeLeft = animationEnd - Date.now();
@@ -3455,9 +3455,10 @@ export function callConfettiSnow() {
     }
 
     // since particles fall down, start a bit higher than random
-    var timeLeft = animationEnd - Date.now();
+     timeLeft = animationEnd - Date.now();
     var ticks = Math.max(200, 500 * (timeLeft / duration));
-    var skew = Math.max(0.8, skew - 0.001);
+    var skew;
+     skew = Math.max(0.8, skew - 0.001);
 
     confetti({
       particleCount: 1,
@@ -3521,7 +3522,6 @@ export const languages = [
   { name: "தமிழ்", lang: "ta", symbol: "இ" },
   { name: "English", lang: "en", symbol: "A" },
   //{ name: "Hindi", lang: "hi", symbol: "क" },
-  ,
 ];
 
 export const randomizeArray = (arr) => {

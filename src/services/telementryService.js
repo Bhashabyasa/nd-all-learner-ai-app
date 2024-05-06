@@ -6,13 +6,11 @@ import { jwtDecode } from '../../node_modules/jwt-decode/build/cjs/index';
 var contentSessionId;
 let playSessionId;
 let url;
-let config;
 let isBuddyLogin = checkTokenInLocalStorage();
 
 if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
     var userDetails = jwtDecode(jwtToken);
-    var emis_username = userDetails.emis_username;
 }
 
 function checkTokenInLocalStorage() {
@@ -31,8 +29,6 @@ let getUrl = window.location.href;
 url = getUrl && getUrl.includes('#') && getUrl.split('#')[1].split('/')[1];
 
 export const initialize = async ({ context, config, metadata }) => {
-    context = context;
-    config = config;
     playSessionId = uniqueId();
     if (!CsTelemetryModule.instance.isInitialised) {
         await CsTelemetryModule.instance.init({});

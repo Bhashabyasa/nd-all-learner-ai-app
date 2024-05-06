@@ -1,20 +1,16 @@
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import back from "../../assets/images/back-arrow.svg";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
 
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
 import practicebgstone3 from "../../assets/images/practice-bg-stone3.svg";
-
 import practicebg from "../../assets/images/practice-bg.svg";
 import practicebg2 from "../../assets/images/practice-bg2.svg";
 import practicebg3 from "../../assets/images/practice-bg3.svg";
-
 import gameWon from "../../assets/images/gameWon.svg";
 import gameLost from "../../assets/images/gameLost.svg";
 import clouds from "../../assets/images/clouds.svg";
 import catLoading from "../../assets/images/catLoading.gif";
-
 import textureImage from "../../assets/images/textureImage.png";
 import timer from "../../assets/images/timer.svg";
 import {
@@ -105,7 +101,7 @@ const MainLayout = (props) => {
     enableNext,
     showNext = true,
     showTimer = true,
-    showScore = true,
+    // showScore = true,
     nextLessonAndHome = false,
     cardBackground,
     backgroundImage,
@@ -176,7 +172,7 @@ const MainLayout = (props) => {
     livesData?.blackLivesToShow > 0 ? livesData?.blackLivesToShow : 0;
 
   const redLivesToShow =
-    livesData?.redLivesToShow != undefined
+    livesData?.redLivesToShow !== undefined
       ? livesData?.redLivesToShow > 0
         ? livesData?.redLivesToShow
         : 0
@@ -196,11 +192,11 @@ const MainLayout = (props) => {
             position: "absolute",
             bottom: "70px",
             left:
-              LEVEL == 1
+              LEVEL === 1
                 ? "3px"
-                : LEVEL == 2
+                : LEVEL === 2
                 ? "40px"
-                : LEVEL == 3
+                : LEVEL === 3
                 ? "78px"
                 : "78px",
           }}
@@ -428,14 +424,14 @@ const MainLayout = (props) => {
                                     background:
                                       currentPracticeStep > i
                                         ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                        : currentPracticeStep == i
+                                        : currentPracticeStep === i
                                         ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                         : "rgba(0, 0, 0, 0.04)",
                                     ml: {
                                       md: 1.5,
                                       lg: 2,
                                     },
-                                    mr: i == practiceSteps?.length - 1 ? 2 : 0,
+                                    mr: i === practiceSteps?.length - 1 ? 2 : 0,
                                     borderRadius: "30px",
                                     display: "flex",
                                     justifyContent: "center",
@@ -448,7 +444,7 @@ const MainLayout = (props) => {
                                     <span
                                       style={{
                                         color:
-                                          currentPracticeStep == i
+                                          currentPracticeStep === i
                                             ? "white"
                                             : "#1E2937",
                                         fontWeight: 600,
@@ -780,7 +776,7 @@ const MainLayout = (props) => {
                                       background:
                                         currentPracticeStep > i
                                           ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                          : currentPracticeStep == i
+                                          : currentPracticeStep === i
                                           ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                           : "rgba(0, 0, 0, 0.04)",
                                       ml: {
@@ -788,7 +784,7 @@ const MainLayout = (props) => {
                                         lg: 2,
                                       },
                                       mr:
-                                        i == practiceSteps?.length - 1 ? 2 : 0,
+                                        i === practiceSteps?.length - 1 ? 2 : 0,
                                       borderRadius: "30px",
                                       display: "flex",
                                       justifyContent: "center",
@@ -801,7 +797,7 @@ const MainLayout = (props) => {
                                       <span
                                         style={{
                                           color:
-                                            currentPracticeStep == i
+                                            currentPracticeStep === i
                                               ? "white"
                                               : "#1E2937",
                                           fontWeight: 600,
