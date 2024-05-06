@@ -405,6 +405,8 @@ const MainLayout = (props) => {
                               height: "48px",
                               border: "1.5px solid rgba(51, 63, 97, 0.15)",
                               ml: {
+                                xs: 10,
+                                sm: 15,
                                 lg: 25,
                                 md: 18,
                               },
@@ -418,10 +420,14 @@ const MainLayout = (props) => {
                                   key={i}
                                   sx={{
                                     width: {
+                                      xs: "24px",
+                                      sm: "26px",
                                       md: "28px",
                                       lg: "36px",
                                     },
                                     height: {
+                                      xs: "24px",
+                                      sm: "26px",
                                       md: "28px",
                                       lg: "36px",
                                     },
@@ -432,6 +438,8 @@ const MainLayout = (props) => {
                                         ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                         : "rgba(0, 0, 0, 0.04)",
                                     ml: {
+                                      xs: 0.5,
+                                      sm: 0.5,
                                       md: 1.5,
                                       lg: 2,
                                     },
@@ -470,6 +478,8 @@ const MainLayout = (props) => {
                               justifyContent: "center",
                               alignItems: "center",
                               ml: {
+                                xs: 10,
+                                sm: 15,
                                 lg: 25,
                                 md: 15,
                               },
