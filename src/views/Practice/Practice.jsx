@@ -165,7 +165,7 @@ const Practice = () => {
         currentPracticeProgress = Math.round(
           ((currentQuestion + 1 + currentPracticeStep * limit) /
             (practiceSteps.length * limit)) *
-            100
+          100
         );
       }
 
@@ -568,7 +568,7 @@ const Practice = () => {
                 <Typography
                   variant="h5"
                   component="h4"
-                  sx={{                  
+                  sx={{
                     fontSize: `${fontSize}px`,
                     fontWeight: 700,
                     fontFamily: "Quicksand",
@@ -655,11 +655,13 @@ const Practice = () => {
   }
 
   useEffect(() => {
-		const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
-       const stringLengths = contentSourceData.map(item => item.text.length);
-	   const length = stringLengths[0]
-		window.parent.postMessage({ type: 'stringLengths',length }, '*');
-	  }, [questions[currentQuestion]?.contentSourceData?.[0]?.text]); 
+    if (questions[currentQuestion]?.contentSourceData) {
+      const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
+      const stringLengths = contentSourceData.map(item => item.text.length);
+      const length = stringLengths[0]
+      window.parent.postMessage({ type: 'stringLengths', length }, '*');
+    }
+  }, [questions[currentQuestion]?.contentSourceData?.[0]?.text]);
 
   const renderMechanics = () => {
     if (!mechanism) {
