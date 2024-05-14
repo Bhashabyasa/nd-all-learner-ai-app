@@ -338,11 +338,15 @@ export const ProfileHeader = ({
   const [openMessageDialog, setOpenMessageDialog] = useState("");
 
   const handleProfileBack = () => {
-    if(localStorage.getItem("token")){
-      let length = 100; 
-      window.parent.postMessage({ type: 'stringLengths', length }, '*');
+    try {
+      if(localStorage.getItem("token")){
+        let length = 100; 
+        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+      }
+      navigate("/")
+    } catch (error) {
+      console.error("Error posting message:", error);
     }
-    navigate("/")
   };
 
   return (
