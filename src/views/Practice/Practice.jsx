@@ -654,6 +654,13 @@ const Practice = () => {
     }
   }
 
+  useEffect(() => {
+		const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
+       const stringLengths = contentSourceData.map(item => item.text.length);
+	   const length = stringLengths[0]
+		window.parent.postMessage({ type: 'stringLengths',length }, '*');
+	  }, [questions[currentQuestion]?.contentSourceData?.[0]?.text]); 
+
   const renderMechanics = () => {
     if (!mechanism) {
       return (
