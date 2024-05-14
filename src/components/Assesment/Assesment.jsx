@@ -336,6 +336,15 @@ export const ProfileHeader = ({
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+
+  const handleProfileBack = () => {
+    if(localStorage.getItem("token")){
+      let length = 100; 
+      window.parent.postMessage({ type: 'stringLengths', length }, '*');
+    }
+    navigate("/")
+  };
+
   return (
     <>
       {!!openMessageDialog && (
@@ -375,7 +384,7 @@ export const ProfileHeader = ({
               <Box
                 ml={handleBack ? "12px" : "94px"}
                 sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={handleProfileBack}
               >
                 <img src={profilePic} alt="profile-pic"></img>
               </Box>
