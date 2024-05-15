@@ -336,6 +336,18 @@ export const ProfileHeader = ({
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+
+  const handleProfileBack = () => {
+    try {
+      if (window !== window.parent) {
+        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
+      }
+      navigate("/")
+    } catch (error) {
+      console.error("Error posting message:", error);
+    }
+  };
+
   return (
     <>
       {!!openMessageDialog && (
@@ -375,7 +387,7 @@ export const ProfileHeader = ({
               <Box
                 ml={handleBack ? "12px" : "94px"}
                 sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={handleProfileBack}
               >
                 <img src={profilePic} alt="profile-pic"></img>
               </Box>
