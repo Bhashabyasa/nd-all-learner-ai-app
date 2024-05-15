@@ -339,7 +339,7 @@ export const ProfileHeader = ({
 
   const handleProfileBack = () => {
     try {
-      if(localStorage.getItem("token")){
+      if (window !== window.parent) {
         window.parent.postMessage({ type: 'restore-iframe-content'}, '*');
       }
       navigate("/")
