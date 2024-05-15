@@ -340,8 +340,7 @@ export const ProfileHeader = ({
   const handleProfileBack = () => {
     try {
       if(localStorage.getItem("token")){
-        let length = 100; 
-        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+        window.parent.postMessage({ type: 'restore-iframe-content'}, '*');
       }
       navigate("/")
     } catch (error) {
