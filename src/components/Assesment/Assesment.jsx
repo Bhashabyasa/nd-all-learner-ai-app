@@ -340,7 +340,7 @@ export const ProfileHeader = ({
   const handleProfileBack = () => {
     try {
       if (window !== window.parent) {
-        window.parent.postMessage({ type: 'restore-iframe-content'}, '*');
+        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
       }
       navigate("/")
     } catch (error) {
