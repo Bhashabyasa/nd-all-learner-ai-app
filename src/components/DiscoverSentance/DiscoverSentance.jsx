@@ -193,6 +193,7 @@ const SpeakSentenceComponent = () => {
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Sentence");
+          setTotalSyllableCount(resPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(
             sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId
           );
@@ -216,6 +217,7 @@ const SpeakSentenceComponent = () => {
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Word");
+          setTotalSyllableCount(resPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(words?.content?.[0]?.collectionId);
           let quesArr = [...(resWordsPagination?.data?.data || [])];
           setCurrentQuestion(0);
