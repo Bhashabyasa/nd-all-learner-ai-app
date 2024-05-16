@@ -93,7 +93,10 @@ const WordsOrImage = ({
         sx={{
           overflow: "hidden",
           pt: "100px",
-          pr: "40px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           opacity: disableScreen ? 0.25 : 1,
           pointerEvents: disableScreen ? "none" : "initial",
         }}
