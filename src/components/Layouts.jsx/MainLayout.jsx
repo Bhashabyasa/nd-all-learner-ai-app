@@ -715,11 +715,11 @@ const MainLayout = (props) => {
                             
                             {!fluency ? (
                               <Typography textAlign="center" sx={{ mt: 2 }}>
-                                Well done! Next, try to read it more confidently.
+                                Good try! Need more speed.
                               </Typography>
                             ) : (
                               <Typography textAlign="center" sx={{ mt: 2 }}>
-                                You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more points to reach the next level
+                                You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more.
                               </Typography>
                             )}
                           </Typography>
