@@ -491,7 +491,7 @@ const Assesment = ({ discoverStart }) => {
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "ta");
+  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
