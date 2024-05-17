@@ -61,6 +61,7 @@ const Practice = () => {
   const { state } = useLocation();
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
+  const [percentage, setPercentage] = useState('');
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -73,7 +74,6 @@ const Practice = () => {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
-
   const callConfettiAndPlay = () => {
     play();
     callConfetti();
@@ -219,6 +219,7 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          setPercentage(getSetData?.data?.percentage);
           await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
@@ -704,6 +705,7 @@ const Practice = () => {
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
             loading,
+            percentage,
             setOpenMessageDialog,
           }}
         />

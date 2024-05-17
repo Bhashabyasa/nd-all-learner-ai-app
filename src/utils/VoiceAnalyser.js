@@ -266,7 +266,9 @@ function VoiceAnalyser(props) {
         data = updateLearnerData;
         responseText = data.responseText;
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
-        handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
+        if (contentType.toLowerCase() !== 'word') {
+          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
+        }
       }
 
       const responseEndTime = new Date().getTime();
