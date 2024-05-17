@@ -120,6 +120,7 @@ const MainLayout = (props) => {
     startShowCase,
     contentType,
     percentage,
+    fluency,
     setStartShowCase,
     livesData,
     gameOverData,

@@ -62,6 +62,7 @@ const Practice = () => {
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
   const [percentage, setPercentage] = useState('');
+  const [fluency, setFluency] = useState('');
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -133,6 +134,21 @@ const Practice = () => {
     }
   };
 
+  const checkFluency = (contentType, fluencyScore) => {
+      switch (contentType.toLowerCase()) {
+          case 'word':
+            setFluency(fluencyScore < 2);
+              break;
+          case 'sentence':
+            setFluency(fluencyScore < 6);
+              break;
+          case 'paragraph':
+            setFluency(fluencyScore < 10);
+              break;
+          default:
+            setFluency(true);
+      }
+  }
   const handleNext = async (isGameOver) => {
     setEnableNext(false);
 
@@ -220,6 +236,7 @@ const Practice = () => {
           );
           const { data: getSetData } = getSetResultRes;
           setPercentage(getSetData?.data?.percentage);
+          checkFluency(currentContentType, getSetData?.data?.fluency);
           await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
@@ -716,6 +733,7 @@ const Practice = () => {
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
             loading,
             percentage,
+            fluency,
             setOpenMessageDialog,
           }}
         />
