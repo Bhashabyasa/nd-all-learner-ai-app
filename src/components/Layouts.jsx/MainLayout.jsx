@@ -690,9 +690,6 @@ const MainLayout = (props) => {
                       ) : (
                         <Stack justifyContent="center"
                           alignItems="center">
-                          {!gameOverData.meetsFluencyCriteria && (<Typography textAlign="center" sx={{ mt: 2 }}>
-                            Well done! Next, try to read it more confidently.
-                          </Typography>)}
                           <img
                             src={gameLost}
                             alt="gameLost"
@@ -715,9 +712,16 @@ const MainLayout = (props) => {
                               {percentage}/100
                             </span>
                             <br />
-                            <Typography textAlign="center" sx={{ mt: 2 }}>
-                              You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more points to reach the next level
-                            </Typography>
+                            
+                            {!fluency ? (
+                              <Typography textAlign="center" sx={{ mt: 2 }}>
+                                Well done! Next, try to read it more confidently.
+                              </Typography>
+                            ) : (
+                              <Typography textAlign="center" sx={{ mt: 2 }}>
+                                You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more points to reach the next level
+                              </Typography>
+                            )}
                           </Typography>
                         </Stack>
 
