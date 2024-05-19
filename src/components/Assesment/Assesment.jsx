@@ -526,7 +526,7 @@ const Assesment = ({ discoverStart }) => {
 
         if (!session_id){
           session_id = uniqueId();
-          localStorage.setItem("session_id", session_id)
+          localStorage.setItem("sessionId", session_id)
         }
         
         localStorage.setItem("lang", lang || "ta");
@@ -554,10 +554,10 @@ const Assesment = ({ discoverStart }) => {
           )
         );
         const sessionId = getLocalData("sessionId");
-        
-        if (!session_id){
-          session_id = uniqueId();
-          localStorage.setItem("session_id", session_id)
+
+        if (!sessionId){
+          sessionId = uniqueId();
+          localStorage.setItem("sessionId", sessionId)
         }
 
         if (virtualId) {

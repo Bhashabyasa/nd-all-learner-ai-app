@@ -391,9 +391,9 @@ const Practice = () => {
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
 
-      if (!session_id){
-        session_id = uniqueId();
-        localStorage.setItem("session_id", session_id)
+      if (!sessionId){
+        sessionId = uniqueId();
+        localStorage.setItem("sessionId", sessionId)
       }
 
       const getMilestoneDetails = await axios.get(
