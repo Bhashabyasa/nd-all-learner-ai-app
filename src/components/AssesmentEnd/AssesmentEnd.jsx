@@ -43,6 +43,10 @@ const AssesmentEnd = () => {
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
       const sessionId = getLocalData("sessionId");
+      if (!session_id){
+        session_id = uniqueId();
+        localStorage.setItem("session_id", session_id)
+      }
       const getPointersDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );

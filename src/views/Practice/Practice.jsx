@@ -391,6 +391,11 @@ const Practice = () => {
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
 
+      if (!session_id){
+        session_id = uniqueId();
+        localStorage.setItem("session_id", session_id)
+      }
+
       const getMilestoneDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );

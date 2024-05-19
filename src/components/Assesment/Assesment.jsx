@@ -524,6 +524,11 @@ const Assesment = ({ discoverStart }) => {
         );
         let session_id = localStorage.getItem("sessionId");
 
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("session_id", session_id)
+        }
+        
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
@@ -549,6 +554,12 @@ const Assesment = ({ discoverStart }) => {
           )
         );
         const sessionId = getLocalData("sessionId");
+        
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("session_id", session_id)
+        }
+
         if (virtualId) {
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
