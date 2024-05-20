@@ -442,7 +442,10 @@ function VoiceAnalyser(props) {
 
             // Determine the number of red and black lives to show.
             const redLivesToShow = totalLives - livesLost;
-            const blackLivesToShow = livesLost;
+            let blackLivesToShow = 5;
+            if(livesLost <= 5){
+               blackLivesToShow = livesLost;
+            }
 
             // Prepare the new lives data.
             let newLivesData = {
