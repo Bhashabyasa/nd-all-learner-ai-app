@@ -61,6 +61,8 @@ const Practice = () => {
   const { state } = useLocation();
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
+  const [percentage, setPercentage] = useState('');
+  const [fluency, setFluency] = useState('');
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -73,7 +75,6 @@ const Practice = () => {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
-
   const callConfettiAndPlay = () => {
     play();
     callConfetti();
@@ -133,6 +134,21 @@ const Practice = () => {
     }
   };
 
+  const checkFluency = (contentType, fluencyScore) => {
+      switch (contentType.toLowerCase()) {
+          case 'word':
+            setFluency(fluencyScore < 2);
+              break;
+          case 'sentence':
+            setFluency(fluencyScore < 6);
+              break;
+          case 'paragraph':
+            setFluency(fluencyScore < 10);
+              break;
+          default:
+            setFluency(true);
+      }
+  }
   const handleNext = async (isGameOver) => {
     setEnableNext(false);
 
@@ -219,6 +235,8 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          setPercentage(getSetData?.data?.percentage);
+          checkFluency(currentContentType, getSetData?.data?.fluency);
           await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
@@ -372,6 +390,11 @@ const Practice = () => {
       const lang = getLocalData("lang");
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
+
+      if (!sessionId){
+        sessionId = uniqueId();
+        localStorage.setItem("sessionId", sessionId)
+      }
 
       const getMilestoneDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
@@ -714,6 +737,8 @@ const Practice = () => {
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
             loading,
+            percentage,
+            fluency,
             setOpenMessageDialog,
           }}
         />

@@ -3336,14 +3336,12 @@ export const levelGetContent = {
     {
       title: "P1",
       criteria: "word",
-      template: "simple",
-      mechanism: "formAWord",
+      template: "simple"
     },
     {
       title: "P2",
       criteria: "word",
-      template: "simple",
-      mechanism: "formAWord",
+      template: "simple"
     },
     { title: "P3", criteria: "sentence", template: "simple" },
     { title: "P4", criteria: "sentence", template: "simple" },

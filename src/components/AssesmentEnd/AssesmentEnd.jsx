@@ -21,6 +21,7 @@ import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { ProfileHeader } from "../Assesment/Assesment";
 import desktopLevel5 from "../../assets/images/assesmentComplete.png";
 import config from '../../utils/urlConstants.json';
+import { uniqueId } from "../../services/utilService";
 
 const AssesmentEnd = () => {
   const [shake, setShake] = useState(true);
@@ -43,6 +44,10 @@ const AssesmentEnd = () => {
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
       const sessionId = getLocalData("sessionId");
+      if (!sessionId){
+        sessionId = uniqueId();
+        localStorage.setItem("sessionId", sessionId)
+      }
       const getPointersDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
