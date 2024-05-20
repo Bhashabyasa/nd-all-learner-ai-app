@@ -62,26 +62,32 @@ const Mechanics2 = ({
   let wordToCheck = type == "audio" ? parentWords : wordToFill;
 
   useEffect(() => {
-    if (type == "fillInTheBlank" && parentWords?.length) {
-      let wordsArr = parentWords?.split(" ");
-      let randomIndex = Math.floor(Math.random() * wordsArr.length);
-      getSimilarWords(wordsArr[randomIndex]);
-      setWordToFill(wordsArr[randomIndex]);
-      wordsArr[randomIndex] = "dash";
-      setSentences(wordsArr);
-      setSelectedWord("");
-    }
+    const initializeFillInTheBlank = async () => {
+      if (type === "fillInTheBlank" && parentWords?.length) {
+        let wordsArr = parentWords.split(" ");
+        let randomIndex = Math.floor(Math.random() * wordsArr.length);
+        await getSimilarWords(wordsArr[randomIndex]);
+        setWordToFill(wordsArr[randomIndex]);
+        wordsArr[randomIndex] = "dash";
+        setSentences(wordsArr);
+        setSelectedWord("");
+      }
+    };
+    initializeFillInTheBlank();
   }, [contentId]);
 
   useEffect(() => {
-    if (type == "audio" && parentWords) {
-      setDisabledWords(true);
-      setSelectedWord("");
-      getSimilarWords(parentWords);
-    }
+    const initializeAudio = async () => {
+      if (type === "audio" && parentWords) {
+        setDisabledWords(true);
+        setSelectedWord("");
+        await getSimilarWords(parentWords);
+      }
+    };
+    initializeAudio();
   }, [contentId]);
 
-  const getSimilarWords = (wordForFindingHomophones) => {
+  const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
     // const isFillInTheBlanks = type == "fillInTheBlank";
     const wordToSimilar = wordForFindingHomophones
@@ -90,14 +96,14 @@ const Mechanics2 = ({
 
     if (lang == "en") {
       const finder = new HomophonesFinder();
-      finder.find(wordToSimilar).then((homophones) => {
-        let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
-        setWords(randomizeArray(wordsArr));
-      });
+      const homophones = await finder.find(wordToSimilar);
+      let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
+      setWords(randomizeArray(wordsArr));
     } else {
       let wordsToShow = [];
-      if (type == "audio")
+      if (type == "audio") {
         wordsToShow = allWords?.filter((elem) => elem != wordToSimilar);
+      }
       if (type == "fillInTheBlank") {
         wordsToShow = allWords
           ?.join(" ")
