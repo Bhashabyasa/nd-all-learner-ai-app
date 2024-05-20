@@ -66,26 +66,34 @@ const Mechanics2 = ({
       if (type === "fillInTheBlank" && parentWords?.length) {
         let wordsArr = parentWords.split(" ");
         let randomIndex = Math.floor(Math.random() * wordsArr.length);
-        await getSimilarWords(wordsArr[randomIndex]);
-        setWordToFill(wordsArr[randomIndex]);
-        wordsArr[randomIndex] = "dash";
-        setSentences(wordsArr);
-        setSelectedWord("");
+        try {
+          await getSimilarWords(wordsArr[randomIndex]);
+          setWordToFill(wordsArr[randomIndex]);
+          wordsArr[randomIndex] = "dash";
+          setSentences(wordsArr);
+          setSelectedWord("");
+        } catch (error) {
+          console.error("Error in initializeFillInTheBlank:", error);
+        }
       }
     };
     initializeFillInTheBlank();
-  }, [contentId]);
+  }, [contentId, parentWords]);
 
   useEffect(() => {
     const initializeAudio = async () => {
       if (type === "audio" && parentWords) {
         setDisabledWords(true);
         setSelectedWord("");
-        await getSimilarWords(parentWords);
+        try {
+          await getSimilarWords(parentWords);
+        } catch (error) {
+          console.error("Error in initializeAudio:", error);
+        }
       }
     };
     initializeAudio();
-  }, [contentId]);
+  }, [contentId, parentWords]);
 
   const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
