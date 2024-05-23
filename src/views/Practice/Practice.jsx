@@ -70,6 +70,10 @@ const Practice = () => {
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
+  const isFirefox = () => {
+    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
+  };
+
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
@@ -317,6 +321,15 @@ const Practice = () => {
         let showcaseLevel =
           currentPracticeStep == 3 || currentPracticeStep == 8;
         setIsShowCase(showcaseLevel);
+        if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+          localStorage.setItem('isShowcaseReload', true)
+          const iframe = window.parent.document.getElementById("myLearningJourneyIframe");
+          const baseUrl = iframe.src.split('#')[0].split('?')[0];
+          iframe.src = `${baseUrl}#/practice`;
+        }
+        else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+          localStorage.removeItem('isShowcaseReload')
+        }
 
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
         setCurrentContentType(resGetContent?.data?.content?.[0]?.contentType);
@@ -463,7 +476,15 @@ const Practice = () => {
 
       let showcaseLevel = userState == 4 || userState == 9;
       setIsShowCase(showcaseLevel);
-
+      if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+        localStorage.setItem('isShowcaseReload', true)
+        const iframe = window.parent.document.getElementById("myLearningJourneyIframe");
+        const baseUrl = iframe.src.split('#')[0].split('?')[0];
+        iframe.src = `${baseUrl}#/practice`;
+      }
+      else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+        localStorage.removeItem('isShowcaseReload')
+      }
       if (showcaseLevel) {
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
