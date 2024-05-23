@@ -29,6 +29,7 @@ import {
   replaceAll,
 } from "./constants";
 import config from "./urlConstants.json";
+import { filterBadWords } from "./Badwords";
 // import S3Client from '../config/awsS3';
 /* eslint-disable */
 
@@ -245,6 +246,7 @@ function VoiceAnalyser(props) {
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
+      let profanityWord = ""
       let newThresholdPercentage = 0;
       let data = {};
 
@@ -265,8 +267,17 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
+         profanityWord = await filterBadWords(data.responseText);
+        if (profanityWord !== data.responseText) {
+          props?.setOpenMessageDialog({
+            message: "Please avoid using inappropriate language.",
+            isError: true,
+          });
+        } 
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
-        handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
+        if (contentType.toLowerCase() !== 'word') {
+          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
+        }
       }
 
       const responseEndTime = new Date().getTime();
@@ -431,7 +442,10 @@ function VoiceAnalyser(props) {
 
             // Determine the number of red and black lives to show.
             const redLivesToShow = totalLives - livesLost;
-            const blackLivesToShow = livesLost;
+            let blackLivesToShow = 5;
+            if(livesLost <= 5){
+               blackLivesToShow = livesLost;
+            }
 
             // Prepare the new lives data.
             let newLivesData = {

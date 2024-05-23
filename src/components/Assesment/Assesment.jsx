@@ -339,6 +339,18 @@ export const ProfileHeader = ({
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+
+  const handleProfileBack = () => {
+    try {
+      if (window !== window.parent) {
+        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
+      }
+      navigate("/")
+    } catch (error) {
+      console.error("Error posting message:", error);
+    }
+  };
+
   return (
     <>
       {!!openMessageDialog && (
@@ -378,7 +390,7 @@ export const ProfileHeader = ({
               <Box
                 ml={handleBack ? "12px" : "94px"}
                 sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={handleProfileBack}
               >
                 <img src={profilePic}></img>
               </Box>
@@ -479,7 +491,7 @@ const Assesment = ({ discoverStart }) => {
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "ta");
+  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -512,6 +524,11 @@ const Assesment = ({ discoverStart }) => {
         );
         let session_id = localStorage.getItem("sessionId");
 
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("sessionId", session_id)
+        }
+        
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
@@ -537,6 +554,12 @@ const Assesment = ({ discoverStart }) => {
           )
         );
         const sessionId = getLocalData("sessionId");
+
+        if (!sessionId){
+          sessionId = uniqueId();
+          localStorage.setItem("sessionId", sessionId)
+        }
+
         if (virtualId) {
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
