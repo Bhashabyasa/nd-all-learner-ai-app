@@ -321,12 +321,12 @@ const Practice = () => {
         let showcaseLevel =
           currentPracticeStep == 3 || currentPracticeStep == 8;
         setIsShowCase(showcaseLevel);
-        if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox()) {
-          localStorage.setItem('testing', true)
+        if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+          localStorage.setItem('isShowcaseReload', true)
           window.location.reload();
         }
-        else if (!showcaseLevel && localStorage.getItem('testing') && isFirefox()) {
-          localStorage.removeItem('testing')
+        else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+          localStorage.removeItem('isShowcaseReload')
         }
 
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
@@ -474,12 +474,12 @@ const Practice = () => {
 
       let showcaseLevel = userState == 4 || userState == 9;
       setIsShowCase(showcaseLevel);
-      if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox()) {
-        localStorage.setItem('testing', true)
+      if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+        localStorage.setItem('isShowcaseReload', true)
         window.location.reload();
       }
-      else if (!showcaseLevel && localStorage.getItem('testing') && isFirefox()) {
-        localStorage.removeItem('testing')
+      else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+        localStorage.removeItem('isShowcaseReload')
       }
       if (showcaseLevel) {
         await axios.post(
