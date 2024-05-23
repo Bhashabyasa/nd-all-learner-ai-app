@@ -320,10 +320,10 @@ const Practice = () => {
           currentPracticeStep == 3 || currentPracticeStep == 8;
         setIsShowCase(showcaseLevel);
         if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox()) {
-          localStorage.setItem('testing',true)  
-          window.location.reload(); 
+          localStorage.setItem('testing', true)
+          window.location.reload();
         }
-        else if(!showcaseLevel && localStorage.getItem('testing') && isFirefox()){
+        else if (!showcaseLevel && localStorage.getItem('testing') && isFirefox()) {
           localStorage.removeItem('testing')
         }
 
@@ -472,11 +472,11 @@ const Practice = () => {
 
       let showcaseLevel = userState == 4 || userState == 9;
       setIsShowCase(showcaseLevel);
-      if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox() ) {
-        localStorage.setItem('testing',true)  
-        window.location.reload(); 
+      if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox()) {
+        localStorage.setItem('testing', true)
+        window.location.reload();
       }
-      else if(!showcaseLevel && localStorage.getItem('testing') && isFirefox()){
+      else if (!showcaseLevel && localStorage.getItem('testing') && isFirefox()) {
         localStorage.removeItem('testing')
       }
       if (showcaseLevel) {
