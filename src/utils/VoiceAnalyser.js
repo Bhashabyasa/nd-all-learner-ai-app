@@ -400,12 +400,18 @@ function VoiceAnalyser(props) {
       );
 
       setApiResponse(callUpdateLearner ? data.status : "success");
+      if(props.handleNext){
+        props.handleNext();
+      }
       setLoader(false);
       if( props.setIsNextButtonCalled){ 
         props.setIsNextButtonCalled(false);
       }
     } catch (error) {
       setLoader(false);
+      if(props.handleNext){
+        props.handleNext();
+      }
       if( props.setIsNextButtonCalled){ 
         props.setIsNextButtonCalled(false);
       }

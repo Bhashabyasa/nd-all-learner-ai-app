@@ -532,7 +532,13 @@ const MainLayout = (props) => {
                       {enableNext ? (
                         <Box
                           sx={{ cursor: "pointer" }}
-                          onClick={() => handleNext()}
+                          onClick={() => {
+                            if (props.setIsNextButtonCalled) {
+                              props.setIsNextButtonCalled(true);
+                            } else {
+                              handleNext();
+                            }
+                          }}                          
                         >
                           <NextButton />
                         </Box>
