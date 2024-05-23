@@ -323,7 +323,7 @@ const Practice = () => {
         setIsShowCase(showcaseLevel);
         if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
           localStorage.setItem('isShowcaseReload', true)
-          window.location.reload();
+          window.parent.document.getElementById("myLearningJourneyIframe").contentWindow.location.reload();
         }
         else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
           localStorage.removeItem('isShowcaseReload')
@@ -476,7 +476,7 @@ const Practice = () => {
       setIsShowCase(showcaseLevel);
       if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
         localStorage.setItem('isShowcaseReload', true)
-        window.location.reload();
+        window.parent.document.getElementById("myLearningJourneyIframe").contentWindow.location.reload();
       }
       else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
         localStorage.removeItem('isShowcaseReload')
