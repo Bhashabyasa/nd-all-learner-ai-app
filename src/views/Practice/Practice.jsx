@@ -70,6 +70,10 @@ const Practice = () => {
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
+  const isFirefox = () => {
+    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
+  };
+
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
@@ -315,6 +319,13 @@ const Practice = () => {
         let showcaseLevel =
           currentPracticeStep == 3 || currentPracticeStep == 8;
         setIsShowCase(showcaseLevel);
+        if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox()) {
+          localStorage.setItem('testing',true)  
+          window.location.reload(); 
+        }
+        else if(!showcaseLevel && localStorage.getItem('testing') && isFirefox()){
+          localStorage.removeItem('testing')
+        }
 
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
         setCurrentContentType(resGetContent?.data?.content?.[0]?.contentType);
@@ -461,7 +472,13 @@ const Practice = () => {
 
       let showcaseLevel = userState == 4 || userState == 9;
       setIsShowCase(showcaseLevel);
-
+      if (showcaseLevel && localStorage.getItem('testing') === null && isFirefox() ) {
+        localStorage.setItem('testing',true)  
+        window.location.reload(); 
+      }
+      else if(!showcaseLevel && localStorage.getItem('testing') && isFirefox()){
+        localStorage.removeItem('testing')
+      }
       if (showcaseLevel) {
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
