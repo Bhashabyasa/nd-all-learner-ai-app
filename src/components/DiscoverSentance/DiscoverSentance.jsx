@@ -40,6 +40,7 @@ const SpeakSentenceComponent = () => {
   const [play] = useSound(LevelCompleteAudio);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
+  const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
 
   const callConfettiAndPlay = () => {
@@ -114,6 +115,7 @@ const SpeakSentenceComponent = () => {
   };
 
   const handleNext = async () => {
+    setIsNextButtonCalled(true)
     setEnableNext(false);
 
     try {
@@ -331,6 +333,8 @@ const SpeakSentenceComponent = () => {
           disableScreen,
           handleBack,
           setEnableNext,
+          isNextButtonCalled,
+          setIsNextButtonCalled,
           setOpenMessageDialog,
         }}
       />
