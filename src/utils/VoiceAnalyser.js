@@ -168,7 +168,7 @@ function VoiceAnalyser(props) {
 
   useEffect(() => {
     if (recordedAudio !== "") {
-      setLoader(true);
+      // setLoader(true);
       let uri = recordedAudio;
       var request = new XMLHttpRequest();
       request.open("GET", uri, true);
@@ -189,12 +189,22 @@ function VoiceAnalyser(props) {
     }
   }, [recordedAudio]);
 
+  useEffect(()=>{
+    if(props.isNextButtonCalled){
+      if (recordedAudioBase64 !== "") {
+        const lang = getLocalData("lang") || "ta";
+        fetchASROutput(lang, recordedAudioBase64);
+        setLoader(true)
+      }
+    }
+      },[props.isNextButtonCalled])
+
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
-      const lang = getLocalData("lang") || "ta";
-      fetchASROutput(lang, recordedAudioBase64);
+      props.setIsNextButtonCalled(false);
     }
   }, [recordedAudioBase64]);
+
   useEffect(() => {
     // props.updateStory();
     props.setVoiceText(apiResponse);
@@ -389,6 +399,7 @@ function VoiceAnalyser(props) {
 
       setApiResponse(callUpdateLearner ? data.status : "success");
       setLoader(false);
+      props.setIsNextButtonCalled(false);
     } catch (error) {
       setLoader(false);
       setRecordedAudioBase64("");
@@ -457,9 +468,9 @@ function VoiceAnalyser(props) {
 
             // Play audio based on the change in lives.
             var audio = new Audio(
-                newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
-            );
-            audio.play();
+              newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
+          );
+           audio.play();
 
             // Update the state or data structure with the new lives data.
             setLivesData(newLivesData);

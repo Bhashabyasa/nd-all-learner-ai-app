@@ -39,7 +39,6 @@ const Practice = () => {
   const [assessmentResponse, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
   const [currentCollectionId, setCurrentCollectionId] = useState("");
-
   const [points, setPoints] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [enableNext, setEnableNext] = useState(false);
@@ -63,6 +62,7 @@ const Practice = () => {
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
   const [percentage, setPercentage] = useState('');
   const [fluency, setFluency] = useState('');
+  const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -118,7 +118,7 @@ const Practice = () => {
       setEnableNext(false);
     }
     if (voiceText == "success") {
-      setEnableNext(true);
+      // setEnableNext(true);
       // go_to_result(voiceText);
       setVoiceText("");
     }
@@ -149,7 +149,9 @@ const Practice = () => {
             setFluency(true);
       }
   }
+
   const handleNext = async (isGameOver) => {
+    setIsNextButtonCalled(true)
     setEnableNext(false);
 
     try {
@@ -740,6 +742,9 @@ const Practice = () => {
             percentage,
             fluency,
             setOpenMessageDialog,
+            setEnableNext,
+            isNextButtonCalled,
+            setIsNextButtonCalled
           }}
         />
       );
