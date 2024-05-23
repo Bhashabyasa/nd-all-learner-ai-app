@@ -94,6 +94,7 @@ const WordsOrImage = ({
         livesData,
         gameOverData,
         loading,
+        setIsNextButtonCalled
       }}
     >
       <CardContent
@@ -250,6 +251,7 @@ const WordsOrImage = ({
             dontShowListen={type == "image" || isDiscover}
             // updateStory={updateStory}
             originalText={words}
+            handleNext={handleNext}
             {...{
               contentId,
               contentType,
