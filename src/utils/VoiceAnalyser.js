@@ -201,7 +201,9 @@ function VoiceAnalyser(props) {
 
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
-      props.setIsNextButtonCalled(false);
+      if( props.setIsNextButtonCalled){
+        props.setIsNextButtonCalled(false);
+      }
     }
   }, [recordedAudioBase64]);
 
@@ -399,9 +401,14 @@ function VoiceAnalyser(props) {
 
       setApiResponse(callUpdateLearner ? data.status : "success");
       setLoader(false);
-      props.setIsNextButtonCalled(false);
+      if( props.setIsNextButtonCalled){ 
+        props.setIsNextButtonCalled(false);
+      }
     } catch (error) {
       setLoader(false);
+      if( props.setIsNextButtonCalled){ 
+        props.setIsNextButtonCalled(false);
+      }
       setRecordedAudioBase64("");
       setApiResponse("error");
       console.log("err", error);
