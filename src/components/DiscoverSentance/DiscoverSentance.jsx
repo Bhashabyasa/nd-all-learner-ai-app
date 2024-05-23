@@ -98,7 +98,7 @@ const SpeakSentenceComponent = () => {
       setEnableNext(false);
     }
     if (voiceText == "success") {
-      setEnableNext(true);
+      // setEnableNext(true);
       // go_to_result(voiceText);
       setVoiceText("");
     }
