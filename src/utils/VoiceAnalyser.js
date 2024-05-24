@@ -490,7 +490,7 @@ function VoiceAnalyser(props) {
             } else {
               isLiveLost = false;
             }
-            var audio = new Audio(isLiveLost ? livesCut : livesAdd);
+            const audio = new Audio(isLiveLost ? livesCut : livesAdd);
             audio.play();
 
             // Update the state or data structure with the new lives data.
