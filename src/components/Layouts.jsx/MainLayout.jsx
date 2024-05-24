@@ -195,19 +195,11 @@ const MainLayout = (props) => {
             left:
               LEVEL === 1
                 ? "3px"
-<<<<<<< HEAD
-                : LEVEL === 2
-                ? "40px"
-                : LEVEL === 3
-                ? "78px"
-                : "78px",
-=======
                 : LEVEL == 2
                   ? "40px"
                   : LEVEL == 3
                     ? "78px"
                     : "78px",
->>>>>>> origin/All-1.0.1
           }}
         >
           <img
@@ -438,15 +430,9 @@ const MainLayout = (props) => {
                                     background:
                                       currentPracticeStep > i
                                         ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-<<<<<<< HEAD
                                         : currentPracticeStep === i
                                         ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                         : "rgba(0, 0, 0, 0.04)",
-=======
-                                        : currentPracticeStep == i
-                                          ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
-                                          : "rgba(0, 0, 0, 0.04)",
->>>>>>> origin/All-1.0.1
                                     ml: {
                                       xs: 0.5,
                                       sm: 0.5,
@@ -831,15 +817,9 @@ const MainLayout = (props) => {
                                       background:
                                         currentPracticeStep > i
                                           ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-<<<<<<< HEAD
                                           : currentPracticeStep === i
                                           ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                           : "rgba(0, 0, 0, 0.04)",
-=======
-                                          : currentPracticeStep == i
-                                            ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
-                                            : "rgba(0, 0, 0, 0.04)",
->>>>>>> origin/All-1.0.1
                                       ml: {
                                         md: 1.5,
                                         lg: 2,
