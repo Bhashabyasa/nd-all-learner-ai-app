@@ -285,10 +285,10 @@ function VoiceAnalyser(props) {
             message: "Please avoid using inappropriate language.",
             isError: true,
           });
-        } 
+        }
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
         if (contentType.toLowerCase() !== 'word') {
-          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
+          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency,lang);
         }
       }
 
@@ -404,7 +404,7 @@ function VoiceAnalyser(props) {
         props.handleNext();
       }
       setLoader(false);
-      if( props.setIsNextButtonCalled){ 
+      if( props.setIsNextButtonCalled){
         props.setIsNextButtonCalled(false);
       }
     } catch (error) {
@@ -412,7 +412,7 @@ function VoiceAnalyser(props) {
       if(props.handleNext){
         props.handleNext();
       }
-      if( props.setIsNextButtonCalled){ 
+      if( props.setIsNextButtonCalled){
         props.setIsNextButtonCalled(false);
       }
       setRecordedAudioBase64("");
@@ -421,16 +421,21 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage, contentType, fluencyScore) => {
+  const handlePercentageForLife = (percentage, contentType, fluencyScore,language) => {
     try {
         if (livesData) {
+          let totalSyllables = livesData.totalTargets;
+          if (language === "en") {
+             if (totalSyllables > 50) {
+              totalSyllables = 50;
+             }
+          }
             // Calculate the current percentage based on total targets.
-            percentage = Math.round((percentage / livesData.totalTargets) * 100);
+            percentage = Math.round((percentage / totalSyllables) * 100);
 
             // Define the total number of lives and adjust the threshold based on syllables.
             const totalLives = 5;
             let threshold = 30; // Default threshold
-            const totalSyllables = livesData.totalTargets;
 
             // Adjust the threshold based on total syllables.
             if (totalSyllables <= 100) threshold = 30;
@@ -442,7 +447,7 @@ function VoiceAnalyser(props) {
 
             // Calculate lives lost based on percentage.
             let livesLost = Math.floor(percentage / (threshold / totalLives));
-            
+
             // Check fluency criteria and adjust lives lost accordingly.
             let meetsFluencyCriteria;
             switch (contentType.toLowerCase()) {
