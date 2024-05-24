@@ -480,10 +480,18 @@ function VoiceAnalyser(props) {
             };
 
             // Play audio based on the change in lives.
+            const HeartGaain =  livesData.redLivesToShow === undefined? (5 - newLivesData.redLivesToShow) : (livesData.redLivesToShow - newLivesData.redLivesToShow);
+            let isLiveLost;
+            if(HeartGaain > 0){
+              isLiveLost = true
+            }
+            else{
+              isLiveLost = false
+            }            
             var audio = new Audio(
-              newLivesData.redLivesToShow < (livesData?.redLivesToShow || livesData?.lives) ? livesCut : livesAdd
-          );
-           audio.play();
+              isLiveLost ? livesCut : livesAdd
+            );
+            audio.play();
 
             // Update the state or data structure with the new lives data.
             setLivesData(newLivesData);
