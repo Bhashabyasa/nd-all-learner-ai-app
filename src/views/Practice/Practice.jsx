@@ -34,7 +34,6 @@ const Practice = () => {
   const [assessmentResponse, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
   const [currentCollectionId, setCurrentCollectionId] = useState("");
-
   const [points, setPoints] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [enableNext, setEnableNext] = useState(false);
@@ -54,6 +53,9 @@ const Practice = () => {
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
+  const [percentage, setPercentage] = useState('');
+  const [fluency, setFluency] = useState('');
+  const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -61,12 +63,15 @@ const Practice = () => {
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
+  const isFirefox = () => {
+    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
+  };
+
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
-
   const callConfettiAndPlay = () => {
     play();
     callConfetti();
@@ -109,8 +114,8 @@ const Practice = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText === "success") {
-      setEnableNext(true);
+    if (voiceText == "success") {
+      // setEnableNext(true);
       // go_to_result(voiceText);
       setVoiceText("");
     }
@@ -126,7 +131,24 @@ const Practice = () => {
     }
   };
 
+  const checkFluency = (contentType, fluencyScore) => {
+      switch (contentType.toLowerCase()) {
+          case 'word':
+            setFluency(fluencyScore < 2);
+              break;
+          case 'sentence':
+            setFluency(fluencyScore < 6);
+              break;
+          case 'paragraph':
+            setFluency(fluencyScore < 10);
+              break;
+          default:
+            setFluency(true);
+      }
+  }
+
   const handleNext = async (isGameOver) => {
+    setIsNextButtonCalled(true)
     setEnableNext(false);
 
     try {
@@ -212,6 +234,8 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          setPercentage(getSetData?.data?.percentage);
+          checkFluency(currentContentType, getSetData?.data?.fluency);
           await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
@@ -295,6 +319,15 @@ const Practice = () => {
         let showcaseLevel =
           currentPracticeStep === 3 || currentPracticeStep === 8;
         setIsShowCase(showcaseLevel);
+        if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+          localStorage.setItem('isShowcaseReload', true)
+          const iframe = window.parent.document.getElementById("myLearningJourneyIframe");
+          const baseUrl = iframe.src.split('#')[0].split('?')[0];
+          iframe.src = `${baseUrl}#/practice`;
+        }
+        else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+          localStorage.removeItem('isShowcaseReload')
+        }
 
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
         setCurrentContentType(resGetContent?.data?.content?.[0]?.contentType);
@@ -371,6 +404,11 @@ const Practice = () => {
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
 
+      if (!sessionId){
+        sessionId = uniqueId();
+        localStorage.setItem("sessionId", sessionId)
+      }
+
       const getMilestoneDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
@@ -436,7 +474,15 @@ const Practice = () => {
 
       let showcaseLevel = userState === 4 || userState === 9;
       setIsShowCase(showcaseLevel);
-
+      if (showcaseLevel && localStorage.getItem('isShowcaseReload') === null && isFirefox()) {
+        localStorage.setItem('isShowcaseReload', true)
+        const iframe = window.parent.document.getElementById("myLearningJourneyIframe");
+        const baseUrl = iframe.src.split('#')[0].split('?')[0];
+        iframe.src = `${baseUrl}#/practice`;
+      }
+      else if (!showcaseLevel && localStorage.getItem('isShowcaseReload') && isFirefox()) {
+        localStorage.removeItem('isShowcaseReload')
+      }
       if (showcaseLevel) {
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
@@ -653,6 +699,16 @@ const Practice = () => {
       return highlightedSentence;
     }
   }
+  useEffect(() => {
+    if (questions[currentQuestion]?.contentSourceData) {
+      if (window !== window.parent) {
+        const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
+        const stringLengths = contentSourceData.map(item => item.text.length);
+        const length = stringLengths[0];
+        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+      }
+    }
+  }, [questions[currentQuestion]]);
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
@@ -708,7 +764,12 @@ const Practice = () => {
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
             loading,
+            percentage,
+            fluency,
             setOpenMessageDialog,
+            setEnableNext,
+            isNextButtonCalled,
+            setIsNextButtonCalled
           }}
         />
       );

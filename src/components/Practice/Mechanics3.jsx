@@ -61,26 +61,40 @@ const Mechanics2 = ({
   let wordToCheck = type === "audio" ? parentWords : wordToFill;
 
   useEffect(() => {
-    if (type === "fillInTheBlank" && parentWords?.length) {
-      let wordsArr = parentWords?.split(" ");
-      let randomIndex = Math.floor(Math.random() * wordsArr.length);
-      getSimilarWords(wordsArr[randomIndex]);
-      setWordToFill(wordsArr[randomIndex]);
-      wordsArr[randomIndex] = "dash";
-      setSentences(wordsArr);
-      setSelectedWord("");
-    }
-  }, [contentId]);
+    const initializeFillInTheBlank = async () => {
+      if (type === "fillInTheBlank" && parentWords?.length) {
+        let wordsArr = parentWords.split(" ");
+        let randomIndex = Math.floor(Math.random() * wordsArr.length);
+        try {
+          await getSimilarWords(wordsArr[randomIndex]);
+          setWordToFill(wordsArr[randomIndex]);
+          wordsArr[randomIndex] = "dash";
+          setSentences(wordsArr);
+          setSelectedWord("");
+        } catch (error) {
+          console.error("Error in initializeFillInTheBlank:", error);
+        }
+      }
+    };
+    initializeFillInTheBlank();
+  }, [contentId, parentWords]);
 
   useEffect(() => {
-    if (type === "audio" && parentWords) {
-      setDisabledWords(true);
-      setSelectedWord("");
-      getSimilarWords(parentWords);
-    }
-  }, [contentId]);
+    const initializeAudio = async () => {
+      if (type === "audio" && parentWords) {
+        setDisabledWords(true);
+        setSelectedWord("");
+        try {
+          await getSimilarWords(parentWords);
+        } catch (error) {
+          console.error("Error in initializeAudio:", error);
+        }
+      }
+    };
+    initializeAudio();
+  }, [contentId, parentWords]);
 
-  const getSimilarWords = (wordForFindingHomophones) => {
+  const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
     // const isFillInTheBlanks = type === "fillInTheBlank";
     const wordToSimilar = wordForFindingHomophones
@@ -89,15 +103,15 @@ const Mechanics2 = ({
 
     if (lang === "en") {
       const finder = new HomophonesFinder();
-      finder.find(wordToSimilar).then((homophones) => {
-        let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
-        setWords(randomizeArray(wordsArr));
-      });
+      const homophones = await finder.find(wordToSimilar);
+      let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
+      setWords(randomizeArray(wordsArr));
     } else {
       let wordsToShow = [];
-      if (type === "audio")
-        wordsToShow = allWords?.filter((elem) => elem !== wordToSimilar);
-      if (type === "fillInTheBlank") {
+      if (type == "audio") {
+        wordsToShow = allWords?.filter((elem) => elem != wordToSimilar);
+      }
+      if (type == "fillInTheBlank") {
         wordsToShow = allWords
           ?.join(" ")
           ?.split(" ")

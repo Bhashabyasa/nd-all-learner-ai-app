@@ -24,6 +24,8 @@ const WordsOrImage = ({
   currentStep,
   contentId,
   contentType,
+  percentage,
+  fluency,
   level,
   isDiscover,
   progressData,
@@ -42,7 +44,9 @@ const WordsOrImage = ({
   highlightWords,
   matchedChar,
   loading,
-  setOpenMessageDialog
+  setOpenMessageDialog,
+  isNextButtonCalled,
+  setIsNextButtonCalled
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -74,6 +78,9 @@ const WordsOrImage = ({
         level,
         progressData,
         showProgress,
+        contentType,
+        percentage,
+        fluency,
         playTeacherAudio,
         handleBack,
         isShowCase,
@@ -83,6 +90,7 @@ const WordsOrImage = ({
         livesData,
         gameOverData,
         loading,
+        setIsNextButtonCalled
       }}
     >
       <CardContent
@@ -237,6 +245,7 @@ const WordsOrImage = ({
             dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={words}
+            handleNext={handleNext}
             {...{
               contentId,
               contentType,
@@ -247,7 +256,9 @@ const WordsOrImage = ({
               setEnableNext,
               livesData,
               setLivesData,
-              setOpenMessageDialog
+              setOpenMessageDialog,
+              isNextButtonCalled,
+              setIsNextButtonCalled
             }}
           />
         </Box>

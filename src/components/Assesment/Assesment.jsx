@@ -479,6 +479,7 @@ const Assesment = ({ discoverStart }) => {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
+    setLocalData("profileName", username);
   }
   // const [searchParams, setSearchParams] = useSearchParams();
   // const [profileName, setProfileName] = useState(username);
@@ -487,7 +488,7 @@ const Assesment = ({ discoverStart }) => {
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "ta");
+  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -497,7 +498,7 @@ const Assesment = ({ discoverStart }) => {
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
-    if (discoverStart && username && localStorage.getItem("token")) {
+    if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
@@ -520,6 +521,11 @@ const Assesment = ({ discoverStart }) => {
         );
         let session_id = localStorage.getItem("sessionId");
 
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("sessionId", session_id)
+        }
+        
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
@@ -545,6 +551,12 @@ const Assesment = ({ discoverStart }) => {
           )
         );
         const sessionId = getLocalData("sessionId");
+
+        if (!sessionId){
+          sessionId = uniqueId();
+          localStorage.setItem("sessionId", sessionId)
+        }
+
         if (virtualId) {
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`

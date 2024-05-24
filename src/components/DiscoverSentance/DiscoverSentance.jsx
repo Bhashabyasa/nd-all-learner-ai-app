@@ -34,6 +34,7 @@ const SpeakSentenceComponent = () => {
   const [play] = useSound(LevelCompleteAudio);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
+  const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
 
   const callConfettiAndPlay = () => {
@@ -90,8 +91,7 @@ const SpeakSentenceComponent = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText === "success") {
-      setEnableNext(true);
+    if (voiceText == "success") {
       // go_to_result(voiceText);
       setVoiceText("");
     }
@@ -108,6 +108,7 @@ const SpeakSentenceComponent = () => {
   };
 
   const handleNext = async () => {
+    setIsNextButtonCalled(true)
     setEnableNext(false);
 
     try {
@@ -187,6 +188,7 @@ const SpeakSentenceComponent = () => {
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Sentence");
+          setTotalSyllableCount(resSentencesPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(
             sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId
           );
@@ -210,6 +212,7 @@ const SpeakSentenceComponent = () => {
             `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Word");
+          setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(words?.content?.[0]?.collectionId);
           let quesArr = [...(resWordsPagination?.data?.data || [])];
           setCurrentQuestion(0);
@@ -323,6 +326,8 @@ const SpeakSentenceComponent = () => {
           disableScreen,
           handleBack,
           setEnableNext,
+          isNextButtonCalled,
+          setIsNextButtonCalled,
           setOpenMessageDialog,
         }}
       />

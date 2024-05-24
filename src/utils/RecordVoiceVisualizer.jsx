@@ -1,49 +1,49 @@
 export default function RecordVoiceVisualizer() {
-    // const bar1 = (
-    //     <span
-    //         class="playing__bar playing__bar1"
-    //         style={{
-    //             height: `${Math.floor(Math.random() * 100)}%`,
-    //             animationDelay: `${Math.floor(Math.random() * 5)}s`,
-    //         }}
-    //     ></span>
-    // );
-    // const bar2 = (
-    //     <span
-    //         class="playing__bar playing__bar1"
-    //         style={{
-    //             height: `${Math.floor(Math.random() * 100)}%`,
-    //             animationDelay: `${Math.floor(Math.random() * 5)}s`,
-    //         }}
-    //     ></span>
-    // );
-    // const bar3 = (
-    //     <span
-    //         class="playing__bar playing__bar1"
-    //         style={{
-    //             height: `${Math.floor(Math.random() * 100)}%`,
-    //             animationDelay: `${Math.floor(Math.random() * 5)}s`,
-    //         }}
-    //     ></span>
-    // );
-    // const bar4 = (
-    //     <span
-    //         class="playing__bar playing__bar1"
-    //         style={{
-    //             height: `${Math.floor(Math.random() * 100)}%`,
-    //             animationDelay: `${Math.floor(Math.random() * 5)}s`,
-    //         }}
-    //     ></span>
-    // );
-    // const bar5 = (
-    //     <span
-    //         class="playing__bar playing__bar1"
-    //         style={{
-    //             height: `${Math.floor(Math.random() * 100)}%`,
-    //             animationDelay: `${Math.floor(Math.random() * 5)}s`,
-    //         }}
-    //     ></span>
-    // );
+    const bar1 = (
+        <span
+            className="playing__bar playing__bar1"
+            style={{
+                height: `${Math.floor(Math.random() * 100)}%`,
+                animationDelay: `${Math.floor(Math.random() * 5)}s`,
+            }}
+        ></span>
+    );
+    const bar2 = (
+        <span
+            className="playing__bar playing__bar1"
+            style={{
+                height: `${Math.floor(Math.random() * 100)}%`,
+                animationDelay: `${Math.floor(Math.random() * 5)}s`,
+            }}
+        ></span>
+    );
+    const bar3 = (
+        <span
+            className="playing__bar playing__bar1"
+            style={{
+                height: `${Math.floor(Math.random() * 100)}%`,
+                animationDelay: `${Math.floor(Math.random() * 5)}s`,
+            }}
+        ></span>
+    );
+    const bar4 = (
+        <span
+            className="playing__bar playing__bar1"
+            style={{
+                height: `${Math.floor(Math.random() * 100)}%`,
+                animationDelay: `${Math.floor(Math.random() * 5)}s`,
+            }}
+        ></span>
+    );
+    const bar5 = (
+        <span
+            className="playing__bar playing__bar1"
+            style={{
+                height: `${Math.floor(Math.random() * 100)}%`,
+                animationDelay: `${Math.floor(Math.random() * 5)}s`,
+            }}
+        ></span>
+    );
 
     const renderType = {
         bar1: { bar: 1, times: 7 },
@@ -58,7 +58,7 @@ export default function RecordVoiceVisualizer() {
         for (let i = 0; i <= Number(value.times); i++) {
             renderArr.push(
                 <span
-                    class={`playing__bar playing__bar${value.bar}`}
+                    className={`playing__bar playing__bar${value.bar}`}
                     style={{
                         height: `${Math.floor(Math.random() * 100)}%`,
                         animationDelay: `${Math.random() * 5}s`,
@@ -70,13 +70,13 @@ export default function RecordVoiceVisualizer() {
     };
     return (
         <div style={{ position: 'relative' }}>
-            <div class="playing">
+            <div className="playing">
                 {Object.entries(renderType).map(([key, value]) => {
                     return <>{renderBar(key, value)}</>;
                 })}
             </div>
             <div
-                class="playing"
+                className="playing"
                 style={{ position: 'absolute', left: '-0.241px', bottom: '-44px', transform: 'rotate(3.142rad)' }}
             >
                 {Object.entries(renderType)
