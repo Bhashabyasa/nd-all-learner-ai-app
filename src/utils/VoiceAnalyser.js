@@ -285,7 +285,7 @@ function VoiceAnalyser(props) {
             message: "Please avoid using inappropriate language.",
             isError: true,
           });
-        }
+        } 
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
         if (contentType.toLowerCase() !== 'word') {
           handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency, lang);
@@ -412,7 +412,7 @@ function VoiceAnalyser(props) {
       if(props.handleNext){
         props.handleNext();
       }
-      if( props.setIsNextButtonCalled){
+      if( props.setIsNextButtonCalled){ 
         props.setIsNextButtonCalled(false);
       }
       setRecordedAudioBase64("");
