@@ -288,7 +288,7 @@ function VoiceAnalyser(props) {
         }
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
         if (contentType.toLowerCase() !== 'word') {
-          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency,lang);
+          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency, lang);
         }
       }
 
@@ -404,7 +404,7 @@ function VoiceAnalyser(props) {
         props.handleNext();
       }
       setLoader(false);
-      if( props.setIsNextButtonCalled){
+      if( props.setIsNextButtonCalled){ 
         props.setIsNextButtonCalled(false);
       }
     } catch (error) {
@@ -421,7 +421,7 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage, contentType, fluencyScore,language) => {
+  const handlePercentageForLife = (percentage, contentType, fluencyScore, language) => {
     try {
         if (livesData) {
           let totalSyllables = livesData.totalTargets;
