@@ -211,7 +211,6 @@ const WordsOrImage = ({
                   color: "#333F61",
                   textAlign: "center",
                   fontSize: "40px",
-                  paddingX: "140px",
                   // lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
