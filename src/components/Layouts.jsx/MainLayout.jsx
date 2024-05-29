@@ -721,7 +721,7 @@ const MainLayout = (props) => {
                               boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
                             }}>
-                              {percentage}/100
+                              {percentage<=0? 0 : percentage}/100
                             </span>
                             <br />
                             
@@ -731,7 +731,7 @@ const MainLayout = (props) => {
                               </Typography>
                             ) : (
                               <Typography textAlign="center" sx={{ mt: 2 }}>
-                                You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more.
+                                You need <span style={{ fontWeight: "bold" }}>{percentage<=0? 70 : 70 - percentage}</span> more.
                               </Typography>
                             )}
                           </Typography>
