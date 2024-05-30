@@ -707,31 +707,39 @@ const MainLayout = (props) => {
                             alt="gameLost"
                             style={{ height: 340 }}
                           />
-                          <Typography sx={{ mb: 1, mt: 1, textAlign: "center" }}>
-                            <span style={{
-                              fontWeight: 600,
-                              fontSize: "24px",
-                              lineHeight: "1.5",
-                              letterSpacing: "1px",
-                              fontFamily: "Quicksand",
-                              backgroundColor: "rgb(237, 134, 0)",
-                              padding: "6px 12px",
-                              color: "#fff",
-                              borderRadius: "20px",
-                              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
-                            }}>
-                              {percentage}/100
+                       <Typography
+                            sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                          >
+                            <span
+                              style={{
+                                fontWeight: 600,
+                                fontSize: "24px",
+                                lineHeight: "1.5",
+                                letterSpacing: "1px",
+                                fontFamily: "Quicksand",
+                                backgroundColor: "rgb(237, 134, 0)",
+                                padding: "6px 12px",
+                                color: "#fff",
+                                borderRadius: "20px",
+                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              {percentage <= 0 ? 0 : percentage}/100
                             </span>
                             <br />
-                            
+
                             {!fluency ? (
                               <Typography textAlign="center" sx={{ mt: 2 }}>
                                 Good try! Need more speed.
                               </Typography>
                             ) : (
                               <Typography textAlign="center" sx={{ mt: 2 }}>
-                                You need <span style={{ fontWeight: "bold" }}>{70 - percentage}</span> more.
+                                You need{" "}
+                                <span style={{ fontWeight: "bold" }}>
+                                  {percentage <= 0 ? 70 : 70 - percentage}
+                                </span>{" "}
+                                more.
                               </Typography>
                             )}
                           </Typography>
