@@ -13,6 +13,7 @@ import useSound from "use-sound";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../Assesment/Assesment";
+import { Log } from "../../services/telementryService";
 
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -162,6 +163,8 @@ const SpeakSentenceComponent = () => {
         );
         setInitialAssesment(false);
         const { data: getSetData } = getSetResultRes;
+        const data = JSON.stringify(getSetData?.data);
+        Log(data, "discovery", "ET");
         if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
