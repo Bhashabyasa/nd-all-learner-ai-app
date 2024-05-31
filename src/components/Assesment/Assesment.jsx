@@ -91,7 +91,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
             {languages.map((elem) => {
               const isSelectedLang = elem.lang === selectedLang;
               return (
-                <Grid xs={4} item>
+                <Grid xs={5} item>
                   <Box
                     onClick={() => setSelectedLang(elem.lang)}
                     sx={{
@@ -169,7 +169,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         </Box>
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
-          mt="60px"
+          mt="50px" mb="10px"
           // mr="110px"
         >
           <Box
@@ -340,10 +340,12 @@ export const ProfileHeader = ({
 
   const handleProfileBack = () => {
     try {
-      if (window !== window.parent) {
+      if (window !== window.parent && process.env.REACT_APP_IS_APP_IFRAME) {
         window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
+        navigate("/")
+      } else {
+        navigate("/discover-start")
       }
-      navigate("/")
     } catch (error) {
       console.error("Error posting message:", error);
     }
