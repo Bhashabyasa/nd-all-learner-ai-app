@@ -503,7 +503,7 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
@@ -551,9 +551,9 @@ const Assesment = ({ discoverStart }) => {
             getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
           )
         );
-        const sessionId = getLocalData("sessionId");
+        let sessionId = getLocalData("sessionId");
 
-        if (!sessionId){
+        if (!sessionId || sessionId === 'null'){
           sessionId = uniqueId();
           localStorage.setItem("sessionId", sessionId)
         }

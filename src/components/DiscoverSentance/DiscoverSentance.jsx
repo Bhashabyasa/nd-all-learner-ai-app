@@ -162,6 +162,7 @@ const SpeakSentenceComponent = () => {
         );
         setInitialAssesment(false);
         const { data: getSetData } = getSetResultRes;
+        if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
           {
@@ -172,6 +173,7 @@ const SpeakSentenceComponent = () => {
             language: localStorage.getItem("lang"),
           }
         );
+        }
         if (
           getSetData.data.sessionResult === "pass" &&
           currentContentType === "Sentence" &&
@@ -185,7 +187,7 @@ const SpeakSentenceComponent = () => {
             (elem) => elem.category === "Sentence"
           );
           const resSentencesPagination = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Sentence");
           setTotalSyllableCount(resSentencesPagination?.data?.totalSyllableCount);
@@ -209,7 +211,7 @@ const SpeakSentenceComponent = () => {
             (elem) => elem.category === "Word"
           );
           const resWordsPagination = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.content?.[0]?.collectionId}`
           );
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
@@ -255,7 +257,7 @@ const SpeakSentenceComponent = () => {
         // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
         const resAssessment = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
+          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
           {
             ...{ tags: ["ASER"], language: lang },
           }
@@ -266,7 +268,7 @@ const SpeakSentenceComponent = () => {
         );
 
         const resPagination = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
+          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
         );
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount)
