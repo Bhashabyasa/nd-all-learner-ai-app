@@ -3,14 +3,14 @@ import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import { uniqueId } from './utilService';
 import { jwtDecode } from '../../node_modules/jwt-decode/build/cjs/index';
 
-var contentSessionId;
+let contentSessionId;
 let playSessionId;
 let url;
 let isBuddyLogin = checkTokenInLocalStorage();
 
 if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
-    var userDetails = jwtDecode(jwtToken);
+    let userDetails = jwtDecode(jwtToken);
 }
 
 function checkTokenInLocalStorage() {
@@ -88,6 +88,28 @@ export const response = (context, telemetryMode) => {
             getEventOptions(),
         );
     }
+};
+
+export const Log = (context, pageid, telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
+    try {
+      CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
+        options: getEventOptions(),
+        edata: {
+          type: "api_call",
+          level: "TRACE",
+          message: context,
+          pageid: pageid,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to log telemetry:", error, {
+        context,
+        pageid,
+        telemetryMode,
+      });
+    }
+  }
 };
 
 export const end = (data) => {

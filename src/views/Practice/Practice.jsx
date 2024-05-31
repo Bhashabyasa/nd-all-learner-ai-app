@@ -22,6 +22,7 @@ import { splitGraphemes } from "split-graphemes";
 import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
+import { Log } from "../../services/telementryService";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -54,7 +55,7 @@ const Practice = () => {
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
   const [percentage, setPercentage] = useState('');
-  const [fluency, setFluency] = useState('');
+  const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
@@ -234,6 +235,8 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          const data = JSON.stringify(getSetData?.data);
+          Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
           if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
