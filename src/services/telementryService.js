@@ -104,7 +104,11 @@ export const Log = (context, pageid, telemetryMode) => {
         },
       });
     } catch (error) {
-        console.error("Failed to log telemetry:", error, { context, pageid, telemetryMode });
+      console.error("Failed to log telemetry:", error, {
+        context,
+        pageid,
+        telemetryMode,
+      });
     }
   }
 };
