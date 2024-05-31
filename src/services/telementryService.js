@@ -3,14 +3,14 @@ import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import { uniqueId } from './utilService';
 import { jwtDecode } from '../../node_modules/jwt-decode/build/cjs/index';
 
-var contentSessionId;
+let contentSessionId;
 let playSessionId;
 let url;
 let isBuddyLogin = checkTokenInLocalStorage();
 
 if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
-    var userDetails = jwtDecode(jwtToken);
+    let userDetails = jwtDecode(jwtToken);
 }
 
 function checkTokenInLocalStorage() {
