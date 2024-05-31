@@ -18,7 +18,7 @@ import { Log } from "../../services/telementryService";
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const navigate = useNavigate();
-  let location = useLocation()
+  const location = useLocation()
   const [recordedAudio, setRecordedAudio] = useState("");
   const [voiceText, setVoiceText] = useState("");
   const [storyLine, setStoryLine] = useState(0);

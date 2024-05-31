@@ -59,7 +59,7 @@ const Practice = () => {
   const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
-  let location = useLocation()
+  const location = useLocation()
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;

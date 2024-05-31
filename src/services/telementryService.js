@@ -91,18 +91,22 @@ export const response = (context, telemetryMode) => {
 };
 
 export const Log = (context, pageid, telemetryMode) => {
-    const data  =  JSON.stringify(context);
-    if (checkTelemetryMode(telemetryMode)) {
-        CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
-            options: getEventOptions(),
-            edata: {
-                type: 'api_call',
-                level: 'TRACE',
-                message: data,
-                pageid: pageid
-            }
-        });
+  const data = JSON.stringify(context);
+  if (checkTelemetryMode(telemetryMode)) {
+    try {
+      CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
+        options: getEventOptions(),
+        edata: {
+          type: "api_call",
+          level: "TRACE",
+          message: data,
+          pageid: pageid,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to log telemetry:", error);
     }
+  }
 };
 
 export const end = (data) => {
