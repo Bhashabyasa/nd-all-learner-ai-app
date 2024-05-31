@@ -91,7 +91,6 @@ export const response = (context, telemetryMode) => {
 };
 
 export const Log = (context, pageid, telemetryMode) => {
-  const data = JSON.stringify(context);
   if (checkTelemetryMode(telemetryMode)) {
     try {
       CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
@@ -99,7 +98,7 @@ export const Log = (context, pageid, telemetryMode) => {
         edata: {
           type: "api_call",
           level: "TRACE",
-          message: data,
+          message: context,
           pageid: pageid,
         },
       });

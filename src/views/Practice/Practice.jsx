@@ -235,7 +235,8 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
-          Log(getSetData?.data, "practice", "ET")
+          const data = JSON.stringify(getSetData?.data);
+          Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
           if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){

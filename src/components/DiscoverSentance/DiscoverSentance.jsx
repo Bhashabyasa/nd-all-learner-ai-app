@@ -163,7 +163,8 @@ const SpeakSentenceComponent = () => {
         );
         setInitialAssesment(false);
         const { data: getSetData } = getSetResultRes;
-        Log(getSetData?.data, "discovery", "ET")
+        const data = JSON.stringify(getSetData?.data);
+        Log(data, "discovery", "ET");
         if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
