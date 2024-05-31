@@ -59,8 +59,6 @@ const Practice = () => {
   const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
-  const location = useLocation()
-
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
     const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
@@ -238,7 +236,7 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
-          Log(getSetData?.data, location.pathname, "ET")
+          Log(getSetData?.data, "practice", "ET")
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
           if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
