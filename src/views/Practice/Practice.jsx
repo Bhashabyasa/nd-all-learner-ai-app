@@ -4,7 +4,6 @@ import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
 import {
-  useLocation,
   useNavigate,
 } from "../../../node_modules/react-router-dom/dist/index";
 import {

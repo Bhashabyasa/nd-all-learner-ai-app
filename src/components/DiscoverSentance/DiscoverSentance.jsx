@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../../../node_modules/axios/index";
 import elephant from "../../assets/images/elephant.svg";
 import {
