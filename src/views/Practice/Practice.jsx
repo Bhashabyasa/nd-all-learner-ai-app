@@ -4,6 +4,7 @@ import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
 import {
+  useLocation,
   useNavigate,
 } from "../../../node_modules/react-router-dom/dist/index";
 import {
@@ -22,6 +23,7 @@ import { splitGraphemes } from "split-graphemes";
 import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
+import { Log } from "../../services/telementryService";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -54,8 +56,10 @@ const Practice = () => {
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
   const [percentage, setPercentage] = useState('');
-  const [fluency, setFluency] = useState('');
+  const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
+
+  let location = useLocation()
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
@@ -234,6 +238,7 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          Log(getSetData?.data, location.pathname, "ET")
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
           await axios.post(
