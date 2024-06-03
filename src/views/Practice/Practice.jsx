@@ -124,7 +124,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (window && window.parent) {
+    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -578,7 +578,11 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      navigate("/");
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+        navigate("/");
+      }else {
+        navigate("/discover-start")
+      }
     }
   };
 
@@ -704,20 +708,10 @@ const Practice = () => {
       return highlightedSentence;
     }
   }
-  useEffect(() => {
-    if (questions[currentQuestion]?.contentSourceData) {
-      if (window !== window.parent) {
-        const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
-        const stringLengths = contentSourceData.map(item => item.text.length);
-        const length = stringLengths[0];
-        window.parent.postMessage({ type: 'stringLengths', length }, '*');
-      }
-    }
-  }, [questions[currentQuestion]]);
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (window !== window.parent) {
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map(item => item.text.length);
         const length = stringLengths[0];

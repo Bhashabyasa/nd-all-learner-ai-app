@@ -100,7 +100,7 @@ const SpeakSentenceComponent = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (window && window.parent) {
+    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -289,7 +289,13 @@ const SpeakSentenceComponent = () => {
     })();
   }, []);
   const handleBack = () => {
-    navigate("/");
+    const destination = process.env.REACT_APP_IS_APP_IFRAME === 'true' ? "/" : "/discover-start";
+    navigate(destination);
+    // if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    //   navigate("/");
+    // } else {
+    //   navigate("/discover-start")
+    // }
   };
   return (
     <>

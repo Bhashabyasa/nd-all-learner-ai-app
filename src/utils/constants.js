@@ -3516,11 +3516,21 @@ export const levelConfig = {
   9: { color: "#00C7E2" },
 };
 
-export const languages = [
+ const AllLanguages = [
   { name: "தமிழ்", lang: "ta", symbol: "இ" },
   { name: "English", lang: "en", symbol: "A" },
-  //{ name: "Hindi", lang: "hi", symbol: "क" },
+  { name: "हिंदी", lang: "hi", symbol: "क" },
+  { name: "ಕನ್ನಡ", lang: "kn", symbol: "ಕ" } ,
+  { name: "తెలుగు", lang: "te", symbol: "ఈ" } ,
 ];
+
+const appLanguages = process.env.REACT_APP_IS_APP_LANGUAGES
+  ? JSON.parse(process.env.REACT_APP_IS_APP_LANGUAGES)
+  : [];
+
+export const languages = AllLanguages.filter(lang =>
+    appLanguages.includes(lang.lang)
+);
 
 export const randomizeArray = (arr) => {
   let wordsArr = [...arr];
