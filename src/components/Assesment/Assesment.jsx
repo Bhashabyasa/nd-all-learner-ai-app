@@ -604,8 +604,8 @@ const Assesment = ({ discoverStart }) => {
     width: "100vw",
     height: "100vh",
     backgroundImage: `url(${images?.[`desktopLevel${level || 1}`]})`,
-    backgroundSize: "contain", // Cover the entire viewport
-    backgroundRepeat: "round", // Center the image
+    backgroundRepeat: "round",
+    backgroundSize: 'auto',
     position: "relative",
   };
 

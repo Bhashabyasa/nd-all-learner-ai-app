@@ -245,7 +245,7 @@ const MainLayout = (props) => {
             backgroundImage: `url(${cardBackground ? cardBackground : textureImage
               })`,
             backgroundSize: "contain",
-            backgroundRepeat: "round",
+            backgroundRepeat: "round", 
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
             backdropFilter: "blur(25px)",
             mt: "50px",
@@ -274,8 +274,8 @@ const MainLayout = (props) => {
                 justifyContent: "space-between",
                 backgroundImage: `url(${cardBackground ? cardBackground : textureImage
                   })`,
-                backgroundSize: "contain",
-                backgroundRepeat: "round",
+                backgroundRepeat: "no-repeat", 
+                backgroundSize: 'cover',
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
                 backdropFilter: "blur(25px)",
                 mt: "50px",
