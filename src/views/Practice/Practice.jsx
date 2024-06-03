@@ -578,7 +578,7 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      if (window !== window.parent && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (window.parent !== window && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         navigate("/");
       }else {
         navigate("/discover-start")
