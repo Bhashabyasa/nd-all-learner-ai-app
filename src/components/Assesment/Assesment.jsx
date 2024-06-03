@@ -367,7 +367,7 @@ export const ProfileHeader = ({
           top: 0,
           left: 0,
           width: "100%",
-          height: "70px",
+          height: { xs: "60px", sm: "70px" },
           background: "rgba(255, 255, 255, 0.2)",
           backdropFilter: "blur(3px)",
           display: "flex",
@@ -375,9 +375,9 @@ export const ProfileHeader = ({
           zIndex: 5555,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", width: "50%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", sm: "50%" } }}>
           {handleBack && (
-            <Box ml="94px">
+            <Box ml={{ xs: "10px", sm: "94px" }}>
               <IconButton onClick={handleBack}>
                 <img src={back} alt="back" style={{ height: "30px" }} />
               </IconButton>
@@ -386,35 +386,35 @@ export const ProfileHeader = ({
           {username && (
             <>
               <Box
-                ml={handleBack ? "12px" : "94px"}
+                ml={handleBack ? { xs: "10px", sm: "12px" } : { xs: "10px", sm: "94px" }}
                 sx={{ cursor: "pointer" }}
                 onClick={handleProfileBack}
               >
-                <img src={profilePic} alt="profile-pic"></img>
+                <img src={profilePic} alt="profile-pic" style={{ height: "30px" }} />
               </Box>
               <Box ml="12px">
                 <span
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {username || ""}
+                 {username || ""}
                 </span>
               </Box>
             </>
           )}
         </Box>
-
+  
         <Box
           sx={{
             justifySelf: "flex-end",
-            width: "50%",
+            width: { xs: "100%", sm: "50%" },
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: { xs: "center", sm: "flex-end" },
             alignItems: "center",
           }}
         >
@@ -438,9 +438,9 @@ export const ProfileHeader = ({
               </span>
             </Box>
           </Box> */}
-
+  
           <Box
-            mr={"90px"}
+            mr={{ xs: "10px", sm: "90px" }}
             onClick={() =>
               setOpenLangModal
                 ? setOpenLangModal(true)
@@ -457,13 +457,13 @@ export const ProfileHeader = ({
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {languages?.find((elem) => elem.lang === language).name ||
-                    `Select Language`}
+                  {languages?.find((elem) => elem.lang === language)?.name ||
+                    "Select Language"}
                 </span>
               </Box>
             </Box>
