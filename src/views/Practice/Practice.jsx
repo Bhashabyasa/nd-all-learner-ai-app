@@ -124,7 +124,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (window && window.parent && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    if (window.parent && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",

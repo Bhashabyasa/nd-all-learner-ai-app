@@ -91,7 +91,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
             {languages.map((elem) => {
               const isSelectedLang = elem.lang === selectedLang;
               return (
-                <Grid xs={5} item>
+                <Grid xs={5} item key={elem.lang}>
                   <Box
                     onClick={() => setSelectedLang(elem.lang)}
                     sx={{
