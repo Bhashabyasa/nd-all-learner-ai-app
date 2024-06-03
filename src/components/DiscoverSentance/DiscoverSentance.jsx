@@ -289,11 +289,13 @@ const SpeakSentenceComponent = () => {
     })();
   }, []);
   const handleBack = () => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-      navigate("/");
-    } else {
-      navigate("/discover-start")
-    }
+    const destination = process.env.REACT_APP_IS_APP_IFRAME === 'true' ? "/" : "/discover-start";
+    navigate(destination);
+    // if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    //   navigate("/");
+    // } else {
+    //   navigate("/discover-start")
+    // }
   };
   return (
     <>

@@ -169,7 +169,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         </Box>
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
-          mt="50px" mb="10px"
+          mt={5} mb={1}
           // mr="110px"
         >
           <Box

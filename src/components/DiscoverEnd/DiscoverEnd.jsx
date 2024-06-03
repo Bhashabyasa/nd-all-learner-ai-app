@@ -132,11 +132,7 @@ const SpeakSentenceComponent = () => {
           </Typography>
 
           <Box
-            onClick={
-              // window.location.reload();
-              // navigate(`/`);
-              handleProfileBack
-            }
+           onClick={() => handleProfileBack()}
             sx={{
               display: "flex",
               justifyContent: "center",
