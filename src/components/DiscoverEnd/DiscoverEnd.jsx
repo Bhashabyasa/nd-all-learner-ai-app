@@ -54,7 +54,7 @@ const SpeakSentenceComponent = () => {
 
   const handleProfileBack = () => {
     try {
-      if (window !== window.parent && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         navigate("/")
       } else {
         navigate("/discover-start")
