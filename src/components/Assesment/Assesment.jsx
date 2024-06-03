@@ -340,7 +340,7 @@ export const ProfileHeader = ({
 
   const handleProfileBack = () => {
     try {
-      if (window !== window.parent && process.env.REACT_APP_IS_APP_IFRAME) {
+      if (window !== window.parent && process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
         navigate("/")
       } else {
