@@ -245,7 +245,7 @@ const MainLayout = (props) => {
             backgroundImage: `url(${cardBackground ? cardBackground : textureImage
               })`,
             backgroundSize: "contain",
-            backgroundRepeat: "round",
+            backgroundRepeat: "round", 
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
             backdropFilter: "blur(25px)",
             mt: "50px",
@@ -263,8 +263,10 @@ const MainLayout = (props) => {
         <>
           {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
             <Card
-              sx={{
-                width: "85vw",
+              sx={{               
+                position: { xs: 'absolute', md: 'relative' },
+                left: { xs: '0px', md: 'auto' },
+                width: { xs: '100%', md: '85vw' },
                 minHeight: "80vh",
                 borderRadius: "20px",
                 display: "flex",
@@ -272,8 +274,8 @@ const MainLayout = (props) => {
                 justifyContent: "space-between",
                 backgroundImage: `url(${cardBackground ? cardBackground : textureImage
                   })`,
-                backgroundSize: "contain",
-                backgroundRepeat: "round",
+                backgroundRepeat: "no-repeat", 
+                backgroundSize: 'cover',
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
                 backdropFilter: "blur(25px)",
                 mt: "50px",
@@ -301,7 +303,7 @@ const MainLayout = (props) => {
               {steps > 0 && (
                 <Box
                   sx={{
-                    width: "85vw",
+                    width: { xs: '100%', md: '85vw' },
                     position: "absolute",
                     display: "flex",
                     top: "0",

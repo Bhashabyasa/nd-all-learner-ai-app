@@ -369,7 +369,7 @@ export const ProfileHeader = ({
           top: 0,
           left: 0,
           width: "100%",
-          height: "70px",
+          height: { xs: "60px", sm: "70px" },
           background: "rgba(255, 255, 255, 0.2)",
           backdropFilter: "blur(3px)",
           display: "flex",
@@ -377,9 +377,9 @@ export const ProfileHeader = ({
           zIndex: 5555,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", width: "50%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", sm: "50%" } }}>
           {handleBack && (
-            <Box ml="94px">
+            <Box ml={{ xs: "10px", sm: "94px" }}>
               <IconButton onClick={handleBack}>
                 <img src={back} alt="back" style={{ height: "30px" }} />
               </IconButton>
@@ -388,35 +388,35 @@ export const ProfileHeader = ({
           {username && (
             <>
               <Box
-                ml={handleBack ? "12px" : "94px"}
+                ml={handleBack ? { xs: "10px", sm: "12px" } : { xs: "10px", sm: "94px" }}
                 sx={{ cursor: "pointer" }}
                 onClick={handleProfileBack}
               >
-                <img src={profilePic} alt="profile-pic"></img>
+                <img src={profilePic} alt="profile-pic" style={{ height: "30px" }} />
               </Box>
               <Box ml="12px">
                 <span
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {username || ""}
+                 {username || ""}
                 </span>
               </Box>
             </>
           )}
         </Box>
-
+  
         <Box
           sx={{
             justifySelf: "flex-end",
-            width: "50%",
+            width: { xs: "100%", sm: "50%" },
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: { xs: "center", sm: "flex-end" },
             alignItems: "center",
           }}
         >
@@ -440,9 +440,9 @@ export const ProfileHeader = ({
               </span>
             </Box>
           </Box> */}
-
+  
           <Box
-            mr={"90px"}
+            mr={{ xs: "10px", sm: "90px" }}
             onClick={() =>
               setOpenLangModal
                 ? setOpenLangModal(true)
@@ -459,13 +459,13 @@ export const ProfileHeader = ({
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {languages?.find((elem) => elem.lang === language).name ||
-                    `Select Language`}
+                  {languages?.find((elem) => elem.lang === language)?.name ||
+                    "Select Language"}
                 </span>
               </Box>
             </Box>
@@ -606,8 +606,8 @@ const Assesment = ({ discoverStart }) => {
     width: "100vw",
     height: "100vh",
     backgroundImage: `url(${images?.[`desktopLevel${level || 1}`]})`,
-    backgroundSize: "contain", // Cover the entire viewport
-    backgroundRepeat: "round", // Center the image
+    backgroundRepeat: "round",
+    backgroundSize: 'auto',
     position: "relative",
   };
 
@@ -675,60 +675,68 @@ const Assesment = ({ discoverStart }) => {
         </Box>
       ) : (
         <MainLayout
-          showNext={false}
-          showTimer={false}
-          cardBackground={assessmentBackground}
-          backgroundImage={practicebg}
-          {...{
-            setOpenLangModal,
-            lang,
-            points,
+        showNext={false}
+        showTimer={false}
+        cardBackground={assessmentBackground}
+        backgroundImage={practicebg}
+        {...{
+          setOpenLangModal,
+          lang,
+          points,
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            right: { xs: 20, md: 200 },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: { xs: 2, md: 5 },
           }}
         >
-          <Box
+          <Typography
             sx={{
-              position: "absolute",
-              right: 200,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+              color: "#322020",
+              fontWeight: 700,
+              fontSize: { xs: "24px", md: "40px" },
+              fontFamily: "Quicksand",
+              lineHeight: { xs: "36px", md: "62px" }, 
+              textAlign: "center",
             }}
-            mt={5}
           >
-            <span
-              style={{
-                color: "#322020",
-                fontWeight: 700,
-                fontSize: "40px",
+            {discoverStart
+              ? "Let's test your language skills"
+              : "You have good language skills"}
+          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                color: "#1CB0F6",
+                fontWeight: 600,
+                fontSize: { xs: "20px", md: "30px" },
                 fontFamily: "Quicksand",
-                lineHeight: "62px",
+                lineHeight: { xs: "30px", md: "50px" },
+                textAlign: "center",
               }}
             >
-              {discoverStart
-                ? "Lets test your language skills"
-                : "You have good language skills"}
-            </span>
-            <Box>
-              <span
-                style={{
-                  color: "#1CB0F6",
-                  fontWeight: 600,
-                  fontSize: "30px",
-                  fontFamily: "Quicksand",
-                  lineHeight: "50px",
-                }}
-              >
-                {level > 0
-                  ? `Take the assessment to complete Level ${level}.`
-                  : "Take the assessment to discover your level"}
-              </span>
-            </Box>
-            <Box sx={{ cursor: "pointer" }} mt={2} onClick={handleRedirect}>
-              <StartAssessmentButton />
-            </Box>
+              {level > 0
+                ? `Take the assessment to complete Level ${level}.`
+                : "Take the assessment to discover your level"}
+            </Typography>
           </Box>
-        </MainLayout>
+          <Box
+            sx={{
+              cursor: "pointer",
+              mt: { xs: 1, md: 2 },
+            }}
+            onClick={handleRedirect}
+          >
+            <StartAssessmentButton />
+          </Box>
+        </Box>
+      </MainLayout>
       )}
     </>
   );
