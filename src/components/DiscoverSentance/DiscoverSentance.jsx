@@ -195,7 +195,7 @@ const SpeakSentenceComponent = () => {
           setCurrentContentType("Sentence");
           setTotalSyllableCount(resSentencesPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(
-            sentences?.[newSentencePassedCounter]?.content?.[0]?.collectionId
+            sentences?.[newSentencePassedCounter]?.collectionId
           );
           let quesArr = [...(resSentencesPagination?.data?.data || [])];
           setCurrentQuestion(0);
@@ -218,7 +218,7 @@ const SpeakSentenceComponent = () => {
           );
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
-          setCurrentCollectionId(words?.content?.[0]?.collectionId);
+          setCurrentCollectionId(words?.collectionId);
           let quesArr = [...(resWordsPagination?.data?.data || [])];
           setCurrentQuestion(0);
           setQuestions(quesArr);
