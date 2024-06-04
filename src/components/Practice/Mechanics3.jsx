@@ -78,7 +78,7 @@ const Mechanics2 = ({
     };
     initializeFillInTheBlank();
   }, [contentId, parentWords]);
-  
+
   useEffect(() => {
     const initializeAudio = async () => {
       if (type === "audio" && parentWords) {
