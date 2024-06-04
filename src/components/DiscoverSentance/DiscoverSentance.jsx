@@ -271,7 +271,7 @@ const SpeakSentenceComponent = () => {
         );
 
         const resPagination = await axios.get(
-          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.content?.[0]?.collectionId}`
+          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
         );
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount)
