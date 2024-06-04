@@ -275,7 +275,7 @@ const SpeakSentenceComponent = () => {
         );
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount)
-        setCurrentCollectionId(sentences?.content?.[0]?.collectionId);
+        setCurrentCollectionId(sentences?.collectionId);
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data?.data || [])];
