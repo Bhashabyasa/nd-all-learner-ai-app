@@ -283,7 +283,6 @@ const MainLayout = (props) => {
             >
               <CardContent
                 sx={{
-                  width: "85vw",
                   minHeight: "100%",
                   opacity: disableScreen ? 0.25 : 1,
                   pointerEvents: disableScreen ? "none" : "initial",
