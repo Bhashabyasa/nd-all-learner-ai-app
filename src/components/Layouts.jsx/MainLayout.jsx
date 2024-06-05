@@ -195,9 +195,9 @@ const MainLayout = (props) => {
             left:
               LEVEL === 1
                 ? "3px"
-                : LEVEL == 2
+                : LEVEL === 2
                   ? "40px"
-                  : LEVEL == 3
+                  : LEVEL === 3
                     ? "78px"
                     : "78px",
           }}
