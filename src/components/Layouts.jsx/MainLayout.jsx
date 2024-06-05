@@ -265,8 +265,8 @@ const MainLayout = (props) => {
             <Card
               sx={{               
                 position: { xs: 'absolute', md: 'relative' },
-                left: { xs: '5%', md: 'auto' },
-                width: { xs: '90%', md: '85vw' },
+                left: { xs: '0px', md: 'auto' },
+                width: { xs: '100%', md: '85vw' },
                 minHeight: "80vh",
                 borderRadius: "20px",
                 display: "flex",
