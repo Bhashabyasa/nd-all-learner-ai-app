@@ -195,9 +195,9 @@ const MainLayout = (props) => {
             left:
               LEVEL === 1
                 ? "3px"
-                : LEVEL == 2
+                : LEVEL === 2
                   ? "40px"
-                  : LEVEL == 3
+                  : LEVEL === 3
                     ? "78px"
                     : "78px",
           }}
@@ -283,7 +283,6 @@ const MainLayout = (props) => {
             >
               <CardContent
                 sx={{
-                  width: "85vw",
                   minHeight: "100%",
                   opacity: disableScreen ? 0.25 : 1,
                   pointerEvents: disableScreen ? "none" : "initial",

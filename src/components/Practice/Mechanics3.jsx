@@ -215,6 +215,7 @@ const Mechanics2 = ({
           marginTop: "60px",
           letterSpacing: "5px",
           height: "100%",
+          flexWrap: "wrap",
         }}
       >
         {type === "audio" ? (
