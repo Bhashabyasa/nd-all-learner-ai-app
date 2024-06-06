@@ -402,6 +402,10 @@ function VoiceAnalyser(props) {
       setApiResponse(callUpdateLearner ? data.status : "success");
       if(props.handleNext){
         props.handleNext();
+        if(temp_audio !== null){
+          temp_audio.pause();
+          setPauseAudio(false);
+        }
       }
       setLoader(false);
       if( props.setIsNextButtonCalled){ 
