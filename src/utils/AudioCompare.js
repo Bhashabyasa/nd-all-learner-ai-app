@@ -45,13 +45,14 @@ export default class AudioRecorderCompair extends Component {
       this.props.setEnableNext(false);
     }
 
-    if (this.props.isAudioPreprocessing) {
-      this.setState({ soundDetected: false, stopDetection: false });
-      document.getElementById("startaudio_compair").click();
-      // this.startSoundDetection();
-    } else {
-      document.getElementById("startaudio_compair").click();
-    }
+    // if (this.props.isAudioPreprocessing) {
+    //   this.setState({ soundDetected: false, stopDetection: false });
+    //   document.getElementById("startaudio_compair").click();
+    //   // this.startSoundDetection();
+    // } else {
+    //   document.getElementById("startaudio_compair").click();
+    // }
+    document.getElementById("startaudio_compair").click();
 
     this.resetRecording(); // Reset recording state before starting a new recording
   }
@@ -145,19 +146,20 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: temp_audioSrc,
         });
 
-        if (this.props.isAudioPreprocessing) {
-          this.props.setRecordedAudio(temp_audioSrc);
-        } else {
-          if (!this.state.soundDetected) {
-            this.props.setRecordedAudio(temp_audioSrc);
-          } else {
-            // this.props.setRecordedAudio(temp_audioSrc);
-            this.props?.setOpenMessageDialog({
-              message: "Please Speak Louder and Clear",
-              isError: true,
-            });
-          }
-        }
+        this.props.setRecordedAudio(temp_audioSrc);
+        // if (this.props.isAudioPreprocessing) {
+        //   this.props.setRecordedAudio(temp_audioSrc);
+        // } else {
+        //   if (!this.state.soundDetected) {
+        //     this.props.setRecordedAudio(temp_audioSrc);
+        //   } else {
+        //     this.props.setRecordedAudio(temp_audioSrc);
+        //     this.props?.setOpenMessageDialog({
+        //       message: "Please Speak Louder and Clear",
+        //       isError: true,
+        //     });
+        //   }
+        // }
 
         this.setState({
           recordingInitialized: false,
