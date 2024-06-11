@@ -8,7 +8,7 @@ import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
 
 export default class AudioRecorderCompair extends Component {
   MIN_DECIBELS = Number(-45);
-  MEDIARECORDER = {};
+  // MEDIARECORDER = {};
 
   constructor(props) {
     super(props);
@@ -48,7 +48,7 @@ export default class AudioRecorderCompair extends Component {
     if (this.props.isAudioPreprocessing) {
       this.setState({ soundDetected: false, stopDetection: false });
       document.getElementById("startaudio_compair").click();
-      this.startSoundDetection();
+      // this.startSoundDetection();
     } else {
       document.getElementById("startaudio_compair").click();
     }
@@ -63,11 +63,11 @@ export default class AudioRecorderCompair extends Component {
 
     if (this.props.isAudioPreprocessing) {
       document.getElementById("stopaudio_compair").click();
-      this.setState({ stopDetection: true });
+      // this.setState({ stopDetection: true });
     } else {
       document.getElementById("stopaudio_compair").click();
     }
-    this.MEDIARECORDER.stop();
+    // this.MEDIARECORDER.stop();
   }
 
   startSoundDetection = async () => {
@@ -145,10 +145,10 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: temp_audioSrc,
         });
 
-        if (!this.props.isAudioPreprocessing) {
+        if (this.props.isAudioPreprocessing) {
           this.props.setRecordedAudio(temp_audioSrc);
         } else {
-          if (this.state.soundDetected) {
+          if (!this.state.soundDetected) {
             this.props.setRecordedAudio(temp_audioSrc);
           } else {
             // this.props.setRecordedAudio(temp_audioSrc);
