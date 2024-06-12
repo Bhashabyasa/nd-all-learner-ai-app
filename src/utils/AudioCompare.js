@@ -60,7 +60,9 @@ const AudioRecorderCompair = (props) => {
           message: "Please Speak Louder and Clear",
           isError: true,
         });
-        props.setEnableNext(false);
+        if (props.setEnableNext) {
+          props.setEnableNext(false);
+        }
       }
       setRecordingInitialized(false);
       props.setRecordedAudio(temp_audioSrc);
