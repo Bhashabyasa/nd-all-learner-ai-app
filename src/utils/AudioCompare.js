@@ -56,10 +56,11 @@ const AudioRecorderCompair = (props) => {
       const temp_audioSrc = window.URL.createObjectURL(e);
       setAudioSrc(temp_audioSrc);
       if (!audioDetected){
-        props.setOpenMessageDialog({
-          message: "Sorry I couldn't hear a voice. Could you please speak again?",
+        props?.setOpenMessageDialog({
+          message: "Please Speak Louder and Clear",
           isError: true,
         });
+        props.setEnableNext(false);
       }
       setRecordingInitialized(false);
       props.setRecordedAudio(temp_audioSrc);
