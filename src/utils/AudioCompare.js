@@ -55,7 +55,7 @@ const AudioRecorderCompair = (props) => {
     stopCallback: (e) => {
       const temp_audioSrc = window.URL.createObjectURL(e);
       setAudioSrc(temp_audioSrc);
-      if (!audioDetected){
+      if (!audioDetected) {
         props?.setOpenMessageDialog({
           message: "Please Speak Louder and Clear",
           isError: true,
@@ -63,9 +63,10 @@ const AudioRecorderCompair = (props) => {
         if (props.setEnableNext) {
           props.setEnableNext(false);
         }
+      } else {
+        props.setRecordedAudio(temp_audioSrc);
       }
       setRecordingInitialized(false);
-      props.setRecordedAudio(temp_audioSrc);
     },
     onRecordCallback: (e) => {},
     errorCallback: (err) => {},
