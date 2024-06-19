@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Updated to Node.js 18
+          node-version: '18'
 
       - name: Install AWS CLI
         run: |
@@ -30,8 +30,16 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
 
+      - name: Clean up node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Run Husky Install
+        run: npm run prepare
 
       - name: Build and Package Application
         env:
