@@ -38,9 +38,6 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Install Missing Babel Plugin
-        run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
-
       - name: Run Husky Install
         run: npm run prepare
 
