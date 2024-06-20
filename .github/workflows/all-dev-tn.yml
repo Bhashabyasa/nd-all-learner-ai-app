@@ -1,9 +1,9 @@
-name: ALL rig dev Deployment
+name: ALL tn dev Deployment
 
 on:
   push:
     branches:
-      - all-rig-v2-0.1
+      - test
 
 jobs:
   deploy:
