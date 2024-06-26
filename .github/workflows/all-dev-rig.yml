@@ -3,7 +3,7 @@ name: ALL rig dev Deployment
 on:
   push:
     branches:
-      - test-rig-1.1
+      - all-1.2
 
 jobs:
   deploy:
