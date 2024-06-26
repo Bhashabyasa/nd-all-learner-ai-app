@@ -73,7 +73,7 @@ jobs:
           REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
           REACT_APP_POST_LEARNER_PROGRESS: ${{ vars.REACT_APP_POST_LEARNER_PROGRESS }}
           REACT_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
-          REACT_APP_IS_APP_TEST_RIG: ${{ vars.REACT_APP_IS_APP_TEST_RIG }}
+          REACT_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
           REACT_APP_IS_APP_LANGUAGES: ${{ vars.REACT_APP_IS_APP_LANGUAGES }}
           CI: false  # Disabling CI to not treat warnings as errors
         run: npm run build
