@@ -43,6 +43,7 @@ import config from "../../utils/urlConstants.json";
 import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
+import { end } from "../../services/telementryService";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -355,6 +356,7 @@ export const ProfileHeader = ({
 
   const handleLogout = () => {
     localStorage.clear();
+    end({});
     navigate("/Login");
   };
 
