@@ -517,8 +517,8 @@ export const ProfileHeader = ({
               </Box>
             </Box>
           </Box>
-          <CustomTooltip title="Logout">
-            {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+          {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+            <CustomTooltip title="Logout">
               <Box>
                 <CustomIconButton onClick={handleLogout}>
                   <img
@@ -529,8 +529,8 @@ export const ProfileHeader = ({
                   />
                 </CustomIconButton>
               </Box>
-            )}
-          </CustomTooltip>
+            </CustomTooltip>
+          )}
         </Box>
       </Box>
     </>
