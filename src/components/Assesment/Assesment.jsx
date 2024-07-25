@@ -343,7 +343,7 @@ export const ProfileHeader = ({
 
   const handleProfileBack = () => {
     try {
-      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+      if (import.meta.env.VITE_APP_IS_APP_IFRAME === "true") {
         window.parent.postMessage({ type: "restore-iframe-content" }, "*");
         navigate("/");
       } else {
@@ -519,7 +519,7 @@ export const ProfileHeader = ({
               </Box>
             </Box>
           </Box>
-          {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+          {import.meta.env.VITE_APP_IS_IN_APP_AUTHORISATION === "true" && (
             <CustomTooltip title="Logout">
               <Box>
                 <CustomIconButton onClick={handleLogout}>
@@ -568,10 +568,10 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
-          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+          `${import.meta.env.VITE_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
+          `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -594,7 +594,7 @@ const Assesment = ({ discoverStart }) => {
 
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
+          `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -605,7 +605,7 @@ const Assesment = ({ discoverStart }) => {
         const virtualId = getLocalData("virtualId");
         const language = lang;
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
+          `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
         localStorage.setItem(
           "getMilestone",
@@ -625,7 +625,7 @@ const Assesment = ({ discoverStart }) => {
 
         if (virtualId) {
           const getPointersDetails = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+            `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }

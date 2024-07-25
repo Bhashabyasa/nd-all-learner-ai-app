@@ -128,7 +128,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    if (import.meta.env.VITE_APP_IS_APP_IFRAME === 'true') {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -165,7 +165,7 @@ const Practice = () => {
         }
       } else {
         const pointsRes = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
+          `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
           {
             userId: localStorage.getItem("virtualId"),
             sessionId: localStorage.getItem("sessionId"),
@@ -199,7 +199,7 @@ const Practice = () => {
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
 
       await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+        `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
         {
           userId: virtualId,
           sessionId: sessionId,
@@ -228,7 +228,7 @@ const Practice = () => {
 
           const sub_session_id = getLocalData("sub_session_id");
           const getSetResultRes = await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
+            `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
             {
               sub_session_id: sub_session_id,
               contentType: currentContentType,
@@ -243,9 +243,9 @@ const Practice = () => {
           Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
-          if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
+          if(import.meta.env.VITE_APP_POST_LEARNER_PROGRESS === "true"){
           await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
+            `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
               userId: virtualId,
               sessionId: sessionId,
@@ -260,7 +260,7 @@ const Practice = () => {
           if (getSetData.data.sessionResult === "pass") {
             try{
               await axios.post(
-                `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+                `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
                 {
                   userId: virtualId,
                   sessionId: sessionId,
@@ -294,7 +294,7 @@ const Practice = () => {
         );
 
         await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+          `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
           {
             userId: virtualId,
             sessionId: sessionId,
@@ -312,7 +312,7 @@ const Practice = () => {
           // navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
         setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
@@ -385,12 +385,12 @@ const Practice = () => {
   const playTeacherAudio = () => {
     const contentId = questions[currentQuestion]?.contentId;
     var audio = new Audio(
-      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
+      `${import.meta.env.VITE_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
     );
     audio.addEventListener("canplaythrough", () => {
       set_temp_audio(
         new Audio(
-          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
+          `${import.meta.env.VITE_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
         )
       );
     });
@@ -402,7 +402,7 @@ const Practice = () => {
       setLoading(true);
       const lang = getLocalData("lang");
       const virtualId = getLocalData("virtualId");
-      const sessionId = getLocalData("sessionId");
+      let sessionId = getLocalData("sessionId");
 
       if (!sessionId){
         sessionId = uniqueId();
@@ -410,7 +410,7 @@ const Practice = () => {
       }
 
       const getMilestoneDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       setLocalData(
         "getMilestone",
@@ -425,10 +425,10 @@ const Practice = () => {
       setLevel(level);
 
       const resLessons = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
       );
       const getPointersDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
@@ -452,7 +452,7 @@ const Practice = () => {
       );
 
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
@@ -476,7 +476,7 @@ const Practice = () => {
       setIsShowCase(showcaseLevel);
       if (showcaseLevel) {
         await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+          `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
           {
             userId: virtualId,
             sessionId: sessionId,
@@ -522,7 +522,7 @@ const Practice = () => {
       };
 
       await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+        `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
         {
           userId: virtualId,
           sessionId: sessionId,
@@ -541,7 +541,7 @@ const Practice = () => {
       );
       let quesArr = [];
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
@@ -564,7 +564,7 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (import.meta.env.VITE_APP_IS_APP_IFRAME === 'true') {
         navigate("/");
       }else {
         navigate("/discover-start")
@@ -697,7 +697,7 @@ const Practice = () => {
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (import.meta.env.VITE_APP_IS_APP_IFRAME === 'true') {
         const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map(item => item.text.length);
         const length = stringLengths[0];
