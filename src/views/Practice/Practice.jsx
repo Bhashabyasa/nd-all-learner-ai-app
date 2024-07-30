@@ -215,6 +215,7 @@ const Practice = () => {
         currentQuestion === questions.length - 1 || isGameOver
           ? currentPracticeStep + 1
           : currentPracticeStep;
+      newPracticeStep = Number(newPracticeStep);
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
