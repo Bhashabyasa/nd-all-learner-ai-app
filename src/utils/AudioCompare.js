@@ -95,7 +95,7 @@ const AudioRecorderCompair = (props) => {
                 {(!props.dontShowListen || props.recordedAudio) && (
                   <>
                     {!props.pauseAudio ? (
-                      <div onClick={() => { props.playAudio(true); }}>
+                      <div role="button" tabIndex="0" onClick={() => { props.playAudio(true); }} aria-label="Play audio">
                         <Box sx={{ cursor: "pointer" }}>
                           <ListenButton />
                         </Box>
