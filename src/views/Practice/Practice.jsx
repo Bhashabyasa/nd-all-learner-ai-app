@@ -402,7 +402,7 @@ const Practice = () => {
       setLoading(true);
       const lang = getLocalData("lang");
       const virtualId = getLocalData("virtualId");
-      const sessionId = getLocalData("sessionId");
+      let sessionId = getLocalData("sessionId");
 
       if (!sessionId){
         sessionId = uniqueId();
@@ -701,7 +701,7 @@ const Practice = () => {
         const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map(item => item.text.length);
         const length = stringLengths[0];
-        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+        window.parent.postMessage({ type: 'stringLengths', length });
       }
     }
   }, [questions[currentQuestion]]);
