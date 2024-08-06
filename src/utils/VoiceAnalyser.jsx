@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Box, CircularProgress } from "../../node_modules/@mui/material/index";
-import axios from "../../node_modules/axios/index";
-import calcCER from "../../node_modules/character-error-rate/index";
+import { Box, CircularProgress } from "@mui/material";
+import axios from "axios";
+import calcCER from "character-error-rate";
 import s1 from "../assets/audio/S1.m4a";
 import s2 from "../assets/audio/S2.m4a";
 import s3 from "../assets/audio/S3.m4a";
@@ -69,7 +69,7 @@ function VoiceAnalyser(props) {
   const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
-    process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
+    import.meta.env.VITE_APP_IS_AUDIOPREPROCESSING === "true"
   );
 
   const initiateValues = async () => {
@@ -87,7 +87,7 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+            ? `${import.meta.env.VITE_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
             : AudioPath[1][10]
       );
       set_temp_audio(audio);
@@ -264,7 +264,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
             audio: base64Data,
@@ -356,15 +356,15 @@ function VoiceAnalyser(props) {
 
       let word_result = finalScore === 100 ? "correct" : "incorrect";
 
-      // TODO: Remove false when REACT_APP_AWS_S3_BUCKET_NAME and keys added
+      // TODO: Remove false when VITE_APP_AWS_S3_BUCKET_NAME and keys added
       var audioFileName = "";
-      if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
+      if (import.meta.env.VITE_APP_CAPTURE_AUDIO === "true" && false) {
         let getContentId = currentLine;
-        audioFileName = `${process.env.REACT_APP_CHANNEL
+        audioFileName = `${import.meta.env.VITE_APP_CHANNEL
           }/${sessionId}-${Date.now()}-${getContentId}.wav`;
 
         const command = new PutObjectCommand({
-          Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+          Bucket: import.meta.env.VITE_APP_AWS_S3_BUCKET_NAME,
           Key: audioFileName,
           Body: Uint8Array.from(window.atob(base64Data), (c) =>
             c.charCodeAt(0)
@@ -380,7 +380,7 @@ function VoiceAnalyser(props) {
         {
           // Required
           target:
-            process.env.REACT_APP_CAPTURE_AUDIO === "true"
+            import.meta.env.VITE_APP_CAPTURE_AUDIO === "true"
               ? `${audioFileName}`
               : "", // Required. Target of the response
           //"qid": "", // Required. Unique assessment/question id

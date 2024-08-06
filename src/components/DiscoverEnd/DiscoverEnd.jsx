@@ -41,7 +41,7 @@ const SpeakSentenceComponent = () => {
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
@@ -54,7 +54,7 @@ const SpeakSentenceComponent = () => {
 
   const handleProfileBack = () => {
     try {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (import.meta.env.VITE_APP_IS_APP_IFRAME === 'true') {
         navigate("/")
       } else {
         navigate("/discover-start")

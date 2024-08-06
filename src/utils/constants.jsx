@@ -132,7 +132,7 @@ export const ListenButton = (props) => {
         rx="35"
         fill="url(#paint0_linear_400_1331)"
       />
-      <g clip-path="url(#clip0_400_1331)">
+      <g clipPath="url(#clip0_400_1331)">
         <path
           d="M43.374 30.1609C43.1512 29.8851 42.828 29.7091 42.4754 29.6716C42.1228 29.6341 41.7698 29.7381 41.494 29.9609C41.2181 30.1837 41.0421 30.5069 41.0046 30.8595C40.9671 31.2121 41.0712 31.5651 41.294 31.8409C41.9676 32.7568 42.3309 33.864 42.3309 35.0009C42.3309 36.1379 41.9676 37.245 41.294 38.1609C41.135 38.3569 41.0349 38.5939 41.0053 38.8445C40.9757 39.095 41.0178 39.3489 41.1267 39.5765C41.2356 39.8041 41.4069 39.9961 41.6206 40.1302C41.8343 40.2644 42.0817 40.3351 42.334 40.3343C42.5332 40.3349 42.73 40.291 42.91 40.2056C43.0899 40.1202 43.2485 39.9956 43.374 39.8409C44.4316 38.449 45.0042 36.749 45.0042 35.0009C45.0042 33.2528 44.4316 31.5528 43.374 30.1609Z"
           fill="white"
@@ -155,8 +155,8 @@ export const ListenButton = (props) => {
           y2="56.914"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#710EDC" />
-          <stop offset="1" stop-color="#A856FF" />
+          <stop stopColor="#710EDC" />
+          <stop offset="1" stopColor="#A856FF" />
         </linearGradient>
         <clipPath id="clip0_400_1331">
           <rect
@@ -3524,8 +3524,8 @@ export const levelConfig = {
   { name: "తెలుగు", lang: "te", symbol: "ఈ" } ,
 ];
 
-const appLanguages = process.env.REACT_APP_IS_APP_LANGUAGES
-  ? JSON.parse(process.env.REACT_APP_IS_APP_LANGUAGES)
+const appLanguages = import.meta.env.VITE_APP_IS_APP_LANGUAGES
+  ? JSON.parse(import.meta.env.VITE_APP_IS_APP_LANGUAGES)
   : [];
 
 export const languages = AllLanguages.filter(lang =>

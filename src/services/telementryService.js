@@ -1,7 +1,7 @@
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 
 import { uniqueId } from './utilService';
-import { jwtDecode } from '../../node_modules/jwt-decode/build/cjs/index';
+import { jwtDecode } from "jwt-decode";
 
 let contentSessionId;
 let playSessionId;
@@ -41,7 +41,7 @@ export const initialize = async ({ context, config, metadata }) => {
                 authtoken: context.authToken || '',
                 uid: 'anonymous',
                 sid: context.sid,
-                batchsize: process.env.REACT_APP_BATCHSIZE,
+                batchsize: import.meta.env.VITE_APP_BATCHSIZE,
                 mode: context.mode,
                 host: context.host,
                 apislug: context.apislug,
@@ -188,9 +188,9 @@ export const feedback = (data, contentId, telemetryMode) => {
 
 function checkTelemetryMode(currentMode) {
     return (
-        (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||
-        (process.env.REACT_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) ||
-        (process.env.REACT_APP_TELEMETRY_MODE === 'DT' &&
+        (import.meta.env.VITE_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||
+        (import.meta.env.VITE_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) ||
+        (import.meta.env.VITE_APP_TELEMETRY_MODE === 'DT' &&
             (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'))
     );
 }
@@ -219,11 +219,11 @@ export const getEventOptions = () => {
         context: {
             pdata: {
                 // optional
-                id: process.env.REACT_APP_ID, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-                ver: process.env.REACT_APP_VER, // Version of the App
-                pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
+                id: import.meta.env.VITE_APP_ID, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+                ver: import.meta.env.VITE_APP_VER, // Version of the App
+                pid: import.meta.env.VITE_APP_PID, // Optional. In case the component is distributed, then which instance of that component
             },
-            env: process.env.REACT_APP_ENV,
+            env: import.meta.env.VITE_APP_ENV,
             uid: `${isBuddyLogin ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'}`,
             cdata: [
                 { id: localStorage.getItem('virtualStorySessionID') || contentSessionId, type: 'ContentSession' },
