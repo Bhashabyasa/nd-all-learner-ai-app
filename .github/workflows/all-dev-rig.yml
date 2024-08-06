@@ -74,7 +74,10 @@ jobs:
           VITE_APP_POST_LEARNER_PROGRESS: ${{ vars.REACT_APP_POST_LEARNER_PROGRESS }}
           VITE_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
           VITE_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
-          VITE_APP_IS_APP_LANGUAGES: ${{ vars.REACT_APP_IS_APP_LANGUAGES }}
+          VITE_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
+          VITE_APP_ASR_OFFLINE_LANGUAGUAGES:  ${{ vars.REACT_APP_ASR_OFFLINE_LANGUAGUAGES }}
+          VITE_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          _APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
           CI: false  # Disabling CI to not treat warnings as errors
         run: npm run build
 
