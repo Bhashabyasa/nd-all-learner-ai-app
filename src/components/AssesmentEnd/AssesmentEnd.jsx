@@ -34,7 +34,7 @@ const AssesmentEnd = () => {
       const previous_level = getLocalData("previous_level");
       setPreviousLevel(previous_level?.replace("m", ""));
       const getMilestoneDetails = await axios.get(
-        `${import.meta.env.VITE_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
@@ -45,7 +45,7 @@ const AssesmentEnd = () => {
         localStorage.setItem("sessionId", sessionId)
       }
       const getPointersDetails = await axios.get(
-        `${import.meta.env.VITE_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
     })();

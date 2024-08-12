@@ -20,7 +20,7 @@ const LoginPage = () => {
 
     try {
       const usernameDetails = await axios.post(
-        `${import.meta.env.VITE_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
       );
 
       if (usernameDetails?.data?.result?.virtualID) {
