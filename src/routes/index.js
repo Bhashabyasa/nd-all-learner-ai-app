@@ -69,7 +69,7 @@ const routData = [
 // add login route for test rig
 
 const virtualId = localStorage.getItem('virtualId');
-const isLogin = import.meta.env.VITE_APP_IS_IN_APP_AUTHORISATION === 'true';
+const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === 'true';
 
 if (isLogin && !virtualId) {
   routData.push(

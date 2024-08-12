@@ -246,7 +246,7 @@ const Mechanics2 = ({
                   type="audio/mp3"
                   src={
                     contentId
-                      ? `${import.meta.env.VITE_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
                       : ""
                   }
                 />
