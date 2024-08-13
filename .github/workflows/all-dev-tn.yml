@@ -79,7 +79,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to S3 Bucket
-        run: aws s3 sync ./build s3://sballappliance/assets/test-rig/
+        run: aws s3 sync ./build s3://sballtnlanglab/assets/test-rig/
 
       - name: Debug Environment Variables
         run: |
