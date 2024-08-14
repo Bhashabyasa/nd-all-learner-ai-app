@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-staging-tn
+    environment: all-dev-tn
 
     steps:
       - name: Checkout code
