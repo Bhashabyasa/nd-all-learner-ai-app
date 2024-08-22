@@ -32,7 +32,15 @@ const AudioRecorder = (props) => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
 
-      recorderRef.current = new RecordRTC(stream, { type: "audio" });
+      // Use RecordRTC with specific configurations to match the blob structure
+      recorderRef.current = new RecordRTC(stream, {
+        type: "audio",
+        mimeType: "audio/wav", // Ensuring the same MIME type as AudioRecorderCompair
+        recorderType: RecordRTC.StereoAudioRecorder, // Use StereoAudioRecorder for better compatibility
+        numberOfAudioChannels: 1, // Match the same number of audio channels
+        desiredSampRate: 16000, // Adjust the sample rate if necessary to match
+      });
+
       recorderRef.current.startRecording();
 
       setIsRecording(true);
@@ -68,25 +76,8 @@ const AudioRecorder = (props) => {
   };
 
   const saveBlob = (blob) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64Data = reader.result;
-      playRecording(base64Data);
-    };
-    reader.readAsDataURL(blob);
-  };
-
-  const playRecording = (base64Data) => {
-    if (base64Data) {
-      fetch(base64Data)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const url = URL.createObjectURL(blob);
-          props?.setRecordedAudio(url);
-        });
-    } else {
-      console.error("No saved audio found.");
-    }
+    const url = window.URL.createObjectURL(blob);
+    props?.setRecordedAudio(url);
   };
 
   return (
