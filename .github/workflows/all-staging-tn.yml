@@ -1,14 +1,14 @@
-name: ALL tn dev Deployment
+name: ALL tn staging Deployment
 
 on:
   push:
     branches:
-      - all-1.2-tn-dev
+      - all-1.2-tn-staging
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-dev-tn
+    environment: all-staging-tn
 
     steps:
       - name: Checkout code
@@ -79,7 +79,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to S3 Bucket
-        run: aws s3 sync ./build s3://sb-all/assets/test-rig/
+        run: aws s3 sync ./build s3://sballtnlanglab/assets/test-rig/
 
       - name: Debug Environment Variables
         run: |
