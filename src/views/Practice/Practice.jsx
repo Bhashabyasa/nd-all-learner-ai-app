@@ -3,7 +3,7 @@ import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
-import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
+import { useNavigate } from "react-router-dom";
 import {
   callConfetti,
   getLocalData,
@@ -11,7 +11,7 @@ import {
   practiceSteps,
   setLocalData,
 } from "../../utils/constants";
-import axios from "../../../node_modules/axios/index";
+import axios from "axios";
 import WordsOrImage from "../../components/Mechanism/WordsOrImage";
 import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
@@ -57,16 +57,9 @@ const Practice = () => {
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
-    let userWon = isUserPass ? true : false;
-    const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
+    const userWon = isUserPass;
+    const meetsFluencyCriteria = livesData?.meetsFluencyCriteria;
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria });
-  };
-
-  const isFirefox = () => {
-    return (
-      typeof navigator !== "undefined" &&
-      navigator.userAgent.toLowerCase().includes("firefox")
-    );
   };
 
   useEffect(() => {
@@ -74,6 +67,7 @@ const Practice = () => {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
+
   const callConfettiAndPlay = () => {
     play();
     callConfetti();
@@ -93,13 +87,9 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
         setOpenMessageDialog({
           message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
         });
-        // setDisableScreen(false);
       }, 1200);
     }
   }, [currentQuestion]);
@@ -116,7 +106,6 @@ const Practice = () => {
         message: "Sorry I couldn't hear a voice. Could you please speak again?",
         isError: true,
       });
-      // alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText("");
       setEnableNext(false);
     }
@@ -279,8 +268,6 @@ const Practice = () => {
               // catch error
             }
           }
-
-          // navigate("/assesment-end");
         }
 
         let quesArr = [];
@@ -310,7 +297,6 @@ const Practice = () => {
         if (newPracticeStep === 0 || newPracticeStep === 5 || isGameOver) {
           gameOver();
           return;
-          // navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
@@ -375,18 +361,13 @@ const Practice = () => {
     }
   };
 
-  // const playAudio = () => {
-  //   // const myAudio = localStorage.getItem("recordedAudio");
-  //   set_temp_audio(new Audio(recordedAudio));
-  // };
-
   useEffect(() => {
     learnAudio();
   }, [temp_audio]);
 
   const playTeacherAudio = () => {
     const contentId = questions[currentQuestion]?.contentId;
-    var audio = new Audio(
+    let audio = new Audio(
       `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
     );
     audio.addEventListener("canplaythrough", () => {
@@ -586,15 +567,40 @@ const Practice = () => {
 
   function highlightWords(sentence, matchedChar) {
     const words = sentence.split(" ");
-    matchedChar.sort(function (str1, str2) {
-      return str2.length - str1.length;
-    });
+    matchedChar.sort((str1, str2) => str2.length - str1.length);
 
-    let fontSize =
+    const fontSize =
       questions[currentQuestion]?.contentType?.toLowerCase() === "paragraph"
         ? 30
         : 40;
-    let type = currentContentType?.toLowerCase();
+    const type = currentContentType?.toLowerCase();
+    const commonTypographyProps = {
+      variant: "h5",
+      component: "h4",
+      sx: {
+        fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
+        fontWeight: 700,
+        fontFamily: "Quicksand",
+        lineHeight: "50px",
+      },
+    };
+
+    const renderTypography = (key, content, background = null) => (
+      <React.Fragment key={key}>
+        <Typography
+          {...commonTypographyProps}
+          sx={{
+            ...commonTypographyProps.sx,
+            color: background ? undefined : "#333F61",
+            background: background ? "#FFF0BD" : undefined,
+            fontSize: `${fontSize}px`,
+          }}
+        >
+          {content}
+        </Typography>
+      </React.Fragment>
+    );
+
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
@@ -602,100 +608,30 @@ const Practice = () => {
       let highlightedString = [];
       for (let i = 0; i < word.length; i++) {
         let matchFound = false;
-        for (let j = 0; j < matchedChar.length; j++) {
-          let length = splitGraphemes(matchedChar[j]).filter(
+        for (const match of matchedChar) {
+          const length = splitGraphemes(match).filter(
             (item) => item !== "‌" && item !== "" && item !== " "
           ).length;
           const substr = word.slice(i, i + length).join("");
-          if (substr.includes(matchedChar[j])) {
-            highlightedString.push(
-              <React.Fragment key={i}>
-                <Typography
-                  variant="h5"
-                  component="h4"
-                  sx={{
-                    fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
-                    fontWeight: 700,
-                    fontFamily: "Quicksand",
-                    lineHeight: "50px",
-                    background: "#FFF0BD",
-                  }}
-                >
-                  {substr}
-                </Typography>
-              </React.Fragment>
-            );
+          if (substr.includes(match)) {
+            highlightedString.push(renderTypography(i, substr, true));
             i += length - 1;
             matchFound = true;
             break;
           }
         }
         if (!matchFound) {
-          highlightedString.push(
-            <React.Fragment key={i}>
-              <Typography
-                variant="h5"
-                component="h4"
-                sx={{
-                  color: "#333F61",
-                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
-                  fontWeight: 700,
-                  fontFamily: "Quicksand",
-                  lineHeight: "50px",
-                }}
-              >
-                {word[i]}
-              </Typography>
-            </React.Fragment>
-          );
+          highlightedString.push(renderTypography(i, word[i]));
         }
       }
       return highlightedString;
     } else {
-      const highlightedSentence = words.map((word, index) => {
+      return words.map((word, index) => {
         const isMatched = matchedChar.some((char) =>
           word.toLowerCase().includes(char)
         );
-        if (isMatched) {
-          return (
-            <React.Fragment key={index}>
-              <Typography
-                variant="h5"
-                component="h4"
-                ml={1}
-                sx={{
-                  fontSize: `${fontSize}px`,
-                  fontWeight: 700,
-                  fontFamily: "Quicksand",
-                  lineHeight: "50px",
-                  background: "#FFF0BD",
-                }}
-              >
-                {word}
-              </Typography>{" "}
-            </React.Fragment>
-          );
-        } else {
-          return (
-            <Typography
-              variant="h5"
-              component="h4"
-              ml={1}
-              sx={{
-                color: "#333F61",
-                fontSize: `${fontSize}px`,
-                fontWeight: 700,
-                fontFamily: "Quicksand",
-                lineHeight: "50px",
-              }}
-              key={index}
-            >
-              {word + " "}
-            </Typography>
-          );
-        }
+        return renderTypography(index, word + " ", isMatched);
       });
-      return highlightedSentence;
     }
   }
 
