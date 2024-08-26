@@ -39,6 +39,7 @@ const AudioRecorder = (props) => {
         recorderType: RecordRTC.StereoAudioRecorder, // Use StereoAudioRecorder for better compatibility
         numberOfAudioChannels: 1, // Match the same number of audio channels
         desiredSampRate: 16000, // Adjust the sample rate if necessary to match
+        disableLogs: true,
       });
 
       recorderRef.current.startRecording();
@@ -116,33 +117,34 @@ const AudioRecorder = (props) => {
                 }}
                 className="game-action-button"
               >
-                {(!props.dontShowListen || props.recordedAudio) && (
-                  <>
-                    {!props.pauseAudio ? (
-                      <div
-                        onClick={() => {
-                          props.playAudio(true);
-                        }}
-                      >
-                        <Box sx={{ cursor: "pointer" }}>
-                          <ListenButton />
+                {props?.originalText &&
+                  (!props.dontShowListen || props.recordedAudio) && (
+                    <>
+                      {!props.pauseAudio ? (
+                        <div
+                          onClick={() => {
+                            props.playAudio(true);
+                          }}
+                        >
+                          <Box sx={{ cursor: "pointer" }}>
+                            <ListenButton />
+                          </Box>
+                        </div>
+                      ) : (
+                        <Box
+                          sx={{ cursor: "pointer" }}
+                          onClick={() => {
+                            props.playAudio(false);
+                          }}
+                        >
+                          <StopButton />
                         </Box>
-                      </div>
-                    ) : (
-                      <Box
-                        sx={{ cursor: "pointer" }}
-                        onClick={() => {
-                          props.playAudio(false);
-                        }}
-                      >
-                        <StopButton />
-                      </Box>
-                    )}
-                  </>
-                )}
+                      )}
+                    </>
+                  )}
 
                 <div>
-                  {!props.showOnlyListen && (
+                  {props?.originalText && !props.showOnlyListen && (
                     <Box
                       marginLeft={
                         !props.dontShowListen || props.recordedAudio
