@@ -3,9 +3,7 @@ import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
-import {
-  useNavigate,
-} from "../../../node_modules/react-router-dom/dist/index";
+import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 import {
   callConfetti,
   getLocalData,
@@ -53,19 +51,22 @@ const Practice = () => {
   const TARGETS_PERCENTAGE = 0.3;
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const lang = getLocalData("lang");
-  const [totalSyllableCount, setTotalSyllableCount] = useState('');
-  const [percentage, setPercentage] = useState('');
+  const [totalSyllableCount, setTotalSyllableCount] = useState("");
+  const [percentage, setPercentage] = useState("");
   const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
     const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
-    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
+    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria });
   };
 
   const isFirefox = () => {
-    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
+    return (
+      typeof navigator !== "undefined" &&
+      navigator.userAgent.toLowerCase().includes("firefox")
+    );
   };
 
   useEffect(() => {
@@ -128,7 +129,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -137,23 +138,23 @@ const Practice = () => {
   };
 
   const checkFluency = (contentType, fluencyScore) => {
-      switch (contentType.toLowerCase()) {
-          case 'word':
-            setFluency(fluencyScore < 2);
-              break;
-          case 'sentence':
-            setFluency(fluencyScore < 6);
-              break;
-          case 'paragraph':
-            setFluency(fluencyScore < 10);
-              break;
-          default:
-            setFluency(true);
-      }
-  }
+    switch (contentType.toLowerCase()) {
+      case "word":
+        setFluency(fluencyScore < 2);
+        break;
+      case "sentence":
+        setFluency(fluencyScore < 6);
+        break;
+      case "paragraph":
+        setFluency(fluencyScore < 10);
+        break;
+      default:
+        setFluency(true);
+    }
+  };
 
   const handleNext = async (isGameOver) => {
-    setIsNextButtonCalled(true)
+    setIsNextButtonCalled(true);
     setEnableNext(false);
 
     try {
@@ -192,7 +193,7 @@ const Practice = () => {
         currentPracticeProgress = Math.round(
           ((currentQuestion + 1 + currentPracticeStep * limit) /
             (practiceSteps.length * limit)) *
-          100
+            100
         );
       }
 
@@ -244,22 +245,22 @@ const Practice = () => {
           Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
-          if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
-          await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
-            {
-              userId: virtualId,
-              sessionId: sessionId,
-              subSessionId: sub_session_id,
-              milestoneLevel: getSetData?.data?.currentLevel,
-              totalSyllableCount: totalSyllableCount,
-              language: localStorage.getItem("lang"),
-            }
-          );
-        }
+          if (process.env.REACT_APP_POST_LEARNER_PROGRESS === "true") {
+            await axios.post(
+              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
+              {
+                userId: virtualId,
+                sessionId: sessionId,
+                subSessionId: sub_session_id,
+                milestoneLevel: getSetData?.data?.currentLevel,
+                totalSyllableCount: totalSyllableCount,
+                language: localStorage.getItem("lang"),
+              }
+            );
+          }
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult === "pass") {
-            try{
+            try {
               await axios.post(
                 `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
                 {
@@ -274,8 +275,7 @@ const Practice = () => {
               );
               gameOver({ link: "/assesment-end" }, true);
               return;
-            }
-            catch(e){
+            } catch (e) {
               // catch error
             }
           }
@@ -316,14 +316,15 @@ const Practice = () => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
-        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
+        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount);
         setLivesData({
           ...livesData,
           totalTargets: resGetContent?.data?.totalSyllableCount,
           targetsForLives:
             resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
           targetPerLive:
-            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
+            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) /
+            LIVES,
         });
 
         let showcaseLevel =
@@ -405,9 +406,9 @@ const Practice = () => {
       const virtualId = getLocalData("virtualId");
       let sessionId = getLocalData("sessionId");
 
-      if (!sessionId){
+      if (!sessionId) {
         sessionId = uniqueId();
-        localStorage.setItem("sessionId", sessionId)
+        localStorage.setItem("sessionId", sessionId);
       }
 
       const getMilestoneDetails = await axios.get(
@@ -455,11 +456,12 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
+        targetsForLives:
+          resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
@@ -544,11 +546,12 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
+        targetsForLives:
+          resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
@@ -565,10 +568,10 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
         navigate("/");
-      }else {
-        navigate("/discover-start")
+      } else {
+        navigate("/discover-start");
       }
     }
   };
@@ -611,7 +614,7 @@ const Practice = () => {
                   variant="h5"
                   component="h4"
                   sx={{
-                    fontSize: `${fontSize}px`,
+                    fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
                     lineHeight: "50px",
@@ -635,7 +638,7 @@ const Practice = () => {
                 component="h4"
                 sx={{
                   color: "#333F61",
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -698,11 +701,12 @@ const Practice = () => {
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-        const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
-        const stringLengths = contentSourceData.map(item => item.text.length);
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+        const contentSourceData =
+          questions[currentQuestion]?.contentSourceData || [];
+        const stringLengths = contentSourceData.map((item) => item.text.length);
         const length = stringLengths[0];
-        window.parent.postMessage({ type: 'stringLengths', length });
+        window.parent.postMessage({ type: "stringLengths", length });
       }
     }
   }, [questions[currentQuestion]]);
@@ -755,7 +759,7 @@ const Practice = () => {
             setOpenMessageDialog,
             setEnableNext,
             isNextButtonCalled,
-            setIsNextButtonCalled
+            setIsNextButtonCalled,
           }}
         />
       );
