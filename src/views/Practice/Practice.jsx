@@ -571,10 +571,6 @@ const Practice = () => {
       return str2.length - str1.length;
     });
 
-    let fontSize =
-      questions[currentQuestion]?.contentType?.toLowerCase() === "paragraph"
-        ? 30
-        : 40;
     let type = currentContentType?.toLowerCase();
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
@@ -595,7 +591,7 @@ const Practice = () => {
                   variant="h5"
                   component="h4"
                   sx={{
-                    fontSize: `${fontSize}px`,
+                    fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
                     lineHeight: "50px",
@@ -619,7 +615,7 @@ const Practice = () => {
                 component="h4"
                 sx={{
                   color: "#333F61",
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -645,7 +641,7 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -664,7 +660,7 @@ const Practice = () => {
               ml={1}
               sx={{
                 color: "#333F61",
-                fontSize: `${fontSize}px`,
+                fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                 fontWeight: 700,
                 fontFamily: "Quicksand",
                 lineHeight: "50px",
