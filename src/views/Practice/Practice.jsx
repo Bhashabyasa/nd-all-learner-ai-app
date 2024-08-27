@@ -567,40 +567,15 @@ const Practice = () => {
 
   function highlightWords(sentence, matchedChar) {
     const words = sentence.split(" ");
-    matchedChar.sort((str1, str2) => str2.length - str1.length);
+    matchedChar.sort(function (str1, str2) {
+      return str2.length - str1.length;
+    });
 
-    const fontSize =
+    let fontSize =
       questions[currentQuestion]?.contentType?.toLowerCase() === "paragraph"
         ? 30
         : 40;
-    const type = currentContentType?.toLowerCase();
-    const commonTypographyProps = {
-      variant: "h5",
-      component: "h4",
-      sx: {
-        fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
-        fontWeight: 700,
-        fontFamily: "Quicksand",
-        lineHeight: "50px",
-      },
-    };
-
-    const renderTypography = (key, content, background = null) => (
-      <React.Fragment key={key}>
-        <Typography
-          {...commonTypographyProps}
-          sx={{
-            ...commonTypographyProps.sx,
-            color: background ? undefined : "#333F61",
-            background: background ? "#FFF0BD" : undefined,
-            fontSize: `${fontSize}px`,
-          }}
-        >
-          {content}
-        </Typography>
-      </React.Fragment>
-    );
-
+    let type = currentContentType?.toLowerCase();
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
@@ -608,30 +583,100 @@ const Practice = () => {
       let highlightedString = [];
       for (let i = 0; i < word.length; i++) {
         let matchFound = false;
-        for (const match of matchedChar) {
-          const length = splitGraphemes(match).filter(
+        for (let j = 0; j < matchedChar.length; j++) {
+          let length = splitGraphemes(matchedChar[j]).filter(
             (item) => item !== "‌" && item !== "" && item !== " "
           ).length;
           const substr = word.slice(i, i + length).join("");
-          if (substr.includes(match)) {
-            highlightedString.push(renderTypography(i, substr, true));
+          if (substr.includes(matchedChar[j])) {
+            highlightedString.push(
+              <React.Fragment key={i}>
+                <Typography
+                  variant="h5"
+                  component="h4"
+                  sx={{
+                    fontSize: `${fontSize}px`,
+                    fontWeight: 700,
+                    fontFamily: "Quicksand",
+                    lineHeight: "50px",
+                    background: "#FFF0BD",
+                  }}
+                >
+                  {substr}
+                </Typography>
+              </React.Fragment>
+            );
             i += length - 1;
             matchFound = true;
             break;
           }
         }
         if (!matchFound) {
-          highlightedString.push(renderTypography(i, word[i]));
+          highlightedString.push(
+            <React.Fragment key={i}>
+              <Typography
+                variant="h5"
+                component="h4"
+                sx={{
+                  color: "#333F61",
+                  fontSize: `${fontSize}px`,
+                  fontWeight: 700,
+                  fontFamily: "Quicksand",
+                  lineHeight: "50px",
+                }}
+              >
+                {word[i]}
+              </Typography>
+            </React.Fragment>
+          );
         }
       }
       return highlightedString;
     } else {
-      return words.map((word, index) => {
+      const highlightedSentence = words.map((word, index) => {
         const isMatched = matchedChar.some((char) =>
           word.toLowerCase().includes(char)
         );
-        return renderTypography(index, word + " ", isMatched);
+        if (isMatched) {
+          return (
+            <React.Fragment key={index}>
+              <Typography
+                variant="h5"
+                component="h4"
+                ml={1}
+                sx={{
+                  fontSize: `${fontSize}px`,
+                  fontWeight: 700,
+                  fontFamily: "Quicksand",
+                  lineHeight: "50px",
+                  background: "#FFF0BD",
+                }}
+              >
+                {word}
+              </Typography>{" "}
+            </React.Fragment>
+          );
+        } else {
+          return (
+            <Typography
+              variant="h5"
+              component="h4"
+              ml={1}
+              sx={{
+                color: "#333F61",
+                fontSize: `${fontSize}px`,
+                fontWeight: 700,
+                fontFamily: "Quicksand",
+                lineHeight: "50px",
+              }}
+              key={index}
+            >
+              {word + " "}
+            </Typography>
+          );
+        }
       });
+      return highlightedSentence;
     }
   }
 
