@@ -30,7 +30,8 @@ import {
 } from "./constants";
 import config from "./urlConstants.json";
 import { filterBadWords } from "./Badwords";
-// import S3Client from '../config/awsS3';
+import S3Client from "../config/awsS3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 /* eslint-disable */
 
 const AudioPath = {
@@ -363,7 +364,7 @@ function VoiceAnalyser(props) {
 
       // TODO: Remove false when REACT_APP_AWS_S3_BUCKET_NAME and keys added
       var audioFileName = "";
-      if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
+      if (process.env.REACT_APP_CAPTURE_AUDIO === "true") {
         let getContentId = currentLine;
         audioFileName = `${
           process.env.REACT_APP_CHANNEL
