@@ -344,7 +344,7 @@ export const ProfileHeader = ({
   const handleProfileBack = () => {
     try {
       if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
-        window.parent.postMessage({ type: "restore-iframe-content" });
+        window.parent.postMessage({ type: "restore-iframe-content" }, "*");
         navigate("/");
       } else {
         navigate("/discover-start");
