@@ -119,10 +119,13 @@ const Practice = () => {
 
   const send = (score) => {
     if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
-      window.parent.postMessage({
-        score: score,
-        message: "all-test-rig-score",
-      });
+      window.parent.postMessage(
+        {
+          score: score,
+          message: "all-test-rig-score",
+        },
+        "*"
+      );
     }
   };
 
@@ -683,7 +686,7 @@ const Practice = () => {
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
         const length = stringLengths[0];
-        window.parent.postMessage({ type: "stringLengths", length });
+        window.parent.postMessage({ type: "stringLengths", length }, "*");
       }
     }
   }, [questions[currentQuestion]]);
