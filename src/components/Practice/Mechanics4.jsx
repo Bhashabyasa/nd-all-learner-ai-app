@@ -56,8 +56,27 @@ const Mechanics4 = ({
     setSelectedWords([]);
   }, [contentId]);
 
+  function jumbleSentence(sentence) {
+    // Split the sentence into words
+    const words = sentence.split(" ");
+
+    // Shuffle the words using Fisher-Yates (Durstenfeld) shuffle algorithm
+    for (let i = words.length - 1; i > 0; i--) {
+      // Pick a random index from 0 to i
+      const j = Math.floor(Math.random() * (i + 1));
+
+      // Swap words[i] with the element at random index
+      [words[i], words[j]] = [words[j], words[i]];
+    }
+
+    // Join the jumbled words back into a sentence
+    return words;
+  }
+
   useEffect(() => {
-    let wordsArr = splitGraphemes(parentWords);
+    let wordsArr = jumbleSentence(parentWords);
+
+    console.log(wordsArr);
     if (parentWords) {
       for (let i = wordsArr.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * i);
@@ -118,7 +137,7 @@ const Mechanics4 = ({
   const answer =
     selectedWords?.length !== wordsAfterSplit?.length
       ? ""
-      : selectedWords?.join("") === parentWords
+      : selectedWords?.join(" ") === parentWords
       ? "correct"
       : "wrong";
 
@@ -141,6 +160,22 @@ const Mechanics4 = ({
         loading,
       }}
     >
+      <div
+        style={{
+          left: `calc(50% - 258px / 2)`,
+          top: `calc(50% - 45px / 2 - 235.5px)`,
+          fontFamily: "Quicksand",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "36px",
+          lineHeight: "45px",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#333F61",
+        }}
+      >
+        {header}
+      </div>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2, mt: 8 }}>
         <Box
           sx={{
