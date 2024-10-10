@@ -751,7 +751,9 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType === "image"
+              mechanism === "fillInTheBlank"
+                ? "Fill in the blank"
+                : questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
             parentWords:
@@ -845,7 +847,44 @@ const Practice = () => {
         <Mechanics4
           page={page}
           setPage={setPage}
-          {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
+          {...{
+            level: !isShowCase && level,
+            header: "Form a sentence using word and speak",
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            jumbled_text:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            type: mechanism,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            // image: elephant,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            allWords:
+              questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
+              [],
+            loading,
+            setOpenMessageDialog,
+          }}
         />
       );
     } else if (page === 1) {

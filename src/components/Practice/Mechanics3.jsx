@@ -134,7 +134,7 @@ const Mechanics2 = ({
       if (type !== "audio") {
         let index = wordsArr?.findIndex((elem) => elem === word);
         if (index !== -1) {
-        wordsArr?.splice(index, 1);
+          wordsArr?.splice(index, 1);
         }
       }
 
@@ -207,6 +207,23 @@ const Mechanics2 = ({
         loading,
       }}
     >
+      <div
+        style={{
+          left: `calc(50% - 258px / 2)`,
+          top: `calc(50% - 45px / 2 - 235.5px)`,
+          fontFamily: "Quicksand",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "36px",
+          lineHeight: "45px",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#333F61",
+        }}
+      >
+        {header}
+      </div>
+
       <Box
         sx={{
           display: "flex",
@@ -284,7 +301,7 @@ const Mechanics2 = ({
         ) : (
           <>
             {sentences?.map((elem, index) => (
-             <React.Fragment key={index}>
+              <React.Fragment key={index}>
                 {elem === "dash" ? (
                   <Box
                     sx={{
