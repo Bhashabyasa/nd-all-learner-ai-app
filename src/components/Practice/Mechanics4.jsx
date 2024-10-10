@@ -56,6 +56,8 @@ const Mechanics4 = ({
     setSelectedWords([]);
   }, [contentId]);
 
+  const [shake, setShake] = useState(false);
+
   function jumbleSentence(sentence) {
     // Split the sentence into words
     const words = sentence.split(" ");
@@ -105,6 +107,10 @@ const Mechanics4 = ({
   //   R: rPlay,
   // };
   const handleWords = (word, isSelected) => {
+    setShake(true);
+    setTimeout(() => {
+      setShake(false);
+    }, 3000);
     // audioPlay[word]();
     if (selectedWords?.length + 1 !== wordsAfterSplit?.length || isSelected) {
       let audio = new Audio(isSelected ? removeSound : addSound);
@@ -180,7 +186,7 @@ const Mechanics4 = ({
         <Box
           sx={{
             minWidth: "250px",
-            minHeight: "70px",
+            minHeight: "75px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -195,7 +201,7 @@ const Mechanics4 = ({
                 : "rgba(51, 63, 97, 0.10)"
             }`,
             cursor: "pointer",
-            letterSpacing: "15px",
+            letterSpacing: answer != "correct" ? "5px" : "normal",
             background: "#FBFBFB",
             paddingX: type === "word" ? 0 : "20px",
           }}
@@ -203,7 +209,24 @@ const Mechanics4 = ({
           {selectedWords?.map((elem) => (
             <span
               onClick={() => handleWords(elem, true)}
+              className={
+                answer === "wrong"
+                  ? `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
+                  : ""
+              }
               style={{
+                borderRadius: "12px",
+                padding: "5px 10px 5px 10px",
+                border:
+                  answer != "wrong"
+                    ? answer === "correct"
+                      ? "none" // No border if the answer is correct
+                      : answer === "wrong"
+                      ? "2px solid #C30303" // Red border if the answer is wrong
+                      : !words.length && selectedWords.length && type === "word"
+                      ? "2px solid #1897DE" // Blue border for some specific condition
+                      : "2px solid rgba(51, 63, 97, 0.15)"
+                    : "", // Default light border,
                 color:
                   type === "word"
                     ? answer === "correct"
@@ -211,12 +234,15 @@ const Mechanics4 = ({
                       : answer === "wrong"
                       ? "#C30303"
                       : "#1897DE"
+                    : answer === "wrong"
+                    ? "#C30303"
                     : "#333F61",
                 fontWeight: type === "word" ? 600 : 700,
                 fontSize: "40px",
                 fontFamily: "Quicksand",
                 cursor: "pointer",
-                marginLeft: type === "word" ? 0 : "20px",
+                marginLeft:
+                  type === "word" ? 0 : answer != "correct" ? "20px" : 0,
               }}
             >
               {elem}

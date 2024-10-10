@@ -443,13 +443,14 @@ const Mechanics2 = ({
           </Box>
         ))}
       </Box>
-      {selectedWord === wordToCheck && type === "fillInTheBlank" && (
+      {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
             setVoiceText={setVoiceText}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
+            dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={parentWords}
             {...{
@@ -460,11 +461,12 @@ const Mechanics2 = ({
               callUpdateLearner,
               isShowCase,
               setEnableNext,
+              showOnlyListen: selectedWord != wordToCheck,
               setOpenMessageDialog,
             }}
           />
         </Box>
-      )}
+      }
       {/* <Box
         sx={{
           display: "flex",
