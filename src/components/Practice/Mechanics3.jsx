@@ -128,6 +128,7 @@ const Mechanics2 = ({
     if (removeWord) {
       setWords([...words, word]);
       setSelectedWord("");
+      setEnableNext(false);
     } else {
       let wordsArr = [...words];
 
@@ -143,8 +144,11 @@ const Mechanics2 = ({
       }
 
       // if (type === "audio") {
-
-      var audio = new Audio(word === wordToCheck ? correctSound : wrongSound);
+      const isSoundCorrect = word === wordToCheck ? true : false;
+      var audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
+      if (!isSoundCorrect) {
+        setEnableNext(false);
+      }
       audio.play();
       setShake(true);
       setTimeout(() => {
@@ -300,6 +304,33 @@ const Mechanics2 = ({
           </Box>
         ) : (
           <>
+            <Box
+              sx={{
+                position: "absolute",
+                left: 0,
+                marginTop: "40px",
+                marginLeft: "80px",
+                // Add responsiveness
+                width: "100%", // Full width on smaller screens
+                maxWidth: "500px", // Limit width on larger screens
+                "@media (max-width: 600px)": {
+                  position: "relative",
+                  marginTop: "20px", // Adjust margin on small screens
+                  marginLeft: "20px", // Adjust margin on small screens
+                  width: "70%", // Adjust width for smaller devices
+                },
+                "@media (min-width: 600px)": {
+                  marginTop: "30px",
+                  marginLeft: "50px",
+                },
+              }}
+            >
+              <img
+                src={image}
+                placeholder="image"
+                style={{ width: "100%", height: "auto", maxWidth: "200px" }}
+              />
+            </Box>
             {sentences?.map((elem, index) => (
               <React.Fragment key={index}>
                 {elem === "dash" ? (
@@ -453,6 +484,8 @@ const Mechanics2 = ({
             dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={parentWords}
+            enableNext={getEnableButton()}
+            handleNext={handleNext}
             {...{
               contentId,
               contentType,
