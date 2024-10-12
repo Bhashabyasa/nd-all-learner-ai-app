@@ -115,6 +115,7 @@ const Mechanics4 = ({
     if (selectedWords?.length + 1 !== wordsAfterSplit?.length || isSelected) {
       let audio = new Audio(isSelected ? removeSound : addSound);
       audio.play();
+      setEnableNext(false);
     }
 
     if (isSelected) {
@@ -320,6 +321,8 @@ const Mechanics4 = ({
             storyLine={storyLine}
             dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
+            handleNext={handleNext}
+            enableNext={enableNext}
             originalText={parentWords}
             {...{
               contentId,

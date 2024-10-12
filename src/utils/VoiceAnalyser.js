@@ -19,7 +19,7 @@ import v7 from "../assets/audio/V7.m4a";
 import v8 from "../assets/audio/V8.m4a";
 import livesAdd from "../assets/audio/livesAdd.wav";
 import livesCut from "../assets/audio/livesCut.wav";
-
+import { NextButtonRound } from "./constants";
 import { response } from "../services/telementryService";
 import AudioCompare from "./AudioCompare";
 import {
@@ -66,12 +66,19 @@ function VoiceAnalyser(props) {
   const [apiResponse, setApiResponse] = useState("");
   const [currentIndex, setCurrentIndex] = useState();
   const [temp_audio, set_temp_audio] = useState(null);
+  const [isStudentAudioPlaying, setIsStudentAudioIsPlaying] = useState(false);
   const { callUpdateLearner } = props;
   const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
+
+  useEffect(() => {
+    if (!props.enableNext) {
+      setRecordedAudio("");
+    }
+  }, [props.enableNext]);
 
   const initiateValues = async () => {
     const currIndex = (await localStorage.getItem("index")) || 1;
@@ -85,14 +92,27 @@ function VoiceAnalyser(props) {
   const playAudio = (val) => {
     try {
       var audio = new Audio(
-        recordedAudio
-          ? recordedAudio
-          : props.contentId
-          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
-          : AudioPath[1][10]
+        `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
       );
       set_temp_audio(audio);
       setPauseAudio(val);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const playRecordedAudio = (val) => {
+    try {
+      const audio = new Audio(recordedAudio);
+
+      if (val) {
+        audio.play();
+        setIsStudentAudioIsPlaying(true);
+        audio.onended = () => setIsStudentAudioIsPlaying(false);
+      } else {
+        audio.pause();
+        setIsStudentAudioIsPlaying(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -571,6 +591,8 @@ function VoiceAnalyser(props) {
                     originalText={props.originalText}
                     playAudio={playAudio}
                     pauseAudio={pauseAudio}
+                    playRecordedAudio={playRecordedAudio}
+                    isStudentAudioPlaying={isStudentAudioPlaying}
                     dontShowListen={
                       props.isShowCase
                         ? props.isShowCase && !recordedAudio
@@ -607,6 +629,22 @@ function VoiceAnalyser(props) {
           }
         })()
       )}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        {props.enableNext && (
+          <Box
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              if (props.setIsNextButtonCalled) {
+                props.setIsNextButtonCalled(true);
+              } else {
+                props.handleNext();
+              }
+            }}
+          >
+            <NextButtonRound />
+          </Box>
+        )}
+      </Box>
     </div>
   );
 }

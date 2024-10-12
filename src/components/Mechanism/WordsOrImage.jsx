@@ -245,6 +245,7 @@ const WordsOrImage = ({
             // updateStory={updateStory}
             originalText={words}
             handleNext={handleNext}
+            enableNext={enableNext}
             {...{
               contentId,
               contentType,

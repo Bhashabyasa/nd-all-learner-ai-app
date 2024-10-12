@@ -71,6 +71,39 @@ export const questionsList = [
   },
 ];
 
+export const NextButtonRound = (props) => {
+  return (
+    <svg
+      width={70}
+      height={70}
+      viewBox="0 0 54 54"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      opacity={props?.disabled && 0.3}
+    >
+      <rect width={54} height={54} rx={27} fill="url(#paint0_linear_81_347)" />
+      <path
+        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
+        fill="white"
+        transform="translate(10, 10) scale(2.5)" /* Make arrow bigger and keep it centered */
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_81_347"
+          x1={0}
+          y1={27}
+          x2={54}
+          y2={27}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#E15404" />
+          <stop offset={1} stopColor="#FF9050" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
 export const NextButton = (props) => {
   return (
     <svg
