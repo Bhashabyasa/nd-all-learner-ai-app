@@ -144,8 +144,8 @@ const Mechanics2 = ({
       }
 
       // if (type === "audio") {
-      const isSoundCorrect = word === wordToCheck ? true : false;
-      var audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
+      const isSoundCorrect = word === wordToCheck;
+      let audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
       if (!isSoundCorrect) {
         setEnableNext(false);
       }
@@ -191,6 +191,7 @@ const Mechanics2 = ({
     if (type === "audio") {
       return selectedWord === wordToCheck;
     }
+    return false;
   };
   return (
     <MainLayout
@@ -325,11 +326,11 @@ const Mechanics2 = ({
                 },
               }}
             >
-              <img
+              {/* <img
                 src={image}
                 placeholder="image"
                 style={{ width: "100%", height: "auto", maxWidth: "200px" }}
-              />
+              /> */}
             </Box>
             {sentences?.map((elem, index) => (
               <React.Fragment key={index}>
@@ -431,8 +432,9 @@ const Mechanics2 = ({
           marginBottom: "30px",
         }}
       >
-        {words?.map((elem) => (
+        {words?.map((elem, ind) => (
           <Box
+            key={ind}
             className={`${
               type === "audio" && selectedWord === elem
                 ? selectedWord === parentWords
