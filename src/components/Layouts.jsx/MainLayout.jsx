@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
-
+import PropTypes from "prop-types";
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
 import practicebgstone3 from "../../assets/images/practice-bg-stone3.svg";
@@ -243,9 +243,7 @@ const MainLayout = (props) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundImage: `url(${
-              cardBackground ? cardBackground : textureImage
-            })`,
+            backgroundImage: `url(${cardBackground || textureImage})`,
             backgroundSize: "contain",
             backgroundRepeat: "round",
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -274,9 +272,7 @@ const MainLayout = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${
-                  cardBackground ? cardBackground : textureImage
-                })`,
+                backgroundImage: `url(${cardBackground || textureImage})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -296,7 +292,7 @@ const MainLayout = (props) => {
                     <img
                       src={timer}
                       alt="timer"
-                      sx={{ height: "58px", width: "58px" }}
+                      style={{ height: "58px", width: "58px" }}
                     />
                   </Box>
                 )}
@@ -315,6 +311,7 @@ const MainLayout = (props) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                        key={index}
                         index={index}
                         sx={{
                           height: "8px",
@@ -625,9 +622,7 @@ const MainLayout = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${
-                  cardBackground ? cardBackground : textureImage
-                })`,
+                backgroundImage: `url(${cardBackground || textureImage})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "round",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -979,6 +974,24 @@ const MainLayout = (props) => {
       )}
     </Box>
   );
+};
+
+MainLayout.propTypes = {
+  contentType: PropTypes.string.isRequired,
+  handleBack: PropTypes.func.isRequired,
+  disableScreen: PropTypes.bool,
+  isShowCase: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  setOpenLangModal: PropTypes.func,
+  points: PropTypes.number,
+  handleNext: PropTypes.func.isRequired,
+  enableNext: PropTypes.bool,
+  showNext: PropTypes.bool,
+  showTimer: PropTypes.bool,
+  nextLessonAndHome: PropTypes.bool,
+  startShowCase: PropTypes.bool,
+  setStartShowCase: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default MainLayout;
