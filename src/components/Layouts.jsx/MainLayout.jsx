@@ -978,13 +978,13 @@ const MainLayout = (props) => {
 
 MainLayout.propTypes = {
   contentType: PropTypes.string,
-  handleBack: PropTypes.func.isRequired,
+  handleBack: PropTypes.func,
   disableScreen: PropTypes.bool,
   isShowCase: PropTypes.bool,
   showProgress: PropTypes.bool,
   setOpenLangModal: PropTypes.func,
   points: PropTypes.number,
-  handleNext: PropTypes.func.isRequired,
+  handleNext: PropTypes.any,
   enableNext: PropTypes.bool,
   showNext: PropTypes.bool,
   showTimer: PropTypes.bool,
