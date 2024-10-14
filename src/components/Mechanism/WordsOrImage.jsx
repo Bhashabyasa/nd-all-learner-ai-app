@@ -1,10 +1,10 @@
-import { Box, CardContent, Typography } from "@mui/material";
+import { Box, CardContent, Typography, CircularProgress } from "@mui/material";
 import { createRef, useState } from "react";
 import v11 from "../../assets/audio/V10.mp3";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
 import MainLayout from "../Layouts.jsx/MainLayout";
-import { CircularProgress } from "../../../node_modules/@mui/material/index";
+import PropTypes from "prop-types";
 
 const WordsOrImage = ({
   handleNext,
@@ -245,6 +245,7 @@ const WordsOrImage = ({
             // updateStory={updateStory}
             originalText={words}
             handleNext={handleNext}
+            enableNext={enableNext}
             {...{
               contentId,
               contentType,
@@ -264,6 +265,50 @@ const WordsOrImage = ({
       </CardContent>
     </MainLayout>
   );
+};
+
+WordsOrImage.propTypes = {
+  handleNext: PropTypes.func.isRequired,
+  // background: PropTypes.string,
+  header: PropTypes.string,
+  image: PropTypes.string,
+  setVoiceText: PropTypes.func.isRequired,
+  setRecordedAudio: PropTypes.func.isRequired,
+  setVoiceAnimate: PropTypes.func.isRequired,
+  enableNext: PropTypes.bool,
+  showTimer: PropTypes.bool,
+  points: PropTypes.number,
+  currentStep: PropTypes.number.isRequired,
+  percentage: PropTypes.string,
+  fluency: PropTypes.bool,
+  isDiscover: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  callUpdateLearner: PropTypes.bool,
+  disableScreen: PropTypes.bool,
+  isShowCase: PropTypes.bool,
+  handleBack: PropTypes.func.isRequired,
+  setEnableNext: PropTypes.func.isRequired,
+  startShowCase: PropTypes.bool,
+  setStartShowCase: PropTypes.func,
+  setLivesData: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+  setOpenMessageDialog: PropTypes.func.isRequired,
+  isNextButtonCalled: PropTypes.bool,
+  setIsNextButtonCalled: PropTypes.func,
+  background: PropTypes.bool,
+  type: PropTypes.any,
+  words: PropTypes.any,
+  storyLine: PropTypes.number,
+  steps: PropTypes.number,
+  contentId: PropTypes.any,
+  contentType: PropTypes.string,
+  level: PropTypes.any,
+  progressData: PropTypes.object,
+  playTeacherAudio: PropTypes.func,
+  livesData: PropTypes.any,
+  gameOverData: PropTypes.any,
+  highlightWords: PropTypes.func,
+  matchedChar: PropTypes.any,
 };
 
 export default WordsOrImage;

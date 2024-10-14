@@ -21,6 +21,7 @@ import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
 import { Log } from "../../services/telementryService";
+import elephant from "../../assets/images/elephant.svg";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -766,7 +767,7 @@ const Practice = () => {
             setVoiceAnimate,
             storyLine,
             handleNext,
-            // image: elephant,
+            image: elephant,
             enableNext,
             showTimer: false,
             points,
@@ -849,7 +850,7 @@ const Practice = () => {
           setPage={setPage}
           {...{
             level: !isShowCase && level,
-            header: "Form a sentence using word and speak",
+            header: "Form a sentence using the words and speak",
             parentWords:
               questions[currentQuestion]?.contentSourceData?.[0]?.text,
             contentType: currentContentType,

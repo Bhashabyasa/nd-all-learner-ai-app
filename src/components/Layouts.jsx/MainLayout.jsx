@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import Stack from '@mui/material/Stack';
-
+import Stack from "@mui/material/Stack";
+import PropTypes from "prop-types";
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
 import practicebgstone3 from "../../assets/images/practice-bg-stone3.svg";
@@ -153,8 +153,9 @@ const MainLayout = (props) => {
 
   const sectionStyle = {
     width: "100%",
-    backgroundImage: `url(${backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
-      })`,
+    backgroundImage: `url(${
+      backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
+    })`,
     backgroundSize: "cover", // Cover the entire viewport
     backgroundPosition: "center center", // Center the image
     backgroundRepeat: "no-repeat", // Do not repeat the image
@@ -196,10 +197,10 @@ const MainLayout = (props) => {
               LEVEL === 1
                 ? "3px"
                 : LEVEL === 2
-                  ? "40px"
-                  : LEVEL === 3
-                    ? "78px"
-                    : "78px",
+                ? "40px"
+                : LEVEL === 3
+                ? "78px"
+                : "78px",
           }}
         >
           <img
@@ -242,10 +243,9 @@ const MainLayout = (props) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-              })`,
+            backgroundImage: `url(${cardBackground || textureImage})`,
             backgroundSize: "contain",
-            backgroundRepeat: "round", 
+            backgroundRepeat: "round",
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
             backdropFilter: "blur(25px)",
             mt: "50px",
@@ -255,7 +255,7 @@ const MainLayout = (props) => {
             <img
               src={catLoading}
               alt="catLoading"
-            // sx={{ height: "58px", width: "58px" }}
+              // sx={{ height: "58px", width: "58px" }}
             />
           </Box>
         </Card>
@@ -263,19 +263,18 @@ const MainLayout = (props) => {
         <>
           {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
             <Card
-              sx={{               
-                position: { xs: 'absolute', md: 'relative' },
-                left: { xs: '0px', md: 'auto' },
-                width: { xs: '100%', md: '85vw' },
+              sx={{
+                position: { xs: "absolute", md: "relative" },
+                left: { xs: "0px", md: "auto" },
+                width: { xs: "100%", md: "85vw" },
                 minHeight: "80vh",
                 borderRadius: "20px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-                  })`,
-                backgroundRepeat: "no-repeat", 
-                backgroundSize: 'cover',
+                backgroundImage: `url(${cardBackground || textureImage})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
                 backdropFilter: "blur(25px)",
                 mt: "50px",
@@ -293,7 +292,7 @@ const MainLayout = (props) => {
                     <img
                       src={timer}
                       alt="timer"
-                      sx={{ height: "58px", width: "58px" }}
+                      style={{ height: "58px", width: "58px" }}
                     />
                   </Box>
                 )}
@@ -302,7 +301,7 @@ const MainLayout = (props) => {
               {steps > 0 && (
                 <Box
                   sx={{
-                    width: { xs: '100%', md: '85vw' },
+                    width: { xs: "100%", md: "85vw" },
                     position: "absolute",
                     display: "flex",
                     top: "0",
@@ -312,6 +311,7 @@ const MainLayout = (props) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                        key={index}
                         index={index}
                         sx={{
                           height: "8px",
@@ -324,40 +324,42 @@ const MainLayout = (props) => {
                   })}
                 </Box>
               )}
-              {contentType && contentType.toLowerCase() !== 'word' && startShowCase && (
-                <Box
-                  position={"absolute"}
-                  top={20}
-                  left={20}
-                  justifyContent={"center"}
-                >
-                  <Box display={"flex"}>
-                    {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
-                      (elem) => (
-                        <HeartRed />
-                      )
-                    )}
-
-                    {[...Array(Math.max(0, blackLivesToShow) || 0).keys()]?.map(
-                      (elem) => (
-                        <HeartBlack />
-                      )
-                    )}
-                  </Box>
-                  <span
-                    style={{
-                      marginLeft: "5px",
-                      color: "#000000",
-                      fontWeight: 700,
-                      fontSize: "24px",
-                      lineHeight: "30px",
-                      fontFamily: "Quicksand",
-                    }}
+              {contentType &&
+                contentType.toLowerCase() !== "word" &&
+                startShowCase && (
+                  <Box
+                    position={"absolute"}
+                    top={20}
+                    left={20}
+                    justifyContent={"center"}
                   >
-                    {`You have ${redLivesToShow} lives`}
-                  </span>
-                </Box>
-              )}
+                    <Box display={"flex"}>
+                      {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
+                        (elem) => (
+                          <HeartRed />
+                        )
+                      )}
+
+                      {[
+                        ...Array(Math.max(0, blackLivesToShow) || 0).keys(),
+                      ]?.map((elem) => (
+                        <HeartBlack />
+                      ))}
+                    </Box>
+                    <span
+                      style={{
+                        marginLeft: "5px",
+                        color: "#000000",
+                        fontWeight: 700,
+                        fontSize: "24px",
+                        lineHeight: "30px",
+                        fontFamily: "Quicksand",
+                      }}
+                    >
+                      {`You have ${redLivesToShow} lives`}
+                    </span>
+                  </Box>
+                )}
               <Box sx={{ height: "120px", position: "relative" }}>
                 <Box sx={{ position: "absolute", left: 0, bottom: "-2px" }}>
                   <footer>{LEVEL && levelsImages?.[LEVEL]?.milestone}</footer>
@@ -533,7 +535,7 @@ const MainLayout = (props) => {
                         </Box>
                       </Box>
                     )}
-                    <Box
+                    {/* <Box
                       sx={{ display: "flex", justifyContent: "right", mr: 4 }}
                     >
                       {enableNext ? (
@@ -545,7 +547,7 @@ const MainLayout = (props) => {
                             } else {
                               handleNext();
                             }
-                          }}                          
+                          }}
                         >
                           <NextButton />
                         </Box>
@@ -554,7 +556,7 @@ const MainLayout = (props) => {
                           <NextButton disabled />
                         </Box>
                       )}
-                    </Box>
+                    </Box> */}
                   </Box>
                 )}
                 {nextLessonAndHome && (
@@ -620,8 +622,7 @@ const MainLayout = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-                  })`,
+                backgroundImage: `url(${cardBackground || textureImage})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "round",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -701,14 +702,13 @@ const MainLayout = (props) => {
                           style={{ zIndex: 9999, height: 340 }}
                         />
                       ) : (
-                        <Stack justifyContent="center"
-                          alignItems="center">
+                        <Stack justifyContent="center" alignItems="center">
                           <img
                             src={gameLost}
                             alt="gameLost"
                             style={{ height: 340 }}
                           />
-                       <Typography
+                          <Typography
                             sx={{ mb: 1, mt: 1, textAlign: "center" }}
                           >
                             <span
@@ -745,7 +745,6 @@ const MainLayout = (props) => {
                             )}
                           </Typography>
                         </Stack>
-
                       )}
                     </Box>
                   </>
@@ -975,6 +974,24 @@ const MainLayout = (props) => {
       )}
     </Box>
   );
+};
+
+MainLayout.propTypes = {
+  contentType: PropTypes.string,
+  handleBack: PropTypes.func,
+  disableScreen: PropTypes.bool,
+  isShowCase: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  setOpenLangModal: PropTypes.func,
+  points: PropTypes.number,
+  handleNext: PropTypes.any,
+  enableNext: PropTypes.bool,
+  showNext: PropTypes.bool,
+  showTimer: PropTypes.bool,
+  nextLessonAndHome: PropTypes.bool,
+  startShowCase: PropTypes.bool,
+  setStartShowCase: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default MainLayout;
