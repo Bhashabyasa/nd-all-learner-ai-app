@@ -689,7 +689,8 @@ const Practice = () => {
         const contentSourceData =
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
-        const length = stringLengths[0];
+        const length =
+          mechanism?.name != "readTheImage" ? stringLengths[0] : 1000;
         window.parent.postMessage({ type: "stringLengths", length }, "*");
       }
     }
