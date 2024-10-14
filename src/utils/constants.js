@@ -3342,14 +3342,7 @@ export const levelGetContent = {
     { title: "S2", criteria: "word", template: "simple" },
   ],
   1: [
-    {
-      title: "P1",
-      criteria: "word",
-      template: "simple",
-      criteria: "sentence",
-      template: "simple",
-      mechanism: "fillInTheBlank",
-    },
+    { title: "P1", criteria: "word", template: "simple" },
     { title: "P2", criteria: "word", template: "simple" },
     { title: "P3", criteria: "word", template: "simple" },
     { title: "P4", criteria: "word", template: "simple" },
