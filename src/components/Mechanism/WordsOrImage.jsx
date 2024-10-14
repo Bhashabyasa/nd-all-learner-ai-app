@@ -295,6 +295,20 @@ WordsOrImage.propTypes = {
   setOpenMessageDialog: PropTypes.func.isRequired,
   isNextButtonCalled: PropTypes.bool,
   setIsNextButtonCalled: PropTypes.func,
+  background: PropTypes.bool,
+  type: PropTypes.any,
+  words: PropTypes.any,
+  storyLine: PropTypes.number,
+  steps: PropTypes.number,
+  contentId: PropTypes.any,
+  contentType: PropTypes.string,
+  level: PropTypes.any,
+  progressData: PropTypes.object,
+  playTeacherAudio: PropTypes.func,
+  livesData: PropTypes.any,
+  gameOverData: PropTypes.any,
+  highlightWords: PropTypes.func,
+  matchedChar: PropTypes.any,
 };
 
 export default WordsOrImage;

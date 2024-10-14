@@ -674,6 +674,8 @@ VoiceAnalyser.propTypes = {
   setVoiceAnimate: PropTypes.func.isRequired,
   setRecordedAudio: PropTypes.func.isRequired,
   setVoiceText: PropTypes.func.isRequired,
+  livesData: PropTypes.object,
+  contentId: PropTypes.string,
 };
 
 export default VoiceAnalyser;
