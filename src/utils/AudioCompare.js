@@ -3,6 +3,8 @@ import RecordRTC from "recordrtc";
 import { Box } from "@mui/material";
 import { ListenButton, RetryIcon, SpeakButton, StopButton } from "./constants";
 import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
+import playButton from "../../src/assets/listen.png";
+import pauseButton from "../../src/assets/pause.png";
 
 const AudioRecorder = (props) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -111,7 +113,7 @@ const AudioRecorder = (props) => {
             return (
               <div
                 style={{
-                  display: "flex",
+                  display: !props.showOnlyListen ? "flex" : "",
                   justifyContent: "space-between",
                   margin: "0 auto",
                 }}
@@ -140,6 +142,30 @@ const AudioRecorder = (props) => {
                           <StopButton />
                         </Box>
                       )}
+                      <Box
+                        sx={{
+                          marginLeft: "35px",
+                        }}
+                      >
+                        {props.recordedAudio ? (
+                          <img
+                            onClick={() =>
+                              props.playRecordedAudio(
+                                !props.isStudentAudioPlaying
+                              )
+                            }
+                            style={{ height: "70px" }}
+                            src={
+                              props.isStudentAudioPlaying
+                                ? pauseButton
+                                : playButton
+                            }
+                            alt={props.isStudentAudioPlaying ? "Pause" : "Play"}
+                          />
+                        ) : (
+                          <Box></Box>
+                        )}
+                      </Box>
                     </>
                   )}
 
