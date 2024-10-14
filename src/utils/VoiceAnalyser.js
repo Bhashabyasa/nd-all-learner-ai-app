@@ -361,6 +361,7 @@ function VoiceAnalyser(props) {
       let studentswords = studentTextArray.length;
       let wrong_words = 0;
       let correct_words = 0;
+      let result_per_words = 0;
 
       let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
