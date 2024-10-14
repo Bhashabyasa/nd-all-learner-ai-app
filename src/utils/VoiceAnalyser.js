@@ -90,15 +90,26 @@ function VoiceAnalyser(props) {
     setRecordedAudio("");
   }, [props.contentId]);
 
-  const playAudio = (val) => {
+  const playAudio = async (val) => {
     try {
       let audio = new Audio(
         `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
       );
-      set_temp_audio(audio);
-      setPauseAudio(val);
+
+      audio.addEventListener("canplaythrough", () => {
+        set_temp_audio(audio);
+        setPauseAudio(val);
+        audio.play();
+      });
+
+      audio.addEventListener("error", (e) => {
+        console.error("Audio failed to load", e);
+        setPauseAudio(false); // Set pause state to false
+        alert("Failed to load the audio. Please try again.");
+      });
     } catch (err) {
-      console.log(err);
+      console.error("An error occurred:", err);
+      alert("An unexpected error occurred while trying to play the audio.");
     }
   };
 
@@ -651,7 +662,7 @@ VoiceAnalyser.propTypes = {
   enableNext: PropTypes.bool.isRequired,
   setIsNextButtonCalled: PropTypes.func,
   handleNext: PropTypes.func.isRequired,
-  originalText: PropTypes.string.isRequired,
+  originalText: PropTypes.string,
   isShowCase: PropTypes.bool.isRequired,
   dontShowListen: PropTypes.bool,
   setEnableNext: PropTypes.func.isRequired,
@@ -659,10 +670,10 @@ VoiceAnalyser.propTypes = {
   setOpenMessageDialog: PropTypes.func.isRequired,
   contentType: PropTypes.string.isRequired,
   currentLine: PropTypes.number.isRequired,
-  isNextButtonCalled: PropTypes.bool.isRequired,
-  setVoiceAnimate: PropTypes.bool.isRequired,
-  setRecordedAudio: PropTypes.string.isRequired,
-  setVoiceText: PropTypes.string.isRequired,
+  isNextButtonCalled: PropTypes.bool,
+  setVoiceAnimate: PropTypes.func.isRequired,
+  setRecordedAudio: PropTypes.func.isRequired,
+  setVoiceText: PropTypes.func.isRequired,
 };
 
 export default VoiceAnalyser;

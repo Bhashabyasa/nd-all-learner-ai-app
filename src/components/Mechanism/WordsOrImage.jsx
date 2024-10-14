@@ -269,9 +269,9 @@ const WordsOrImage = ({
 
 WordsOrImage.propTypes = {
   handleNext: PropTypes.func.isRequired,
-  // background: PropTypes.string, // Assuming it's a string
+  // background: PropTypes.string,
   header: PropTypes.string,
-  image: PropTypes.string, // Assuming it's a string
+  image: PropTypes.string,
   setVoiceText: PropTypes.func.isRequired,
   setRecordedAudio: PropTypes.func.isRequired,
   setVoiceAnimate: PropTypes.func.isRequired,
@@ -279,11 +279,11 @@ WordsOrImage.propTypes = {
   showTimer: PropTypes.bool,
   points: PropTypes.number,
   currentStep: PropTypes.number.isRequired,
-  percentage: PropTypes.number,
-  fluency: PropTypes.number,
+  percentage: PropTypes.string,
+  fluency: PropTypes.bool,
   isDiscover: PropTypes.bool,
   showProgress: PropTypes.bool,
-  callUpdateLearner: PropTypes.func.isRequired,
+  callUpdateLearner: PropTypes.bool,
   disableScreen: PropTypes.bool,
   isShowCase: PropTypes.bool,
   handleBack: PropTypes.func.isRequired,

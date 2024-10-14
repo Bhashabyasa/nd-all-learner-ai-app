@@ -977,7 +977,7 @@ const MainLayout = (props) => {
 };
 
 MainLayout.propTypes = {
-  contentType: PropTypes.string.isRequired,
+  contentType: PropTypes.string,
   handleBack: PropTypes.func.isRequired,
   disableScreen: PropTypes.bool,
   isShowCase: PropTypes.bool,
