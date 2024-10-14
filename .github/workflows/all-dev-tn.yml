@@ -21,9 +21,8 @@ jobs:
 
       - name: Install AWS CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install awscli
+          sudo DEBIAN_FRONTEND=noninteractive apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
 
       - name: Configure AWS credentials
         run: |
@@ -83,6 +82,12 @@ jobs:
 
       - name: Deploy to S3 Bucket
         run: aws s3 sync ./build s3://sb-all/assets/test-rig/
+
+      - name: Debug Environment Variables
+        run: |
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "secrate": ${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }}
 
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
