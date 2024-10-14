@@ -439,7 +439,10 @@ const Practice = () => {
       );
 
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
+          (currentGetContent?.mechanism?.id
+            ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+            : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
@@ -744,7 +747,10 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism === "fillInTheBlank" || mechanism === "audio") {
+    } else if (
+      mechanism.name === "fillInTheBlank" ||
+      mechanism.name === "audio"
+    ) {
       return (
         <Mechanics3
           page={page}
@@ -752,7 +758,7 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              mechanism === "fillInTheBlank"
+              mechanism.name === "fillInTheBlank"
                 ? "Fill in the blank"
                 : questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
@@ -762,7 +768,7 @@ const Practice = () => {
             contentType: currentContentType,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
-            type: mechanism,
+            type: mechanism.name,
             setRecordedAudio,
             setVoiceAnimate,
             storyLine,
@@ -792,7 +798,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism === "formAWord") {
+    } else if (mechanism.name === "formAWord") {
       return (
         <Mechanics4
           page={page}
@@ -835,15 +841,57 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism === "readTheImage") {
+    } else if (mechanism.name === "readTheImage") {
       return (
         <Mechanics5
           page={page}
           setPage={setPage}
-          {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
+          {...{
+            level: !isShowCase && level,
+            header: "Study the picture and speak the answer from below",
+            parentWords: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0].text
+              : questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            question_audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0].audio_url
+              : questions[currentQuestion]?.contentSourceData?.[0]?.audio_url,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            options: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0].options
+              : questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            type: "word",
+            image:
+              `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+              questions[currentQuestion]?.mechanics_data[0]?.image_url,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            loading,
+            setOpenMessageDialog,
+          }}
         />
       );
-    } else if (mechanism === "FormASentence") {
+    } else if (mechanism.name === "FormASentence") {
       return (
         <Mechanics4
           page={page}
@@ -858,7 +906,7 @@ const Practice = () => {
               questions[currentQuestion]?.contentSourceData?.[0]?.text,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
-            type: mechanism,
+            type: mechanism.name,
             setRecordedAudio,
             setVoiceAnimate,
             storyLine,

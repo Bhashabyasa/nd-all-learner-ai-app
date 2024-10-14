@@ -1,120 +1,230 @@
-import { Box } from '@mui/material';
-import React, { createRef, useState } from 'react';
-import seePictureAndTell from '../../assets/images/seePictureAndTell.png';
-import VoiceAnalyser from '../../utils/VoiceAnalyser';
-import MainLayout from '../Layouts.jsx/MainLayout';
-import { Grid } from '../../../node_modules/@mui/material/index';
-import { PlayAudioButton, StopAudioButton } from '../../utils/constants';
-import v11 from '../../assets/audio/V10.mp3';
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Grid } from "@mui/material";
+import MainLayout from "../Layouts.jsx/MainLayout";
+import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
+import VoiceAnalyser from "../../utils/VoiceAnalyser";
 
-// const sectionStyle = {
-//     width: '100%',
-//     backgroundImage: `url(${practicebg})`,
-//     backgroundSize: 'cover', // Cover the entire viewport
-//     backgroundPosition: 'center center', // Center the image
-//     backgroundRepeat: 'no-repeat', // Do not repeat the image
-//     height: '100vh',
-//     padding: '20px 100px',
-//     boxSizing: 'border-box',
-// };
+const Mechanics5 = ({
+  background,
+  type,
+  isDiscover,
+  header,
+  parentWords,
+  options,
+  image,
+  question_audio,
+  handleNext,
+  enableNext,
+  showTimer,
+  points,
+  steps,
+  currentStep,
+  level,
+  progressData,
+  showProgress,
+  playTeacherAudio,
+  handleBack,
+  disableScreen,
+  loading,
+  setVoiceText,
+  setRecordedAudio,
+  setVoiceAnimate,
+  storyLine,
+  contentId,
+  contentType,
+  callUpdateLearner,
+  isShowCase,
+  setEnableNext,
+  selectedWord,
+  wordToCheck,
+  setOpenMessageDialog,
+}) => {
+  const audiosRef = useRef(
+    new Array(options.length).fill(null).map(() => React.createRef())
+  );
+  const questionAudioRef = useRef();
+  const [playingIndex, setPlayingIndex] = useState(null);
 
-const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }) => {
-    const [sentences, setSentences] = useState([
-        'What is the boy doing in picture.?',
-        'Kids are eating breakfast',
-        'The kids are playing with the small dog',
-        'The elephant is drinking water',
-    ]);
+  useEffect(() => {
+    // Ensure that audio stops playing when options change
+    audiosRef.current.forEach((ref) => {
+      if (ref.current && !ref.current.paused) {
+        ref.current.pause();
+      }
+    });
 
-    const audioRef = createRef(null);
-    const [duration, setDuration] = useState(0);
-    const [isReady, setIsReady] = React.useState(false);
+    // Create new refs for the updated options
+    audiosRef.current = new Array(options.length)
+      .fill(null)
+      .map(() => React.createRef());
+    setPlayingIndex(null); // Reset playing index
+  }, [options]); // Depend on options to reset refs
 
-    const [isPlaying, setIsPlaying] = React.useState(false);
+  const togglePlayPause = (index) => {
+    const currentAudio =
+      index === "question"
+        ? questionAudioRef.current
+        : audiosRef.current[index].current;
+    if (playingIndex === index && !currentAudio.paused) {
+      currentAudio.pause();
+      setPlayingIndex(null);
+    } else {
+      if (playingIndex !== null && playingIndex !== index) {
+        const previousAudio =
+          playingIndex === "question"
+            ? questionAudioRef.current
+            : audiosRef.current[playingIndex].current;
+        previousAudio.pause();
+      }
+      currentAudio.play();
+      setPlayingIndex(index);
+    }
+  };
 
-    const togglePlayPause = () => {
-        if (isPlaying) {
-            audioRef.current?.pause();
-            setIsPlaying(false);
-        } else {
-            audioRef.current?.play();
-            setIsPlaying(true);
-        }
-    };
-    const [currrentProgress, setCurrrentProgress] = React.useState(0);
-    // const progressBarWidth = isNaN(currrentProgress / duration) ? 0 : currrentProgress / duration;
+  return (
+    <MainLayout
+      background={background}
+      handleNext={handleNext}
+      enableNext={enableNext}
+      showTimer={showTimer}
+      points={points}
+      steps={steps}
+      currentStep={currentStep}
+      level={level}
+      progressData={progressData}
+      showProgress={showProgress}
+      playTeacherAudio={playTeacherAudio}
+      handleBack={handleBack}
+      disableScreen={disableScreen}
+      loading={loading}
+    >
+      <div
+        style={{
+          left: "calc(50% - 258px / 2)",
+          top: "calc(50% - 45px / 2 - 235.5px)",
+          fontFamily: "Quicksand",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "36px",
+          lineHeight: "45px",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#333F61",
+        }}
+      >
+        {header}
+      </div>
 
-    return (
-        <MainLayout level={1}>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Grid container sx={{ width: '80%', justifyContent: 'center', mb: 2, mt: 8 }}>
-                    <Grid xs={5}>
-                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} alt='' />
-                    </Grid>
-                    <Grid xs={7}>
-                        {sentences?.map((elem, i) => (
-                            <Box mt={i > 0 && 3} sx={{ display: 'flex' }}>
-                                <audio
-                                    ref={audioRef}
-                                    preload="metadata"
-                                    onDurationChange={(e) => setDuration(e.currentTarget.duration)}
-                                    onCanPlay={(e) => {
-                                        setIsReady(true);
-                                    }}
-                                    onPlaying={() => setIsPlaying(true)}
-                                    onPause={() => setIsPlaying(false)}
-                                    onTimeUpdate={(e) => {
-                                        setCurrrentProgress(e.currentTarget.currentTime);
-                                    }}
-                                >
-                                    <source type="audio/mp3" src={v11} />
-                                </audio>
-                                <Box
-                                    mt={'1px'}
-                                    mx={1}
-                                    sx={{ cursor: 'pointer' }}
-                                    onClick={() => {
-                                        togglePlayPause();
-                                    }}
-                                >
-                                    {isReady && (
-                                        <>
-                                            {isPlaying ? (
-                                                <StopAudioButton size={35} color={'#1CB0F6'} />
-                                            ) : (
-                                                <PlayAudioButton size={35} color={'#1CB0F6'} />
-                                            )}
-                                        </>
-                                    )}
-                                </Box>
-                                <span
-                                    style={{
-                                        color: '#262649',
-                                        fontWeight: 600,
-                                        fontSize: '26px',
-                                        fontFamily: 'Quicksand',
-                                    }}
-                                >
-                                    {elem}
-                                </span>
-                            </Box>
-                        ))}
-                    </Grid>
-                </Grid>
+      <Grid
+        container
+        sx={{ width: "80%", justifyContent: "center", mb: 2, mt: 8 }}
+      >
+        <Grid item xs={4}>
+          <img
+            src={image}
+            style={{ borderRadius: "20px", maxWidth: "100%", height: "250px" }}
+            alt=""
+          />
+        </Grid>
+        <Grid item xs={8} paddingLeft={2}>
+          <Box paddingBottom={3} sx={{ display: "flex" }}>
+            <audio
+              key={question_audio} // Key added to force remount when source changes
+              ref={questionAudioRef}
+              preload="metadata"
+              onPlaying={() => setPlayingIndex("question")}
+              onPause={() => setPlayingIndex(null)}
+            >
+              <source src={question_audio} type="audio/wav" />
+            </audio>
+            <Box
+              sx={{ cursor: "pointer" }}
+              onClick={() => togglePlayPause("question")}
+            >
+              {playingIndex === "question" ? (
+                <StopAudioButton size={35} color={"#1CB0F6"} />
+              ) : (
+                <PlayAudioButton size={35} color={"#1CB0F6"} />
+              )}
             </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <VoiceAnalyser
-                    setVoiceText={setVoiceText}
-                    setRecordedAudio={setRecordedAudio}
-                    setVoiceAnimate={setVoiceAnimate}
-                    storyLine={storyLine}
-                    dontShowListen={true}
-                    // updateStory={updateStory}
+            <span
+              style={{
+                color: "#262649",
+                fontWeight: 600,
+                fontSize: "26px",
+                fontFamily: "Quicksand",
+              }}
+            >
+              {parentWords}
+            </span>
+          </Box>
+          {options.map((option, i) => (
+            <Box
+              key={option.audio_url}
+              mt={3}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <audio
+                ref={audiosRef.current[i]}
+                preload="metadata"
+                onPlaying={() => setPlayingIndex(i)}
+                onPause={() => setPlayingIndex(null)}
+              >
+                <source
+                  src={`${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/${option.audio_url}`}
+                  type="audio/wav"
                 />
+              </audio>
+              <Box
+                sx={{ cursor: "pointer" }}
+                onClick={() => togglePlayPause(i)}
+              >
+                {playingIndex === i ? (
+                  <StopAudioButton size={35} color={"#1CB0F6"} />
+                ) : (
+                  <PlayAudioButton size={35} color={"#1CB0F6"} />
+                )}
+              </Box>
+              <span
+                style={{
+                  color: "#262649",
+                  fontWeight: 600,
+                  fontSize: "26px",
+                  fontFamily: "Quicksand",
+                  marginLeft: "10px",
+                }}
+              >
+                {option.text}
+              </span>
             </Box>
-        </MainLayout>
-    );
+          ))}
+        </Grid>
+      </Grid>
+      <Box paddingTop={4} sx={{ display: "flex", justifyContent: "center" }}>
+        <VoiceAnalyser
+          setVoiceText={setVoiceText}
+          setRecordedAudio={setRecordedAudio}
+          setVoiceAnimate={setVoiceAnimate}
+          storyLine={storyLine}
+          dontShowListen={type === "image" || isDiscover}
+          originalText={parentWords}
+          enableNext={enableNext}
+          handleNext={handleNext}
+          {...{
+            contentId,
+            contentType,
+            currentLine: currentStep - 1,
+            playTeacherAudio,
+            callUpdateLearner,
+            isShowCase,
+            setEnableNext,
+            showOnlyListen: selectedWord != wordToCheck,
+            setOpenMessageDialog,
+          }}
+        />
+      </Box>
+    </MainLayout>
+  );
 };
 
 export default Mechanics5;
