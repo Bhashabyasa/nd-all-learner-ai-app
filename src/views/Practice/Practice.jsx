@@ -865,7 +865,7 @@ const Practice = () => {
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
             options: questions[currentQuestion]?.mechanics_data
-              ? questions[currentQuestion]?.mechanics_data[0].options
+              ? questions[currentQuestion]?.mechanics_data[0]?.options
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
             setRecordedAudio,
             setVoiceAnimate,
@@ -894,6 +894,21 @@ const Practice = () => {
             setEnableNext,
             loading,
             setOpenMessageDialog,
+            startShowCase,
+            setStartShowCase,
+            handleBack: !isShowCase && handleBack,
+            livesData,
+            setLivesData,
+            gameOverData,
+            highlightWords,
+            matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
+            loading,
+            percentage,
+            fluency,
+            setOpenMessageDialog,
+            setEnableNext,
+            isNextButtonCalled,
+            setIsNextButtonCalled,
           }}
         />
       );
