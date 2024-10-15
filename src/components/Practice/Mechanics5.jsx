@@ -3,6 +3,7 @@ import { Box, Grid } from "@mui/material";
 import MainLayout from "../Layouts.jsx/MainLayout";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
+import PropTypes from "prop-types";
 
 const Mechanics5 = ({
   background,
@@ -38,6 +39,14 @@ const Mechanics5 = ({
   selectedWord,
   wordToCheck,
   setOpenMessageDialog,
+  startShowCase,
+  setStartShowCase,
+  livesData,
+  setLivesData,
+  percentage,
+  fluency,
+  setIsNextButtonCalled,
+  gameOverData,
 }) => {
   const audiosRef = useRef(
     new Array(options.length).fill(null).map(() => React.createRef())
@@ -88,15 +97,26 @@ const Mechanics5 = ({
       enableNext={enableNext}
       showTimer={showTimer}
       points={points}
-      steps={steps}
-      currentStep={currentStep}
-      level={level}
-      progressData={progressData}
-      showProgress={showProgress}
-      playTeacherAudio={playTeacherAudio}
-      handleBack={handleBack}
-      disableScreen={disableScreen}
-      loading={loading}
+      {...{
+        steps,
+        currentStep,
+        level,
+        progressData,
+        showProgress,
+        contentType,
+        percentage,
+        fluency,
+        playTeacherAudio,
+        handleBack,
+        isShowCase,
+        startShowCase,
+        setStartShowCase,
+        disableScreen,
+        livesData,
+        gameOverData,
+        loading,
+        setIsNextButtonCalled,
+      }}
     >
       <div
         style={{
@@ -110,6 +130,7 @@ const Mechanics5 = ({
           alignItems: "center",
           textAlign: "center",
           color: "#333F61",
+          paddingTop: "15vh",
         }}
       >
         {header}
@@ -158,46 +179,47 @@ const Mechanics5 = ({
               {parentWords}
             </span>
           </Box>
-          {options.map((option, i) => (
-            <Box
-              key={option.audio_url}
-              mt={3}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <audio
-                ref={audiosRef.current[i]}
-                preload="metadata"
-                onPlaying={() => setPlayingIndex(i)}
-                onPause={() => setPlayingIndex(null)}
-              >
-                <source
-                  src={`${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/${option.audio_url}`}
-                  type="audio/wav"
-                />
-              </audio>
+          {options.length &&
+            options.map((option, i) => (
               <Box
-                sx={{ cursor: "pointer" }}
-                onClick={() => togglePlayPause(i)}
+                key={option.audio_url}
+                mt={3}
+                sx={{ display: "flex", alignItems: "center" }}
               >
-                {playingIndex === i ? (
-                  <StopAudioButton size={35} color={"#1CB0F6"} />
-                ) : (
-                  <PlayAudioButton size={35} color={"#1CB0F6"} />
-                )}
+                <audio
+                  ref={audiosRef.current[i]}
+                  preload="metadata"
+                  onPlaying={() => setPlayingIndex(i)}
+                  onPause={() => setPlayingIndex(null)}
+                >
+                  <source
+                    src={`${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/${option.audio_url}`}
+                    type="audio/wav"
+                  />
+                </audio>
+                <Box
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => togglePlayPause(i)}
+                >
+                  {playingIndex === i ? (
+                    <StopAudioButton size={35} color={"#1CB0F6"} />
+                  ) : (
+                    <PlayAudioButton size={35} color={"#1CB0F6"} />
+                  )}
+                </Box>
+                <span
+                  style={{
+                    color: "#262649",
+                    fontWeight: 600,
+                    fontSize: "26px",
+                    fontFamily: "Quicksand",
+                    marginLeft: "10px",
+                  }}
+                >
+                  {option.text}
+                </span>
               </Box>
-              <span
-                style={{
-                  color: "#262649",
-                  fontWeight: 600,
-                  fontSize: "26px",
-                  fontFamily: "Quicksand",
-                  marginLeft: "10px",
-                }}
-              >
-                {option.text}
-              </span>
-            </Box>
-          ))}
+            ))}
         </Grid>
       </Grid>
       <Box paddingTop={4} sx={{ display: "flex", justifyContent: "center" }}>
@@ -225,6 +247,50 @@ const Mechanics5 = ({
       </Box>
     </MainLayout>
   );
+};
+
+Mechanics5.propTypes = {
+  handleNext: PropTypes.func.isRequired,
+  // background: PropTypes.string,
+  header: PropTypes.string,
+  image: PropTypes.string,
+  setVoiceText: PropTypes.func.isRequired,
+  setRecordedAudio: PropTypes.func.isRequired,
+  setVoiceAnimate: PropTypes.func.isRequired,
+  enableNext: PropTypes.bool,
+  showTimer: PropTypes.bool,
+  points: PropTypes.number,
+  currentStep: PropTypes.number.isRequired,
+  percentage: PropTypes.string,
+  fluency: PropTypes.bool,
+  isDiscover: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  callUpdateLearner: PropTypes.bool,
+  disableScreen: PropTypes.bool,
+  isShowCase: PropTypes.bool,
+  handleBack: PropTypes.func.isRequired,
+  setEnableNext: PropTypes.func.isRequired,
+  startShowCase: PropTypes.bool,
+  setStartShowCase: PropTypes.func,
+  setLivesData: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+  setOpenMessageDialog: PropTypes.func.isRequired,
+  isNextButtonCalled: PropTypes.bool,
+  setIsNextButtonCalled: PropTypes.func,
+  background: PropTypes.bool,
+  type: PropTypes.any,
+  words: PropTypes.any,
+  storyLine: PropTypes.number,
+  steps: PropTypes.number,
+  contentId: PropTypes.any,
+  contentType: PropTypes.string,
+  level: PropTypes.any,
+  progressData: PropTypes.object,
+  playTeacherAudio: PropTypes.func,
+  livesData: PropTypes.any,
+  gameOverData: PropTypes.any,
+  highlightWords: PropTypes.func,
+  matchedChar: PropTypes.any,
 };
 
 export default Mechanics5;
