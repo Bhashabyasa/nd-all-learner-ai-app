@@ -690,8 +690,9 @@ const Practice = () => {
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
         const length =
+          questions[currentQuestion]?.mechanics_data &&
           questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
-          "mechanic_2"
+            "mechanic_2"
             ? 300
             : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
@@ -871,9 +872,10 @@ const Practice = () => {
             storyLine,
             handleNext,
             type: "word",
-            image:
-              `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
-              questions[currentQuestion]?.mechanics_data[0]?.image_url,
+            image: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                questions[currentQuestion]?.mechanics_data[0]?.image_url
+              : null,
             enableNext,
             showTimer: false,
             points,
