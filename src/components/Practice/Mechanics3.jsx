@@ -218,7 +218,7 @@ const Mechanics2 = ({
   };
 
   const [currrentProgress, setCurrrentProgress] = React.useState(0);
-  const progressBarWidth = isNaN(currrentProgress / duration)
+  const progressBarWidth = Number.isNaN(currrentProgress / duration)
     ? 0
     : currrentProgress / duration;
 
