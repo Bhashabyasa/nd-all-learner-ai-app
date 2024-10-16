@@ -303,20 +303,30 @@ function VoiceAnalyser(props) {
       let newThresholdPercentage = 0;
       let data = {};
 
+      let requestBody = {
+        original_text: originalText,
+        audio: base64Data,
+        user_id: virtualId,
+        session_id: sessionId,
+        language: lang,
+        date: new Date(),
+        sub_session_id,
+        contentId,
+        contentType,
+      };
+
+      if (props.selectedOption) {
+        requestBody["is_correct_choice"] = props.selectedOption?.isAns;
+      }
+
+      if (props.correctness) {
+        requestBody["correctness"] = props.correctness;
+      }
+
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
-          {
-            original_text: originalText,
-            audio: base64Data,
-            user_id: virtualId,
-            session_id: sessionId,
-            language: lang,
-            date: new Date(),
-            sub_session_id,
-            contentId,
-            contentType,
-          }
+          requestBody
         );
         data = updateLearnerData;
         responseText = data.responseText;
