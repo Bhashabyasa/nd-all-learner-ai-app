@@ -853,7 +853,7 @@ const Practice = () => {
           setPage={setPage}
           {...{
             level: !isShowCase && level,
-            header: "Study the picture and speak the answer from below",
+            header: "Study the picture and speak the correct answer from below",
             parentWords: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0].text
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
@@ -867,6 +867,9 @@ const Practice = () => {
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            correctness: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0]?.correctness
+              : null,
             setRecordedAudio,
             setVoiceAnimate,
             storyLine,
