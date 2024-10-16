@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Radio } from "@mui/material";
 import MainLayout from "../Layouts.jsx/MainLayout";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
@@ -45,14 +45,17 @@ const Mechanics5 = ({
   setLivesData,
   percentage,
   fluency,
+  isNextButtonCalled,
   setIsNextButtonCalled,
   gameOverData,
+  correctness,
 }) => {
   const audiosRef = useRef(
     new Array(options.length).fill(null).map(() => React.createRef())
   );
   const questionAudioRef = useRef();
   const [playingIndex, setPlayingIndex] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null); // Add state to track selected radio button
 
   useEffect(() => {
     // Ensure that audio stops playing when options change
@@ -67,6 +70,7 @@ const Mechanics5 = ({
       .fill(null)
       .map(() => React.createRef());
     setPlayingIndex(null); // Reset playing index
+    setSelectedOption(null);
   }, [options]); // Depend on options to reset refs
 
   const togglePlayPause = (index) => {
@@ -88,6 +92,10 @@ const Mechanics5 = ({
       currentAudio.play();
       setPlayingIndex(index);
     }
+  };
+
+  const handleOptionChange = (event, i) => {
+    setSelectedOption(i); // Set the selected option index
   };
 
   return (
@@ -115,6 +123,8 @@ const Mechanics5 = ({
         livesData,
         gameOverData,
         loading,
+        setLivesData,
+        isNextButtonCalled,
         setIsNextButtonCalled,
       }}
     >
@@ -171,7 +181,7 @@ const Mechanics5 = ({
             <span
               style={{
                 color: "#262649",
-                fontWeight: 600,
+                fontWeight: 800,
                 fontSize: "26px",
                 fontFamily: "Quicksand",
               }}
@@ -179,6 +189,7 @@ const Mechanics5 = ({
               {parentWords}
             </span>
           </Box>
+
           {options.length &&
             options.map((option, i) => (
               <Box
@@ -186,6 +197,13 @@ const Mechanics5 = ({
                 mt={3}
                 sx={{ display: "flex", alignItems: "center" }}
               >
+                <Radio
+                  checked={selectedOption === i}
+                  onChange={(e) => handleOptionChange(e, i)}
+                  value={i}
+                  name="options"
+                  color="primary"
+                />
                 <audio
                   ref={audiosRef.current[i]}
                   preload="metadata"
@@ -222,6 +240,7 @@ const Mechanics5 = ({
             ))}
         </Grid>
       </Grid>
+
       <Box paddingTop={4} sx={{ display: "flex", justifyContent: "center" }}>
         <VoiceAnalyser
           setVoiceText={setVoiceText}
@@ -229,9 +248,15 @@ const Mechanics5 = ({
           setVoiceAnimate={setVoiceAnimate}
           storyLine={storyLine}
           dontShowListen={type === "image" || isDiscover}
-          originalText={parentWords}
+          originalText={
+            options.find((option) => option.isAns === true).text
+              ? options.find((option) => option.isAns === true).text
+              : parentWords
+          }
           enableNext={enableNext}
           handleNext={handleNext}
+          selectedOption={options[selectedOption]}
+          correctness={correctness}
           {...{
             contentId,
             contentType,
@@ -240,8 +265,17 @@ const Mechanics5 = ({
             callUpdateLearner,
             isShowCase,
             setEnableNext,
-            showOnlyListen: selectedWord != wordToCheck,
+            showOnlyListen: !options[selectedOption],
             setOpenMessageDialog,
+            startShowCase,
+            setStartShowCase,
+            disableScreen,
+            livesData,
+            gameOverData,
+            loading,
+            setLivesData,
+            isNextButtonCalled,
+            setIsNextButtonCalled,
           }}
         />
       </Box>
