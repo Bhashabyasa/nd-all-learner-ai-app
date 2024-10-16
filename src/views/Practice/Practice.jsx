@@ -866,7 +866,7 @@ const Practice = () => {
             setVoiceText,
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : questions[currentQuestion]?.contentSourceData?.[0]?.text,
+              : null,
             correctness: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.correctness
               : null,
