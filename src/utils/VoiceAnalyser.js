@@ -626,6 +626,7 @@ function VoiceAnalyser(props) {
                         ? props.isShowCase && !recordedAudio
                         : props.dontShowListen
                     }
+                    isShowCase={props.isShowCase}
                     isAudioPreprocessing={isAudioPreprocessing}
                     recordedAudio={recordedAudio}
                     setEnableNext={props.setEnableNext}
