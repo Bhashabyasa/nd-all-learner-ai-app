@@ -21,7 +21,7 @@ import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
 import { Log } from "../../services/telementryService";
-import elephant from "../../assets/images/elephant.svg";
+import Mechanics6 from "../../components/Practice/Mechanics6";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -44,6 +44,7 @@ const Practice = () => {
   const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
+
   const [play] = useSound(LevelCompleteAudio);
   const [livesData, setLivesData] = useState();
   const [gameOverData, setGameOverData] = useState();
@@ -455,6 +456,7 @@ const Practice = () => {
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
+
       setCurrentCollectionId(resWord?.data?.content?.[0]?.collectionId);
       setAssessmentResponse(resWord);
 
@@ -752,10 +754,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (
-      mechanism.name === "fillInTheBlank" ||
-      mechanism.name === "audio"
-    ) {
+    } else if (mechanism.name === "fillInTheBlank" && mechanism.id !== "") {
       return (
         <Mechanics3
           page={page}
@@ -768,8 +767,7 @@ const Practice = () => {
                 : questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
-            parentWords:
-              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            parentWords: questions[currentQuestion]?.mechanics_data?.[0]?.text,
             contentType: currentContentType,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
@@ -778,7 +776,14 @@ const Practice = () => {
             setVoiceAnimate,
             storyLine,
             handleNext,
-            image: elephant,
+            image: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                questions[currentQuestion]?.mechanics_data[0]?.image_url
+              : null,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
             enableNext,
             showTimer: false,
             points,
@@ -800,6 +805,9 @@ const Practice = () => {
               [],
             loading,
             setOpenMessageDialog,
+            options: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0]?.options
+              : null,
           }}
         />
       );
@@ -954,6 +962,67 @@ const Practice = () => {
               [],
             loading,
             setOpenMessageDialog,
+          }}
+        />
+      );
+    } else if (
+      mechanism.name === "audio" ||
+      (mechanism.name === "fillInTheBlank" && mechanism.id === "")
+    ) {
+      return (
+        <Mechanics6
+          page={page}
+          setPage={setPage}
+          {...{
+            level: !isShowCase && level,
+            header:
+              mechanism.name === "fillInTheBlank"
+                ? "Fill in the blank"
+                : questions[currentQuestion]?.contentType === "image"
+                ? `Guess the below image`
+                : `Speak the below ${questions[currentQuestion]?.contentType}`,
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            type: mechanism.name,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            image: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                questions[currentQuestion]?.mechanics_data[0]?.image_url
+              : null,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            allWords:
+              questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
+              [],
+            loading,
+            setOpenMessageDialog,
+            options: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0]?.options
+              : null,
           }}
         />
       );
