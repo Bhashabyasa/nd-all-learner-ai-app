@@ -144,8 +144,8 @@ const Mechanics2 = ({
       }
 
       // if (type === "audio") {
-      const isSoundCorrect = word === wordToCheck ? true : false;
-      var audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
+      const isSoundCorrect = word === wordToCheck;
+      let audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
       if (!isSoundCorrect) {
         setEnableNext(false);
       }
@@ -433,6 +433,7 @@ const Mechanics2 = ({
       >
         {words?.map((elem) => (
           <Box
+            key={elem}
             className={`${
               type === "audio" && selectedWord === elem
                 ? selectedWord === parentWords
