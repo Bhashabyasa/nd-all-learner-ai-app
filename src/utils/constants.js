@@ -3457,7 +3457,12 @@ export const levelGetContent = {
       mechanism: { id: "mechanic_2", name: "readTheImage" },
     },
     { title: "P8", criteria: "sentence", template: "simple" },
-    { title: "S2", criteria: "sentence", template: "simple" },
+    {
+      title: "S2",
+      criteria: "sentence",
+      template: "simple",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
   ],
   5: [
     { title: "P1", criteria: "sentence", template: "simple" },
