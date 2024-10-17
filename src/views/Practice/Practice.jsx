@@ -307,6 +307,9 @@ const Practice = () => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
             (currentGetContent?.mechanism?.id
               ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+              : "") +
+            (currentGetContent?.competency
+              ? `&level_competency=${currentGetContent?.competency}`
               : "")
         );
 
@@ -543,6 +546,9 @@ const Practice = () => {
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
           (currentGetContent?.mechanism?.id
             ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+            : "") +
+          (currentGetContent?.competency
+            ? `&level_competency=${currentGetContent?.competency}`
             : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
@@ -867,10 +873,11 @@ const Practice = () => {
       const options = questions[currentQuestion]?.mechanics_data
         ? questions[currentQuestion]?.mechanics_data[0]?.options
         : null;
-      const audioLink = options.find((option) => option.isAns === true)
-        .audio_url
-        ? options.find((option) => option.isAns === true).audio_url
-        : null;
+      const audioLink =
+        options && options.length > 0
+          ? options.find((option) => option.isAns === true)?.audio_url || null
+          : null;
+
       const mechanics_data = questions[currentQuestion]?.mechanics_data;
       return (
         <Mechanics5
@@ -925,17 +932,13 @@ const Practice = () => {
             setOpenMessageDialog,
             startShowCase,
             setStartShowCase,
-            handleBack: !isShowCase && handleBack,
             livesData,
             setLivesData,
             gameOverData,
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
-            loading,
             percentage,
             fluency,
-            setOpenMessageDialog,
-            setEnableNext,
             isNextButtonCalled,
             setIsNextButtonCalled,
           }}
@@ -953,7 +956,7 @@ const Practice = () => {
               questions[currentQuestion]?.contentSourceData?.[0]?.text,
             contentType: currentContentType,
             jumbled_text:
-              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+              questions[currentQuestion]?.mechanics_data?.[0]?.jumbled_text,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
             type: mechanism.name,
@@ -962,6 +965,10 @@ const Practice = () => {
             storyLine,
             handleNext,
             // image: elephant,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
             enableNext,
             showTimer: false,
             points,
