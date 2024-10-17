@@ -3437,6 +3437,7 @@ export const levelGetContent = {
       criteria: "sentence",
       template: "simple",
       mechanism: { id: "mechanic_2", name: "readTheImage" },
+      competency: "L1.1,L1.2",
     },
     {
       title: "P5",
