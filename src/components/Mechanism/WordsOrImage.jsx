@@ -246,13 +246,13 @@ const WordsOrImage = ({
             originalText={words}
             handleNext={handleNext}
             enableNext={enableNext}
+            isShowCase={isShowCase || isDiscover}
             {...{
               contentId,
               contentType,
               currentLine: currentStep - 1,
               playTeacherAudio,
               callUpdateLearner,
-              isShowCase,
               setEnableNext,
               livesData,
               setLivesData,

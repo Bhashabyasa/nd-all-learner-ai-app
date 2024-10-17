@@ -3354,8 +3354,8 @@ export const levelGetContent = {
     { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
   ],
   2: [
-    { title: "P1", criteria: "char", template: "simple", tags: "CEFR_ENG" },
-    { title: "P2", criteria: "char", template: "simple", tags: "CEFR_ENG" },
+    { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
     {
       title: "P3",
       criteria: "word",
