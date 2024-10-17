@@ -401,7 +401,7 @@ const Mechanics2 = ({
                   <>
                     {parentWords?.split("_____")[0]} {/* Before the blank */}
                     <span
-                      className={!answer.isAns && shake && "shakeImage"}
+                      className={!answer.isAns && shake ? "shakeImage" : ""}
                       style={{
                         color: answer.isAns ? "#58CC02" : "#C30303",
                         border: answer.isAns
@@ -548,7 +548,7 @@ const Mechanics2 = ({
             originalText={parentWords}
             enableNext={getEnableButton()}
             handleNext={handleNext}
-            audioLink={audio ? audio : ""}
+            audioLink={audio ? audio : null}
             {...{
               contentId,
               contentType,

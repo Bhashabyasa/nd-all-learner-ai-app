@@ -864,6 +864,14 @@ const Practice = () => {
         />
       );
     } else if (mechanism.name === "readTheImage") {
+      const options = questions[currentQuestion]?.mechanics_data
+        ? questions[currentQuestion]?.mechanics_data[0]?.options
+        : null;
+      const audioLink = options.find((option) => option.isAns === true)
+        .audio_url
+        ? options.find((option) => option.isAns === true).audio_url
+        : null;
+      const mechanics_data = questions[currentQuestion]?.mechanics_data;
       return (
         <Mechanics5
           page={page}
@@ -871,30 +879,31 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header: "Study the picture and speak the correct answer from below",
-            parentWords: questions[currentQuestion]?.mechanics_data
-              ? questions[currentQuestion]?.mechanics_data[0].text
+            parentWords: mechanics_data
+              ? mechanics_data[0].text
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
             contentType: currentContentType,
-            question_audio: questions[currentQuestion]?.mechanics_data
+            question_audio: mechanics_data
               ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
-                questions[currentQuestion]?.mechanics_data[0].audio_url
+                mechanics_data[0].audio_url
               : questions[currentQuestion]?.contentSourceData?.[0]?.audio_url,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
-            options: questions[currentQuestion]?.mechanics_data
-              ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : null,
-            correctness: questions[currentQuestion]?.mechanics_data
-              ? questions[currentQuestion]?.mechanics_data[0]?.correctness
-              : null,
+            options: options,
+            correctness: mechanics_data ? mechanics_data[0]?.correctness : null,
             setRecordedAudio,
             setVoiceAnimate,
             storyLine,
             handleNext,
             type: "word",
-            image: questions[currentQuestion]?.mechanics_data
+            image: mechanics_data
               ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
-                questions[currentQuestion]?.mechanics_data[0]?.image_url
+                mechanics_data[0]?.image_url
+              : null,
+
+            audio: mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                audioLink
               : null,
             enableNext,
             showTimer: false,
