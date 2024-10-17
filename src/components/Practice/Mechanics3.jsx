@@ -357,8 +357,8 @@ const Mechanics2 = ({
                 left: {
                   xs: 0, // For extra small screens
                   sm: 0, // For small screens
-                  md: "20px", // Adjust position for medium screens
-                  lg: "80px",
+                  md: "-40px", // Adjust position for medium screens
+                  lg: "40px",
                 },
                 mt: {
                   lg: "300px",
@@ -371,7 +371,7 @@ const Mechanics2 = ({
                   style={{
                     borderRadius: "20px",
                     maxWidth: "100%",
-                    height: "200px",
+                    height: "250px",
                   }}
                   alt=""
                 />
