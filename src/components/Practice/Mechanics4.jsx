@@ -46,6 +46,7 @@ const Mechanics4 = ({
   setEnableNext,
   loading,
   setOpenMessageDialog,
+  audio,
 }) => {
   const [words, setWords] = useState(
     type === "word" ? [] : ["Friend", "She is", "My"]
@@ -77,8 +78,6 @@ const Mechanics4 = ({
 
   useEffect(() => {
     let wordsArr = jumbleSentence(parentWords);
-
-    console.log(wordsArr);
     if (parentWords) {
       for (let i = wordsArr.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * i);
@@ -324,6 +323,7 @@ const Mechanics4 = ({
             handleNext={handleNext}
             enableNext={enableNext}
             originalText={parentWords}
+            audioLink={audio ? audio : null}
             {...{
               contentId,
               contentType,
