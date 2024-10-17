@@ -242,6 +242,7 @@ const WordsOrImage = ({
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
             dontShowListen={type === "image" || isDiscover}
+            isShowCase={isShowCase || isDiscover}
             // updateStory={updateStory}
             originalText={words}
             handleNext={handleNext}
@@ -252,7 +253,6 @@ const WordsOrImage = ({
               currentLine: currentStep - 1,
               playTeacherAudio,
               callUpdateLearner,
-              isShowCase,
               setEnableNext,
               livesData,
               setLivesData,
