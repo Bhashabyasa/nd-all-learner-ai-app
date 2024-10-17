@@ -91,11 +91,16 @@ function VoiceAnalyser(props) {
   }, [props.contentId]);
 
   const playAudio = async (val) => {
+    if (isStudentAudioPlaying) {
+      return;
+    }
+    const { audioLink } = props;
     try {
       let audio = new Audio(
-        `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+        audioLink
+          ? audioLink
+          : `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
       );
-
       audio.addEventListener("canplaythrough", () => {
         set_temp_audio(audio);
         setPauseAudio(val);
@@ -114,6 +119,9 @@ function VoiceAnalyser(props) {
   };
 
   const playRecordedAudio = (val) => {
+    if (pauseAudio) {
+      return;
+    }
     try {
       const audio = new Audio(recordedAudio);
 
@@ -618,6 +626,7 @@ function VoiceAnalyser(props) {
                         ? props.isShowCase && !recordedAudio
                         : props.dontShowListen
                     }
+                    isShowCase={props.isShowCase}
                     isAudioPreprocessing={isAudioPreprocessing}
                     recordedAudio={recordedAudio}
                     setEnableNext={props.setEnableNext}

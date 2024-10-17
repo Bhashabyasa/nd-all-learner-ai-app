@@ -49,6 +49,7 @@ const Mechanics5 = ({
   setIsNextButtonCalled,
   gameOverData,
   correctness,
+  audio,
 }) => {
   const audiosRef = useRef(
     new Array(options.length).fill(null).map(() => React.createRef())
@@ -257,6 +258,7 @@ const Mechanics5 = ({
           handleNext={handleNext}
           selectedOption={options[selectedOption]}
           correctness={correctness}
+          audioLink={audio ? audio : null}
           {...{
             contentId,
             contentType,
