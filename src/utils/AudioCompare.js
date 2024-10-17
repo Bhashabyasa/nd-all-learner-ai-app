@@ -122,29 +122,33 @@ const AudioRecorder = (props) => {
                 {props?.originalText &&
                   (!props.dontShowListen || props.recordedAudio) && (
                     <>
-                      {!props.pauseAudio ? (
-                        <div
-                          onClick={() => {
-                            props.playAudio(true);
-                          }}
-                        >
-                          <Box sx={{ cursor: "pointer" }}>
-                            <ListenButton />
-                          </Box>
-                        </div>
-                      ) : (
-                        <Box
-                          sx={{ cursor: "pointer" }}
-                          onClick={() => {
-                            props.playAudio(false);
-                          }}
-                        >
-                          <StopButton />
+                      {!props.isShowCase && (
+                        <Box>
+                          {!props.pauseAudio ? (
+                            <div
+                              onClick={() => {
+                                props.playAudio(true);
+                              }}
+                            >
+                              <Box sx={{ cursor: "pointer" }}>
+                                <ListenButton />
+                              </Box>
+                            </div>
+                          ) : (
+                            <Box
+                              sx={{ cursor: "pointer" }}
+                              onClick={() => {
+                                props.playAudio(false);
+                              }}
+                            >
+                              <StopButton />
+                            </Box>
+                          )}
                         </Box>
                       )}
                       <Box
                         sx={{
-                          marginLeft: "35px",
+                          marginLeft: props.isShowCase ? "" : "35px",
                         }}
                       >
                         {props.recordedAudio ? (
