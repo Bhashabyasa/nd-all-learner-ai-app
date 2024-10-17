@@ -41,7 +41,7 @@ const Practice = () => {
   const [level, setLevel] = useState("");
   const [isShowCase, setIsShowCase] = useState(false);
   const [startShowCase, setStartShowCase] = useState(false);
-  const limit = 5;
+  const limit = 6;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
 
@@ -446,6 +446,9 @@ const Practice = () => {
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
           (currentGetContent?.mechanism?.id
             ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+            : "") +
+          (currentGetContent?.competency
+            ? `&level_competency=${currentGetContent?.competency}`
             : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
