@@ -445,7 +445,8 @@ const Practice = () => {
             : "") +
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
-            : "")
+            : "") +
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
