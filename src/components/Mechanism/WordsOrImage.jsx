@@ -247,6 +247,7 @@ const WordsOrImage = ({
             originalText={words}
             handleNext={handleNext}
             enableNext={enableNext}
+            isShowCase={isShowCase || isDiscover}
             {...{
               contentId,
               contentType,
