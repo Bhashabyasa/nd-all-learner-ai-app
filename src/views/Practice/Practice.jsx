@@ -711,7 +711,7 @@ const Practice = () => {
           questions[currentQuestion]?.mechanics_data &&
           questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
             "mechanic_2"
-            ? 300
+            ? 500
             : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
       }
