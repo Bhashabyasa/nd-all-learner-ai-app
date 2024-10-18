@@ -127,7 +127,6 @@ const MainLayout = (props) => {
     gameOverData,
     loading,
     storedData,
-    pageName,
     resetStoredData,
   } = props;
 
