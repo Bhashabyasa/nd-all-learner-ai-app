@@ -94,6 +94,8 @@ const Mechanics2 = ({
     initializeAudio();
   }, [contentId, parentWords]);
 
+  //console.log('Mechanics6');
+
   const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
     // const isFillInTheBlanks = type === "fillInTheBlank";
@@ -194,6 +196,7 @@ const Mechanics2 = ({
   };
   return (
     <MainLayout
+      pageName={"m6"}
       background={background}
       handleNext={handleNext}
       enableNext={getEnableButton()}
@@ -478,6 +481,7 @@ const Mechanics2 = ({
       {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
+            pageName={"m6"}
             setVoiceText={setVoiceText}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}

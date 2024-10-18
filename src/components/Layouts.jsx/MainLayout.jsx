@@ -9,10 +9,15 @@ import practicebg2 from "../../assets/images/practice-bg2.svg";
 import practicebg3 from "../../assets/images/practice-bg3.svg";
 import gameWon from "../../assets/images/gameWon.svg";
 import gameLost from "../../assets/images/gameLost.svg";
+import correctImage from "../../assets/images/correct.svg";
+import wrongImage from "../../assets/images/wrong.svg";
+import turtleImage from "../../assets/images/turtle.svg";
 import clouds from "../../assets/images/clouds.svg";
 import catLoading from "../../assets/images/catLoading.gif";
 import textureImage from "../../assets/images/textureImage.png";
 import timer from "../../assets/images/timer.svg";
+import playButton from "../../assets/listen.png";
+import pauseButton from "../../assets/pause.png";
 import {
   GreenTick,
   HeartBlack,
@@ -39,6 +44,7 @@ import gameLoseAudio from "../../assets/audio/gameLose.wav";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { blue, red } from "@mui/material/colors";
 
 const MainLayout = (props) => {
   const levelsImages = {
@@ -121,12 +127,34 @@ const MainLayout = (props) => {
     livesData,
     gameOverData,
     loading,
+    storedData,
+    pageName,
+    resetStoredData,
   } = props;
 
   const [shake, setShake] = useState(false);
+  const [audioPlaying, setAudioPlaying] = useState(null);
+
+  //console.log('Main Layout Array', storedData, pageName);
+
+  const handleAudioPlay = (audioElem, index) => {
+    if (audioPlaying !== null && audioPlaying !== index) {
+      document.getElementById(`audio-${audioPlaying}`).pause();
+    }
+    if (audioElem.paused) {
+      audioElem.play();
+      setAudioPlaying(index);
+      audioElem.onended = () => {
+        setAudioPlaying(null);
+      };
+    } else {
+      audioElem.pause();
+      setAudioPlaying(null);
+    }
+  };
 
   useEffect(() => {
-    console.log("ss", isShowCase, !startShowCase, gameOverData);
+    //console.log("ssFlu", fluency, gameOverData);
     if (isShowCase && gameOverData) {
       setShake(gameOverData ? gameOverData.userWon : true);
 
@@ -633,7 +661,7 @@ const MainLayout = (props) => {
               <Box>{shake && <Confetti width={width} height={"600px"} />}</Box>
               <CardContent
                 sx={{
-                  width: "85vw",
+                  width: "82vw",
                   minHeight: "100%",
                   opacity: disableScreen ? 0.25 : 1,
                   pointerEvents: disableScreen ? "none" : "initial",
@@ -684,7 +712,7 @@ const MainLayout = (props) => {
                         <img
                           src={clouds}
                           alt="clouds"
-                          style={{ zIndex: 222 }}
+                          style={{ zIndex: -999 }}
                         />
                       )}
                     </Box>
@@ -693,6 +721,7 @@ const MainLayout = (props) => {
                         display: "flex",
                         justifyContent: "center",
                         position: "relative",
+                        zIndex: "100",
                       }}
                     >
                       {gameOverData?.userWon ? (
@@ -702,48 +731,183 @@ const MainLayout = (props) => {
                           style={{ zIndex: 9999, height: 340 }}
                         />
                       ) : (
-                        <Stack justifyContent="center" alignItems="center">
-                          <img
-                            src={gameLost}
-                            alt="gameLost"
-                            style={{ height: 340 }}
-                          />
-                          <Typography
-                            sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                        <Stack
+                          justifyContent="center"
+                          alignItems="center"
+                          direction={"row"}
+                          zIndex={100}
+                        >
+                          <Stack justifyContent="center" alignItems="center">
+                            <img
+                              src={gameLost}
+                              alt="gameLost"
+                              style={{ height: 340 }}
+                            />
+                            <Typography
+                              sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                            >
+                              <span
+                                style={{
+                                  fontWeight: 600,
+                                  fontSize: "24px",
+                                  lineHeight: "1.5",
+                                  letterSpacing: "1px",
+                                  fontFamily: "Quicksand",
+                                  backgroundColor: "rgb(237, 134, 0)",
+                                  padding: "6px 12px",
+                                  color: "#fff",
+                                  borderRadius: "20px",
+                                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                                  textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                                }}
+                              >
+                                {percentage <= 0 ? 0 : percentage}/100
+                              </span>
+                              <br />
+
+                              {!fluency ? (
+                                <Typography textAlign="center" sx={{ mt: 2 }}>
+                                  Good try! Need more speed.
+                                </Typography>
+                              ) : (
+                                <Typography textAlign="center" sx={{ mt: 2 }}>
+                                  You need{" "}
+                                  <span style={{ fontWeight: "bold" }}>
+                                    {percentage <= 0 ? 70 : 70 - percentage}
+                                  </span>{" "}
+                                  more.
+                                </Typography>
+                              )}
+                            </Typography>
+                          </Stack>
+                          {/* second stack below*/}
+                          <Stack
+                            sx={{
+                              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",
+                              paddingY: "49px",
+                              paddingX: "30px",
+                              borderRadius: "13px",
+                              marginLeft: "80px",
+                              bgcolor: "#FFFFFF",
+                              zIndex: 100,
+                            }}
+                            direction={"row"}
                           >
-                            <span
-                              style={{
-                                fontWeight: 600,
-                                fontSize: "24px",
-                                lineHeight: "1.5",
-                                letterSpacing: "1px",
-                                fontFamily: "Quicksand",
-                                backgroundColor: "rgb(237, 134, 0)",
-                                padding: "6px 12px",
-                                color: "#fff",
-                                borderRadius: "20px",
-                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                            <Stack
+                              sx={{
+                                paddingRight:
+                                  (props.pageName === "wordsorimage" || "m5") &&
+                                  !fluency
+                                    ? "20px"
+                                    : "0px",
+                                borderRight:
+                                  (props.pageName === "wordsorimage" || "m5") &&
+                                  !fluency
+                                    ? "1px dashed grey"
+                                    : "none",
                               }}
                             >
-                              {percentage <= 0 ? 0 : percentage}/100
-                            </span>
-                            <br />
+                              {(props.pageName === "wordsorimage" || "m5") &&
+                                storedData?.map((elem, i) => (
+                                  <Stack
+                                    justifyContent={"start"}
+                                    alignItems={"center"}
+                                    direction={"row"}
+                                    mt={i > 0 && "25px"}
+                                  >
+                                    <Box
+                                      sx={{
+                                        marginLeft: "35px",
+                                        marginRight: "5px",
+                                      }}
+                                    >
+                                      {elem?.audioUrl ? (
+                                        <img
+                                          onClick={() =>
+                                            handleAudioPlay(
+                                              document.getElementById(
+                                                `audio-${i}`
+                                              ),
+                                              i
+                                            )
+                                          }
+                                          style={{
+                                            height: "30px",
+                                            cursor: "pointer",
+                                          }}
+                                          src={
+                                            audioPlaying === i
+                                              ? pauseButton
+                                              : playButton
+                                          }
+                                          alt={
+                                            audioPlaying === i
+                                              ? "Pause"
+                                              : "Play"
+                                          }
+                                        />
+                                      ) : (
+                                        <Box></Box>
+                                      )}
+                                      <audio
+                                        id={`audio-${i}`}
+                                        src={elem?.audioUrl}
+                                      />
+                                    </Box>
 
-                            {!fluency ? (
-                              <Typography textAlign="center" sx={{ mt: 2 }}>
-                                Good try! Need more speed.
-                              </Typography>
-                            ) : (
-                              <Typography textAlign="center" sx={{ mt: 2 }}>
-                                You need{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                  {percentage <= 0 ? 70 : 70 - percentage}
-                                </span>{" "}
-                                more.
-                              </Typography>
+                                    {elem?.correctAnswer === false ? (
+                                      <img src={wrongImage} alt="wrongImage" />
+                                    ) : (
+                                      <img
+                                        src={correctImage}
+                                        alt="correctImage"
+                                      />
+                                    )}
+                                    <span
+                                      style={{
+                                        marginLeft: "8px",
+                                        color: "#1E2937",
+                                        fontWeight: 700,
+                                        lineHeight: "30px",
+                                        fontSize: "15px",
+                                        fontFamily: "Quicksand",
+                                        minWidth: "100px",
+                                      }}
+                                    >
+                                      {elem.selectedAnswer || "Binocular"}
+                                    </span>
+                                  </Stack>
+                                ))}
+                            </Stack>
+                            {!fluency && (
+                              <Stack
+                                sx={{
+                                  paddingLeft:
+                                    (props.pageName === "wordsorimage" ||
+                                      "m5") &&
+                                    !fluency
+                                      ? "20px"
+                                      : "0px",
+                                }}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                              >
+                                <img src={turtleImage} alt="turtleImage" />
+                                <span
+                                  style={{
+                                    marginTop: "12px",
+                                    color: "#1E2937",
+                                    fontWeight: 700,
+                                    lineHeight: "25px",
+                                    fontSize: "20px",
+                                    fontFamily: "Quicksand",
+                                  }}
+                                >
+                                  {"Oops, a bit slow!"}
+                                </span>
+                              </Stack>
                             )}
-                          </Typography>
+                          </Stack>
                         </Stack>
                       )}
                     </Box>
@@ -941,6 +1105,9 @@ const MainLayout = (props) => {
                             padding: "0px 24px 0px 20px",
                           }}
                           onClick={() => {
+                            if (props.pageName === "wordsorimage" || "m5") {
+                              resetStoredData();
+                            }
                             if (isShowCase && !startShowCase && !gameOverData) {
                               setStartShowCase(true);
                             }
@@ -992,6 +1159,9 @@ MainLayout.propTypes = {
   startShowCase: PropTypes.bool,
   setStartShowCase: PropTypes.func,
   loading: PropTypes.bool,
+  storedData: PropTypes.array,
+  resetStoredData: PropTypes.func,
+  pageName: PropTypes.string,
 };
 
 export default MainLayout;
