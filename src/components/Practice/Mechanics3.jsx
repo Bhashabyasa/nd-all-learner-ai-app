@@ -70,6 +70,8 @@ const Mechanics2 = ({
   const lang = getLocalData("lang");
   let wordToCheck = type === "audio" ? parentWords : wordToFill;
 
+  //console.log('Mechanics3', answer);
+
   useEffect(() => {
     const initializeFillInTheBlank = async () => {
       if (type === "fillInTheBlank" && parentWords?.length) {
@@ -238,6 +240,7 @@ const Mechanics2 = ({
       enableNext={getEnableButton()}
       showTimer={showTimer}
       points={points}
+      pageName={"m3"}
       {...{
         steps,
         currentStep,
@@ -540,6 +543,7 @@ const Mechanics2 = ({
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
             setVoiceText={setVoiceText}
+            pageName={"m3"}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
