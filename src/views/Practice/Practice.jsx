@@ -232,6 +232,7 @@ const Practice = () => {
               user_id: virtualId,
               totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
+              is_mechanics: currentGetContent?.mechanism?.id ? true : false,
             }
           );
           const { data: getSetData } = getSetResultRes;
@@ -310,7 +311,8 @@ const Practice = () => {
               : "") +
             (currentGetContent?.competency
               ? `&level_competency=${currentGetContent?.competency}`
-              : "")
+              : "") +
+            (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
         );
 
         setTotalSyllableCount(resGetContent?.data?.totalSyllableCount);
@@ -550,7 +552,8 @@ const Practice = () => {
             : "") +
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
-            : "")
+            : "") +
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
