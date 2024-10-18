@@ -45,7 +45,7 @@ const Practice = () => {
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
 
-  const [play] = useSound(LevelCompleteAudio);
+  // const [play] = useSound(LevelCompleteAudio);
   const [livesData, setLivesData] = useState();
   const [gameOverData, setGameOverData] = useState();
   const [loading, setLoading] = useState();
@@ -71,7 +71,8 @@ const Practice = () => {
   }, [startShowCase]);
 
   const callConfettiAndPlay = () => {
-    play();
+    let audio = new Audio(LevelCompleteAudio);
+    audio.play();
     callConfetti();
   };
 
@@ -600,6 +601,7 @@ const Practice = () => {
     });
 
     let type = currentContentType?.toLowerCase();
+    // console.log(type, sentence, matchedChar);
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
@@ -626,7 +628,7 @@ const Practice = () => {
                     background: "#FFF0BD",
                   }}
                 >
-                  {substr}
+                  {i === 0 ? substr.toUpperCase() : substr}
                 </Typography>
               </React.Fragment>
             );
@@ -649,7 +651,7 @@ const Practice = () => {
                   lineHeight: "50px",
                 }}
               >
-                {word[i]}
+                {i === 0 ? word[i].toUpperCase() : word[i]}
               </Typography>
             </React.Fragment>
           );
