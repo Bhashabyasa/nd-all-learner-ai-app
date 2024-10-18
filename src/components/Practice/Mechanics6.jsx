@@ -184,19 +184,11 @@ const Mechanics2 = ({
     ? 0
     : currrentProgress / duration;
 
-  const getEnableButton = () => {
-    if (type === "fillInTheBlank") {
-      return enableNext;
-    }
-    if (type === "audio") {
-      return selectedWord === wordToCheck;
-    }
-  };
   return (
     <MainLayout
       background={background}
       handleNext={handleNext}
-      enableNext={getEnableButton()}
+      enableNext={enableNext}
       showTimer={showTimer}
       points={points}
       {...{
@@ -485,7 +477,7 @@ const Mechanics2 = ({
             dontShowListen={true}
             // updateStory={updateStory}
             originalText={parentWords}
-            enableNext={getEnableButton()}
+            enableNext={enableNext}
             handleNext={handleNext}
             {...{
               contentId,
