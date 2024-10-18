@@ -141,7 +141,7 @@ const Mechanics5 = ({
           alignItems: "center",
           textAlign: "center",
           color: "#333F61",
-          paddingTop: "15vh",
+          paddingTop: "12vh",
         }}
       >
         {header}
@@ -242,7 +242,7 @@ const Mechanics5 = ({
         </Grid>
       </Grid>
 
-      <Box paddingTop={4} sx={{ display: "flex", justifyContent: "center" }}>
+      <Box paddingTop={1} sx={{ display: "flex", justifyContent: "center" }}>
         <VoiceAnalyser
           setVoiceText={setVoiceText}
           setRecordedAudio={setRecordedAudio}
