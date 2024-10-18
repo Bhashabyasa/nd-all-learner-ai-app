@@ -42,7 +42,7 @@ import Confetti from "react-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import gameLoseAudio from "../../assets/audio/gameLose.wav";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MainLayout = (props) => {
@@ -132,13 +132,25 @@ const MainLayout = (props) => {
 
   const [shake, setShake] = useState(false);
   const [audioPlaying, setAudioPlaying] = useState(null);
+  const audioRefs = useRef([]);
 
-  //console.log('Main Layout Array', storedData, pageName);
+  //console.log('Main Layout Array', storedData);
 
-  const handleAudioPlay = (audioElem, index) => {
-    if (audioPlaying !== null && audioPlaying !== index) {
-      document.getElementById(`audio-${audioPlaying}`).pause();
+  const handleAudioPlay = (index) => {
+    const audioElem = audioRefs.current[index];
+
+    if (!audioElem) {
+      console.error("Audio element not found:", audioElem);
+      return;
     }
+
+    if (audioPlaying !== null && audioPlaying !== index) {
+      const previousAudioElem = audioRefs.current[audioPlaying];
+      if (previousAudioElem) {
+        previousAudioElem.pause();
+      }
+    }
+
     if (audioElem.paused) {
       audioElem.play();
       setAudioPlaying(index);
@@ -809,13 +821,13 @@ const MainLayout = (props) => {
                             >
                               {(props.pageName === "wordsorimage" ||
                                 props.pageName === "m5") &&
-                                storedData?.map((elem, i) => (
+                                storedData?.map((elem, index) => (
                                   <Stack
-                                    key={i}
+                                    key={index}
                                     justifyContent={"start"}
                                     alignItems={"center"}
                                     direction={"row"}
-                                    mt={i > 0 && "25px"}
+                                    mt={index > 0 ? "25px" : 0}
                                   >
                                     <Box
                                       sx={{
@@ -824,35 +836,42 @@ const MainLayout = (props) => {
                                       }}
                                     >
                                       {elem?.audioUrl ? (
-                                        <img
-                                          onClick={() =>
-                                            handleAudioPlay(
-                                              document.getElementById(
-                                                `audio-${i}`
-                                              ),
-                                              i
-                                            )
-                                          }
+                                        <button
+                                          onClick={() => handleAudioPlay(index)}
                                           style={{
                                             height: "30px",
                                             cursor: "pointer",
+                                            background: "none",
+                                            border: "none",
+                                            padding: "0",
                                           }}
-                                          src={
-                                            audioPlaying === i
-                                              ? pauseButton
-                                              : playButton
+                                          aria-label={
+                                            audioPlaying === index
+                                              ? "Pause audio"
+                                              : "Play audio"
                                           }
-                                          alt={
-                                            audioPlaying === i
-                                              ? "Pause"
-                                              : "Play"
-                                          }
-                                        />
+                                        >
+                                          <img
+                                            src={
+                                              audioPlaying === index
+                                                ? pauseButton
+                                                : playButton
+                                            }
+                                            alt={
+                                              audioPlaying === index
+                                                ? "Pause"
+                                                : "Play"
+                                            }
+                                            style={{ height: "30px" }}
+                                          />
+                                        </button>
                                       ) : (
                                         <Box></Box>
                                       )}
                                       <audio
-                                        id={`audio-${i}`}
+                                        ref={(el) =>
+                                          (audioRefs.current[index] = el)
+                                        }
                                         src={elem?.audioUrl}
                                       />
                                     </Box>
