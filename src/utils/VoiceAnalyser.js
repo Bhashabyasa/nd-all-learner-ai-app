@@ -676,7 +676,10 @@ function VoiceAnalyser(props) {
           <Box
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              if (props.pageName === "wordsorimage" || "m5") {
+              if (
+                props.pageName === "wordsorimage" ||
+                props.pageName === "m5"
+              ) {
                 props.updateStoredData(recordedAudio, isMatching);
               }
               if (props.setIsNextButtonCalled) {

@@ -795,20 +795,24 @@ const MainLayout = (props) => {
                             <Stack
                               sx={{
                                 paddingRight:
-                                  (props.pageName === "wordsorimage" || "m5") &&
+                                  (props.pageName === "wordsorimage" ||
+                                    props.pageName === "m5") &&
                                   !fluency
                                     ? "20px"
                                     : "0px",
                                 borderRight:
-                                  (props.pageName === "wordsorimage" || "m5") &&
+                                  (props.pageName === "wordsorimage" ||
+                                    props.pageName === "m5") &&
                                   !fluency
                                     ? "1px dashed grey"
                                     : "none",
                               }}
                             >
-                              {(props.pageName === "wordsorimage" || "m5") &&
+                              {(props.pageName === "wordsorimage" ||
+                                props.pageName === "m5") &&
                                 storedData?.map((elem, i) => (
                                   <Stack
+                                    key={i}
                                     justifyContent={"start"}
                                     alignItems={"center"}
                                     direction={"row"}
@@ -883,7 +887,7 @@ const MainLayout = (props) => {
                                 sx={{
                                   paddingLeft:
                                     (props.pageName === "wordsorimage" ||
-                                      "m5") &&
+                                      props.pageName === "m5") &&
                                     !fluency
                                       ? "20px"
                                       : "0px",
@@ -1104,7 +1108,10 @@ const MainLayout = (props) => {
                             padding: "0px 24px 0px 20px",
                           }}
                           onClick={() => {
-                            if (props.pageName === "wordsorimage" || "m5") {
+                            if (
+                              props.pageName === "wordsorimage" ||
+                              props.pageName === "m5"
+                            ) {
                               resetStoredData();
                             }
                             if (isShowCase && !startShowCase && !gameOverData) {
