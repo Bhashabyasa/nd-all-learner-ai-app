@@ -44,7 +44,6 @@ import gameLoseAudio from "../../assets/audio/gameLose.wav";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { blue, red } from "@mui/material/colors";
 
 const MainLayout = (props) => {
   const levelsImages = {

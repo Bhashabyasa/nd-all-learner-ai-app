@@ -5,7 +5,6 @@ import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
 import MainLayout from "../Layouts.jsx/MainLayout";
 import PropTypes from "prop-types";
-import { setOtpVerified } from "../../store/slices/user.slice";
 
 const WordsOrImage = ({
   handleNext,
