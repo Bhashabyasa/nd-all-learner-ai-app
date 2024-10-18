@@ -32,13 +32,14 @@ const SpeakSentenceComponent = () => {
   const [assesmentCount, setAssesmentcount] = useState(0);
   const [initialAssesment, setInitialAssesment] = useState(true);
   const [disableScreen, setDisableScreen] = useState(false);
-  const [play] = useSound(LevelCompleteAudio);
+  // const [play] = useSound(LevelCompleteAudio);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const [totalSyllableCount, setTotalSyllableCount] = useState("");
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const callConfettiAndPlay = () => {
-    play();
+    let audio = new Audio(LevelCompleteAudio);
+    audio.play();
     callConfetti();
   };
 
