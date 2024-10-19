@@ -1,5 +1,5 @@
 import { Box, CardContent, Typography, CircularProgress } from "@mui/material";
-import { createRef, useState } from "react";
+import { createRef, useState, useEffect } from "react";
 import v11 from "../../assets/audio/V10.mp3";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
@@ -53,6 +53,29 @@ const WordsOrImage = ({
   const [isReady, setIsReady] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [storedData, setStoredData] = useState([]);
+
+  //console.log('wordsORimage', words, storedData);
+
+  const updateStoredData = (audio, isCorrect) => {
+    if (audio && words) {
+      const newEntry = {
+        selectedAnswer: words,
+        audioUrl: audio,
+        correctAnswer: isCorrect,
+      };
+
+      setStoredData((prevData) => [...prevData, newEntry]);
+    }
+  };
+
+  const resetStoredData = () => {
+    setStoredData([]);
+  };
+
+  useEffect(() => {
+    updateStoredData();
+  }, [handleNext]);
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -72,6 +95,9 @@ const WordsOrImage = ({
       enableNext={enableNext}
       showTimer={showTimer}
       points={points}
+      storedData={storedData}
+      resetStoredData={resetStoredData}
+      pageName={"wordsorimage"}
       {...{
         steps,
         currentStep,
@@ -237,7 +263,9 @@ const WordsOrImage = ({
         )}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
+            pageName={"wordsorimage"}
             setVoiceText={setVoiceText}
+            updateStoredData={updateStoredData}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
