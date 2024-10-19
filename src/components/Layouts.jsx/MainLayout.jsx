@@ -876,7 +876,10 @@ const MainLayout = (props) => {
                                     </Box>
 
                                     {elem?.correctAnswer === false ? (
-                                      <img src={wrongImage} alt="wrongImage" />
+                                      <img
+                                        src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/wrong.svg"
+                                        alt="wrongImage"
+                                      />
                                     ) : (
                                       <img
                                         src={correctImage}
@@ -912,7 +915,10 @@ const MainLayout = (props) => {
                                 justifyContent={"center"}
                                 alignItems={"center"}
                               >
-                                <img src={turtleImage} alt="turtleImage" />
+                                <img
+                                  src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/turtle.svg"
+                                  alt="turtleImage"
+                                />
                                 <span
                                   style={{
                                     marginTop: "12px",
