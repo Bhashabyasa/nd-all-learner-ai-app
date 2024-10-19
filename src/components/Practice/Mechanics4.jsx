@@ -76,6 +76,8 @@ const Mechanics4 = ({
     return words;
   }
 
+  //console.log('Mechanics4');
+
   useEffect(() => {
     let wordsArr = jumbleSentence(parentWords);
     if (parentWords) {
@@ -154,6 +156,7 @@ const Mechanics4 = ({
       enableNext={enableNext}
       showTimer={showTimer}
       points={points}
+      pageName={"m4"}
       {...{
         steps,
         currentStep,
@@ -314,6 +317,7 @@ const Mechanics4 = ({
       {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
+            pageName={"m4"}
             setVoiceText={setVoiceText}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}

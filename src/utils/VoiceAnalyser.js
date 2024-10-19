@@ -74,6 +74,9 @@ function VoiceAnalyser(props) {
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
+  const [isMatching, setIsMatching] = useState(false);
+
+  //console.log('audio', recordedAudio, isMatching);
 
   useEffect(() => {
     if (!props.enableNext) {
@@ -348,6 +351,14 @@ function VoiceAnalyser(props) {
         }
       }
 
+      if (responseText.toLowerCase() === originalText.toLowerCase()) {
+        setIsMatching(true);
+      } else {
+        setIsMatching(false);
+      }
+
+      //console.log('textss', recordedAudio, isMatching, responseText, originalText);
+
       const responseEndTime = new Date().getTime();
       const responseDuration = Math.round(
         (responseEndTime - responseStartTime) / 1000
@@ -602,6 +613,8 @@ function VoiceAnalyser(props) {
       });
   };
 
+  //console.log('textss', recordedAudio, isMatching);
+
   return (
     <div>
       {loader ? (
@@ -663,6 +676,12 @@ function VoiceAnalyser(props) {
           <Box
             sx={{ cursor: "pointer" }}
             onClick={() => {
+              if (
+                props.pageName === "wordsorimage" ||
+                props.pageName === "m5"
+              ) {
+                props.updateStoredData(recordedAudio, isMatching);
+              }
               if (props.setIsNextButtonCalled) {
                 props.setIsNextButtonCalled(true);
               } else {
@@ -696,6 +715,8 @@ VoiceAnalyser.propTypes = {
   setVoiceText: PropTypes.func.isRequired,
   livesData: PropTypes.object,
   contentId: PropTypes.string,
+  updateStoredData: PropTypes.func.isRequired,
+  pageName: PropTypes.string,
 };
 
 export default VoiceAnalyser;

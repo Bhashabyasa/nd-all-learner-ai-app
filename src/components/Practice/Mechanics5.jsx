@@ -58,6 +58,28 @@ const Mechanics5 = ({
   const [playingIndex, setPlayingIndex] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null); // Add state to track selected radio button
 
+  const [storedData, setStoredData] = useState([]);
+
+  const updateStoredData = (audios, isCorrect) => {
+    if (audios) {
+      const newEntry = {
+        selectedAnswer: options[selectedOption]?.text,
+        audioUrl: audios,
+        correctAnswer: isCorrect,
+      };
+
+      setStoredData((prevData) => [...prevData, newEntry]);
+    }
+  };
+
+  const resetStoredData = () => {
+    setStoredData([]);
+  };
+
+  useEffect(() => {
+    updateStoredData();
+  }, [handleNext]);
+
   useEffect(() => {
     // Ensure that audio stops playing when options change
     audiosRef.current.forEach((ref) => {
@@ -95,12 +117,17 @@ const Mechanics5 = ({
     }
   };
 
+  //console.log('Mechanics5' , storedData, options);
+
   const handleOptionChange = (event, i) => {
     setSelectedOption(i); // Set the selected option index
   };
 
   return (
     <MainLayout
+      pageName={"m5"}
+      storedData={storedData}
+      resetStoredData={resetStoredData}
       background={background}
       handleNext={handleNext}
       enableNext={enableNext}
@@ -244,6 +271,8 @@ const Mechanics5 = ({
 
       <Box paddingTop={1} sx={{ display: "flex", justifyContent: "center" }}>
         <VoiceAnalyser
+          pageName={"m5"}
+          updateStoredData={updateStoredData}
           setVoiceText={setVoiceText}
           setRecordedAudio={setRecordedAudio}
           setVoiceAnimate={setVoiceAnimate}
