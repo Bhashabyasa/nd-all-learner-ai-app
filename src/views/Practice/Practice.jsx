@@ -215,6 +215,10 @@ const Practice = () => {
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
+      const currentGetContent = levelGetContent?.[level]?.find(
+        (elem) => elem.title === practiceSteps?.[newPracticeStep].name
+      );
+
       if (currentQuestion === questions.length - 1 || isGameOver) {
         // navigate or setNextPracticeLevel
         let currentPracticeStep =
@@ -233,7 +237,10 @@ const Practice = () => {
               user_id: virtualId,
               totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
-              is_mechanics: currentGetContent?.mechanism?.id ? true : false,
+              is_mechanics:
+                currentGetContent && currentGetContent?.mechanism?.id
+                  ? true
+                  : false,
             }
           );
           const { data: getSetData } = getSetResultRes;
@@ -283,10 +290,6 @@ const Practice = () => {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
-
-        const currentGetContent = levelGetContent?.[level]?.find(
-          (elem) => elem.title === practiceSteps?.[newPracticeStep].name
-        );
 
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
