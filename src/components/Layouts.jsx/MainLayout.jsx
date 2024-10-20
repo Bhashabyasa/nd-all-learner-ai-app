@@ -882,7 +882,7 @@ const MainLayout = (props) => {
                                       />
                                     ) : (
                                       <img
-                                        src={correctImage}
+                                        src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/correct.svg"
                                         alt="correctImage"
                                       />
                                     )}
