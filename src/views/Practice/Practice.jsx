@@ -831,7 +831,7 @@ const Practice = () => {
             setOpenMessageDialog,
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : null,
+              : [],
           }}
         />
       );
@@ -881,7 +881,7 @@ const Practice = () => {
     } else if (mechanism.name === "readTheImage") {
       const options = questions[currentQuestion]?.mechanics_data
         ? questions[currentQuestion]?.mechanics_data[0]?.options
-        : null;
+        : [];
       const audioLink =
         options && options.length > 0
           ? options.find((option) => option.isAns === true)?.audio_url || null
@@ -1059,7 +1059,7 @@ const Practice = () => {
             setOpenMessageDialog,
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : null,
+              : [],
           }}
         />
       );
