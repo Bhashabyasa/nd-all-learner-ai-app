@@ -11,7 +11,7 @@ const Mechanics5 = ({
   isDiscover,
   header,
   parentWords,
-  options,
+  options = {},
   image,
   question_audio,
   handleNext,
