@@ -282,6 +282,7 @@ const Mechanics5 = ({
           setVoiceAnimate={setVoiceAnimate}
           storyLine={storyLine}
           dontShowListen={type === "image" || isDiscover}
+          isShowCase={isShowCase || isDiscover}
           originalText={
             options &&
             options.length > 0 &&
