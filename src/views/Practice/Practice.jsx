@@ -41,7 +41,7 @@ const Practice = () => {
   const [level, setLevel] = useState("");
   const [isShowCase, setIsShowCase] = useState(false);
   const [startShowCase, setStartShowCase] = useState(false);
-  const limit = 6;
+  const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
 
@@ -216,7 +216,7 @@ const Practice = () => {
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
       const currentGetContent = levelGetContent?.[level]?.find(
-        (elem) => elem.title === practiceSteps?.[newPracticeStep].name
+        (elem) => elem.title === practiceSteps?.[newPracticeStep]?.name
       );
 
       if (currentQuestion === questions.length - 1 || isGameOver) {
