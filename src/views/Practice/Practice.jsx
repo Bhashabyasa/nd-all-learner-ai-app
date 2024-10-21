@@ -41,7 +41,7 @@ const Practice = () => {
   const [level, setLevel] = useState("");
   const [isShowCase, setIsShowCase] = useState(false);
   const [startShowCase, setStartShowCase] = useState(false);
-  const limit = 6;
+  const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
 
@@ -215,6 +215,10 @@ const Practice = () => {
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
+      const currentGetContent = levelGetContent?.[level]?.find(
+        (elem) => elem.title === practiceSteps?.[newPracticeStep]?.name
+      );
+
       if (currentQuestion === questions.length - 1 || isGameOver) {
         // navigate or setNextPracticeLevel
         let currentPracticeStep =
@@ -233,7 +237,10 @@ const Practice = () => {
               user_id: virtualId,
               totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
-              is_mechanics: currentGetContent?.mechanism?.id ? true : false,
+              is_mechanics:
+                currentGetContent && currentGetContent?.mechanism?.id
+                  ? true
+                  : false,
             }
           );
           const { data: getSetData } = getSetResultRes;
@@ -283,10 +290,6 @@ const Practice = () => {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
-
-        const currentGetContent = levelGetContent?.[level]?.find(
-          (elem) => elem.title === practiceSteps?.[newPracticeStep].name
-        );
 
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
@@ -828,7 +831,7 @@ const Practice = () => {
             setOpenMessageDialog,
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : null,
+              : [],
           }}
         />
       );
@@ -878,7 +881,7 @@ const Practice = () => {
     } else if (mechanism.name === "readTheImage") {
       const options = questions[currentQuestion]?.mechanics_data
         ? questions[currentQuestion]?.mechanics_data[0]?.options
-        : null;
+        : [];
       const audioLink =
         options && options.length > 0
           ? options.find((option) => option.isAns === true)?.audio_url || null
@@ -1056,7 +1059,7 @@ const Practice = () => {
             setOpenMessageDialog,
             options: questions[currentQuestion]?.mechanics_data
               ? questions[currentQuestion]?.mechanics_data[0]?.options
-              : null,
+              : [],
           }}
         />
       );
