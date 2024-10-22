@@ -7,7 +7,9 @@ import playButton from "../../src/assets/listen.png";
 import pauseButton from "../../src/assets/pause.png";
 
 const AudioRecorder = (props) => {
+  const [isRecording, setIsRecording] = useState(false);
   const [status, setStatus] = useState("");
+  const [audioBlob, setAudioBlob] = useState(null);
   const recorderRef = useRef(null);
   const mediaStreamRef = useRef(null);
 
@@ -43,68 +45,22 @@ const AudioRecorder = (props) => {
       });
 
       recorderRef.current.startRecording();
+
+      setIsRecording(true);
     } catch (err) {
       console.error("Failed to start recording:", err);
     }
   };
 
-  const analyzeAudio = async (blob) => {
-    try {
-      const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
-      const arrayBuffer = await blob.arrayBuffer();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-      const rawData = audioBuffer.getChannelData(0); // Get audio samples from the first channel
-      let total = 0;
-
-      // Sum the absolute values of the audio samples
-      for (let i = 0; i < rawData.length; i++) {
-        total += Math.abs(rawData[i]);
-      }
-
-      const average = total / rawData.length;
-
-      // Threshold for silence detection
-      const silenceThreshold = 0.01;
-
-      if (average < silenceThreshold) {
-        console.log("The audio contains only silence.");
-        props.setOpenMessageDialog({
-          message:
-            "Sorry I couldn't hear a voice. Could you please speak again?",
-          dontShowHeader: true,
-        });
-        return true;
-      } else {
-        console.log("The audio contains sound.");
-        return false;
-      }
-    } catch (error) {
-      console.error("Error analyzing audio:", error);
-      return true;
-    }
-  };
-
-  const stopRecording = async () => {
+  const stopRecording = () => {
     setStatus("inactive");
     if (recorderRef.current) {
-      recorderRef.current.stopRecording(async () => {
+      recorderRef.current.stopRecording(() => {
         const blob = recorderRef.current.getBlob();
 
         if (blob) {
-          const isSilent = await analyzeAudio(blob);
-
-          if (!isSilent) {
-            saveBlob(blob);
-            if (props.setEnableNext) {
-              props.setEnableNext(true);
-            }
-          } else {
-            console.log(
-              "The recorded audio is empty or silent. Please try again."
-            );
-          }
+          setAudioBlob(blob);
+          saveBlob(blob); // Persist the blob
         } else {
           console.error("Failed to retrieve audio blob.");
         }
@@ -113,7 +69,12 @@ const AudioRecorder = (props) => {
         if (mediaStreamRef.current) {
           mediaStreamRef.current.getTracks().forEach((track) => track.stop());
         }
+
+        setIsRecording(false);
       });
+    }
+    if (props.setEnableNext) {
+      props.setEnableNext(true);
     }
   };
 
