@@ -953,7 +953,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism.name === "FormASentence") {
+    } else if (mechanism.name === "formASentence") {
       return (
         <Mechanics4
           page={page}
