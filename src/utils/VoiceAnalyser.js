@@ -702,7 +702,7 @@ VoiceAnalyser.propTypes = {
   setIsNextButtonCalled: PropTypes.func,
   handleNext: PropTypes.func.isRequired,
   originalText: PropTypes.string,
-  isShowCase: PropTypes.bool,
+  isShowCase: PropTypes.bool.isRequired,
   dontShowListen: PropTypes.bool,
   setEnableNext: PropTypes.func.isRequired,
   showOnlyListen: PropTypes.bool,
