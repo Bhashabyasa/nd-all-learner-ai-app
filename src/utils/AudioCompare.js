@@ -149,6 +149,7 @@ const AudioRecorder = (props) => {
                       <Box
                         sx={{
                           marginLeft: props.isShowCase ? "" : "35px",
+                          cursor: "pointer",
                         }}
                       >
                         {props.recordedAudio ? (
