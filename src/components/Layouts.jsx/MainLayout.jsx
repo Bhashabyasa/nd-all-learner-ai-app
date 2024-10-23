@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import Stack from '@mui/material/Stack';
-
+import Stack from "@mui/material/Stack";
+import PropTypes from "prop-types";
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
 import practicebgstone3 from "../../assets/images/practice-bg-stone3.svg";
@@ -9,10 +9,15 @@ import practicebg2 from "../../assets/images/practice-bg2.svg";
 import practicebg3 from "../../assets/images/practice-bg3.svg";
 import gameWon from "../../assets/images/gameWon.svg";
 import gameLost from "../../assets/images/gameLost.svg";
+import correctImage from "../../assets/correct.svg";
+import wrongImage from "../../assets/wrong.svg";
+import turtleImage from "../../assets/turtle.svg";
 import clouds from "../../assets/images/clouds.svg";
 import catLoading from "../../assets/images/catLoading.gif";
 import textureImage from "../../assets/images/textureImage.png";
 import timer from "../../assets/images/timer.svg";
+import playButton from "../../assets/listen.png";
+import pauseButton from "../../assets/pause.png";
 import {
   GreenTick,
   HeartBlack,
@@ -37,7 +42,7 @@ import Confetti from "react-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import gameLoseAudio from "../../assets/audio/gameLose.wav";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MainLayout = (props) => {
@@ -121,12 +126,44 @@ const MainLayout = (props) => {
     livesData,
     gameOverData,
     loading,
+    storedData,
+    resetStoredData,
   } = props;
 
   const [shake, setShake] = useState(false);
+  const [audioPlaying, setAudioPlaying] = useState(null);
+  const audioRefs = useRef([]);
+
+  //console.log('Main Layout Array', storedData, pageName);
+
+  const handleAudioPlay = (index) => {
+    const audioElem = audioRefs.current[index];
+
+    if (!audioElem) {
+      console.error("Audio element not found:", audioElem);
+      return;
+    }
+
+    if (audioPlaying !== null && audioPlaying !== index) {
+      const previousAudioElem = audioRefs.current[audioPlaying];
+      if (previousAudioElem) {
+        previousAudioElem.pause();
+      }
+    }
+
+    if (audioElem.paused) {
+      audioElem.play();
+      setAudioPlaying(index);
+      audioElem.onended = () => {
+        setAudioPlaying(null);
+      };
+    } else {
+      audioElem.pause();
+      setAudioPlaying(null);
+    }
+  };
 
   useEffect(() => {
-    console.log("ss", isShowCase, !startShowCase, gameOverData);
     if (isShowCase && gameOverData) {
       setShake(gameOverData ? gameOverData.userWon : true);
 
@@ -153,8 +190,9 @@ const MainLayout = (props) => {
 
   const sectionStyle = {
     width: "100%",
-    backgroundImage: `url(${backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
-      })`,
+    backgroundImage: `url(${
+      backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
+    })`,
     backgroundSize: "cover", // Cover the entire viewport
     backgroundPosition: "center center", // Center the image
     backgroundRepeat: "no-repeat", // Do not repeat the image
@@ -196,10 +234,10 @@ const MainLayout = (props) => {
               LEVEL === 1
                 ? "3px"
                 : LEVEL === 2
-                  ? "40px"
-                  : LEVEL === 3
-                    ? "78px"
-                    : "78px",
+                ? "40px"
+                : LEVEL === 3
+                ? "78px"
+                : "78px",
           }}
         >
           <img
@@ -242,10 +280,9 @@ const MainLayout = (props) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-              })`,
+            backgroundImage: `url(${cardBackground || textureImage})`,
             backgroundSize: "contain",
-            backgroundRepeat: "round", 
+            backgroundRepeat: "round",
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
             backdropFilter: "blur(25px)",
             mt: "50px",
@@ -255,7 +292,7 @@ const MainLayout = (props) => {
             <img
               src={catLoading}
               alt="catLoading"
-            // sx={{ height: "58px", width: "58px" }}
+              // sx={{ height: "58px", width: "58px" }}
             />
           </Box>
         </Card>
@@ -263,19 +300,18 @@ const MainLayout = (props) => {
         <>
           {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
             <Card
-              sx={{               
-                position: { xs: 'absolute', md: 'relative' },
-                left: { xs: '0px', md: 'auto' },
-                width: { xs: '100%', md: '85vw' },
+              sx={{
+                position: { xs: "absolute", md: "relative" },
+                left: { xs: "0px", md: "auto" },
+                width: { xs: "100%", md: "85vw" },
                 minHeight: "80vh",
                 borderRadius: "20px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-                  })`,
-                backgroundRepeat: "no-repeat", 
-                backgroundSize: 'cover',
+                backgroundImage: `url(${cardBackground || textureImage})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
                 backdropFilter: "blur(25px)",
                 mt: "50px",
@@ -293,7 +329,7 @@ const MainLayout = (props) => {
                     <img
                       src={timer}
                       alt="timer"
-                      sx={{ height: "58px", width: "58px" }}
+                      style={{ height: "58px", width: "58px" }}
                     />
                   </Box>
                 )}
@@ -302,7 +338,7 @@ const MainLayout = (props) => {
               {steps > 0 && (
                 <Box
                   sx={{
-                    width: { xs: '100%', md: '85vw' },
+                    width: { xs: "100%", md: "85vw" },
                     position: "absolute",
                     display: "flex",
                     top: "0",
@@ -312,6 +348,7 @@ const MainLayout = (props) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                        key={index}
                         index={index}
                         sx={{
                           height: "8px",
@@ -324,40 +361,42 @@ const MainLayout = (props) => {
                   })}
                 </Box>
               )}
-              {contentType && contentType.toLowerCase() !== 'word' && startShowCase && (
-                <Box
-                  position={"absolute"}
-                  top={20}
-                  left={20}
-                  justifyContent={"center"}
-                >
-                  <Box display={"flex"}>
-                    {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
-                      (elem) => (
-                        <HeartRed />
-                      )
-                    )}
-
-                    {[...Array(Math.max(0, blackLivesToShow) || 0).keys()]?.map(
-                      (elem) => (
-                        <HeartBlack />
-                      )
-                    )}
-                  </Box>
-                  <span
-                    style={{
-                      marginLeft: "5px",
-                      color: "#000000",
-                      fontWeight: 700,
-                      fontSize: "24px",
-                      lineHeight: "30px",
-                      fontFamily: "Quicksand",
-                    }}
+              {contentType &&
+                contentType.toLowerCase() !== "word" &&
+                startShowCase && (
+                  <Box
+                    position={"absolute"}
+                    top={20}
+                    left={20}
+                    justifyContent={"center"}
                   >
-                    {`You have ${redLivesToShow} lives`}
-                  </span>
-                </Box>
-              )}
+                    <Box display={"flex"}>
+                      {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
+                        (elem) => (
+                          <HeartRed />
+                        )
+                      )}
+
+                      {[
+                        ...Array(Math.max(0, blackLivesToShow) || 0).keys(),
+                      ]?.map((elem) => (
+                        <HeartBlack />
+                      ))}
+                    </Box>
+                    <span
+                      style={{
+                        marginLeft: "5px",
+                        color: "#000000",
+                        fontWeight: 700,
+                        fontSize: "24px",
+                        lineHeight: "30px",
+                        fontFamily: "Quicksand",
+                      }}
+                    >
+                      {`You have ${redLivesToShow} lives`}
+                    </span>
+                  </Box>
+                )}
               <Box sx={{ height: "120px", position: "relative" }}>
                 <Box sx={{ position: "absolute", left: 0, bottom: "-2px" }}>
                   <footer>{LEVEL && levelsImages?.[LEVEL]?.milestone}</footer>
@@ -533,7 +572,7 @@ const MainLayout = (props) => {
                         </Box>
                       </Box>
                     )}
-                    <Box
+                    {/* <Box
                       sx={{ display: "flex", justifyContent: "right", mr: 4 }}
                     >
                       {enableNext ? (
@@ -545,7 +584,7 @@ const MainLayout = (props) => {
                             } else {
                               handleNext();
                             }
-                          }}                          
+                          }}
                         >
                           <NextButton />
                         </Box>
@@ -554,7 +593,7 @@ const MainLayout = (props) => {
                           <NextButton disabled />
                         </Box>
                       )}
-                    </Box>
+                    </Box> */}
                   </Box>
                 )}
                 {nextLessonAndHome && (
@@ -620,8 +659,7 @@ const MainLayout = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
-                  })`,
+                backgroundImage: `url(${cardBackground || textureImage})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "round",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -632,7 +670,7 @@ const MainLayout = (props) => {
               <Box>{shake && <Confetti width={width} height={"600px"} />}</Box>
               <CardContent
                 sx={{
-                  width: "85vw",
+                  width: "82vw",
                   minHeight: "100%",
                   opacity: disableScreen ? 0.25 : 1,
                   pointerEvents: disableScreen ? "none" : "initial",
@@ -683,7 +721,7 @@ const MainLayout = (props) => {
                         <img
                           src={clouds}
                           alt="clouds"
-                          style={{ zIndex: 222 }}
+                          style={{ zIndex: -999 }}
                         />
                       )}
                     </Box>
@@ -692,6 +730,7 @@ const MainLayout = (props) => {
                         display: "flex",
                         justifyContent: "center",
                         position: "relative",
+                        zIndex: "100",
                       }}
                     >
                       {gameOverData?.userWon ? (
@@ -701,51 +740,201 @@ const MainLayout = (props) => {
                           style={{ zIndex: 9999, height: 340 }}
                         />
                       ) : (
-                        <Stack justifyContent="center"
-                          alignItems="center">
-                          <img
-                            src={gameLost}
-                            alt="gameLost"
-                            style={{ height: 340 }}
-                          />
-                       <Typography
-                            sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                        <Stack
+                          justifyContent="center"
+                          alignItems="center"
+                          direction={"row"}
+                          zIndex={100}
+                        >
+                          <Stack justifyContent="center" alignItems="center">
+                            <img
+                              src={gameLost}
+                              alt="gameLost"
+                              style={{ height: 340 }}
+                            />
+                            <Typography
+                              sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                            >
+                              <span
+                                style={{
+                                  fontWeight: 600,
+                                  fontSize: "24px",
+                                  lineHeight: "1.5",
+                                  letterSpacing: "1px",
+                                  fontFamily: "Quicksand",
+                                  backgroundColor: "rgb(237, 134, 0)",
+                                  padding: "6px 12px",
+                                  color: "#fff",
+                                  borderRadius: "20px",
+                                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                                  textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                                }}
+                              >
+                                {percentage <= 0 ? 0 : percentage}/100
+                              </span>
+                              <br />
+
+                              {!fluency ? (
+                                <Typography textAlign="center" sx={{ mt: 2 }}>
+                                  Good try! Need more speed.
+                                </Typography>
+                              ) : (
+                                <Typography textAlign="center" sx={{ mt: 2 }}>
+                                  You need{" "}
+                                  <span style={{ fontWeight: "bold" }}>
+                                    {percentage <= 0 ? 70 : 70 - percentage}
+                                  </span>{" "}
+                                  more.
+                                </Typography>
+                              )}
+                            </Typography>
+                          </Stack>
+                          {/* second stack below*/}
+                          <Stack
+                            sx={{
+                              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",
+                              paddingY: "49px",
+                              paddingX: "30px",
+                              borderRadius: "13px",
+                              marginLeft: "80px",
+                              bgcolor: "#FFFFFF",
+                              zIndex: 100,
+                            }}
+                            direction={"row"}
                           >
-                            <span
-                              style={{
-                                fontWeight: 600,
-                                fontSize: "24px",
-                                lineHeight: "1.5",
-                                letterSpacing: "1px",
-                                fontFamily: "Quicksand",
-                                backgroundColor: "rgb(237, 134, 0)",
-                                padding: "6px 12px",
-                                color: "#fff",
-                                borderRadius: "20px",
-                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                            <Stack
+                              sx={{
+                                paddingRight:
+                                  (props.pageName === "wordsorimage" ||
+                                    props.pageName === "m5") &&
+                                  !fluency
+                                    ? "20px"
+                                    : "0px",
+                                borderRight:
+                                  (props.pageName === "wordsorimage" ||
+                                    props.pageName === "m5") &&
+                                  !fluency
+                                    ? "1px dashed grey"
+                                    : "none",
                               }}
                             >
-                              {percentage <= 0 ? 0 : percentage}/100
-                            </span>
-                            <br />
+                              {(props.pageName === "wordsorimage" ||
+                                props.pageName === "m5") &&
+                                storedData?.map((elem, index) => (
+                                  <Stack
+                                    key={index}
+                                    justifyContent={"start"}
+                                    alignItems={"center"}
+                                    direction={"row"}
+                                    mt={index > 0 ? "25px" : 0}
+                                  >
+                                    <Box
+                                      sx={{
+                                        marginLeft: "35px",
+                                        marginRight: "5px",
+                                      }}
+                                    >
+                                      {elem?.audioUrl ? (
+                                        <button
+                                          onClick={() => handleAudioPlay(index)}
+                                          style={{
+                                            height: "30px",
+                                            cursor: "pointer",
+                                            background: "none",
+                                            border: "none",
+                                            padding: "0",
+                                          }}
+                                          aria-label={
+                                            audioPlaying === index
+                                              ? "Pause audio"
+                                              : "Play audio"
+                                          }
+                                        >
+                                          <img
+                                            src={
+                                              audioPlaying === index
+                                                ? pauseButton
+                                                : playButton
+                                            }
+                                            alt={
+                                              audioPlaying === index
+                                                ? "Pause"
+                                                : "Play"
+                                            }
+                                            style={{ height: "30px" }}
+                                          />
+                                        </button>
+                                      ) : (
+                                        <Box></Box>
+                                      )}
+                                      <audio
+                                        ref={(el) =>
+                                          (audioRefs.current[index] = el)
+                                        }
+                                        src={elem?.audioUrl}
+                                      />
+                                    </Box>
 
-                            {!fluency ? (
-                              <Typography textAlign="center" sx={{ mt: 2 }}>
-                                Good try! Need more speed.
-                              </Typography>
-                            ) : (
-                              <Typography textAlign="center" sx={{ mt: 2 }}>
-                                You need{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                  {percentage <= 0 ? 70 : 70 - percentage}
-                                </span>{" "}
-                                more.
-                              </Typography>
+                                    {elem?.correctAnswer === false ? (
+                                      <img
+                                        src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/wrong.svg"
+                                        alt="wrongImage"
+                                      />
+                                    ) : (
+                                      <img
+                                        src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/correct.svg"
+                                        alt="correctImage"
+                                      />
+                                    )}
+                                    <span
+                                      style={{
+                                        marginLeft: "8px",
+                                        color: "#1E2937",
+                                        fontWeight: 700,
+                                        lineHeight: "30px",
+                                        fontSize: "15px",
+                                        fontFamily: "Quicksand",
+                                        minWidth: "100px",
+                                      }}
+                                    >
+                                      {elem.selectedAnswer || "Binocular"}
+                                    </span>
+                                  </Stack>
+                                ))}
+                            </Stack>
+                            {!fluency && (
+                              <Stack
+                                sx={{
+                                  paddingLeft:
+                                    (props.pageName === "wordsorimage" ||
+                                      props.pageName === "m5") &&
+                                    !fluency
+                                      ? "20px"
+                                      : "0px",
+                                }}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                              >
+                                <img
+                                  src="https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.2-tn-dev/src/assets/turtle.svg"
+                                  alt="turtleImage"
+                                />
+                                <span
+                                  style={{
+                                    marginTop: "12px",
+                                    color: "#1E2937",
+                                    fontWeight: 700,
+                                    lineHeight: "25px",
+                                    fontSize: "20px",
+                                    fontFamily: "Quicksand",
+                                  }}
+                                >
+                                  {"Oops, a bit slow!"}
+                                </span>
+                              </Stack>
                             )}
-                          </Typography>
+                          </Stack>
                         </Stack>
-
                       )}
                     </Box>
                   </>
@@ -942,6 +1131,12 @@ const MainLayout = (props) => {
                             padding: "0px 24px 0px 20px",
                           }}
                           onClick={() => {
+                            if (
+                              props.pageName === "wordsorimage" ||
+                              props.pageName === "m5"
+                            ) {
+                              resetStoredData();
+                            }
                             if (isShowCase && !startShowCase && !gameOverData) {
                               setStartShowCase(true);
                             }
@@ -975,6 +1170,27 @@ const MainLayout = (props) => {
       )}
     </Box>
   );
+};
+
+MainLayout.propTypes = {
+  contentType: PropTypes.string,
+  handleBack: PropTypes.func,
+  disableScreen: PropTypes.bool,
+  isShowCase: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  setOpenLangModal: PropTypes.func,
+  points: PropTypes.number,
+  handleNext: PropTypes.any,
+  enableNext: PropTypes.bool,
+  showNext: PropTypes.bool,
+  showTimer: PropTypes.bool,
+  nextLessonAndHome: PropTypes.bool,
+  startShowCase: PropTypes.bool,
+  setStartShowCase: PropTypes.func,
+  loading: PropTypes.bool,
+  storedData: PropTypes.array,
+  resetStoredData: PropTypes.func,
+  pageName: PropTypes.string,
 };
 
 export default MainLayout;

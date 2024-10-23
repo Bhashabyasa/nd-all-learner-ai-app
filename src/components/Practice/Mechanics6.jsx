@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import HomophonesFinder from "homophones";
 import React, { createRef, useEffect, useState } from "react";
 import {
@@ -13,7 +13,6 @@ import {
 import MainLayout from "../Layouts.jsx/MainLayout";
 import correctSound from "../../assets/audio/correct.wav";
 import wrongSound from "../../assets/audio/wrong.wav";
-import removeSound from "../../assets/audio/remove.wav";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 
 const Mechanics2 = ({
@@ -49,8 +48,6 @@ const Mechanics2 = ({
   setEnableNext,
   loading,
   setOpenMessageDialog,
-  options,
-  audio,
 }) => {
   const [words, setWords] = useState([]);
   const [sentences, setSentences] = useState([]);
@@ -60,17 +57,8 @@ const Mechanics2 = ({
   const [shake, setShake] = useState(false);
   const [wordToFill, setWordToFill] = useState("");
   const [disabledWords, setDisabledWords] = useState(false);
-  const [answer, setAnswer] = useState({
-    text: "",
-    audio_url: "",
-    image_url: "",
-    isAns: false,
-  });
-
   const lang = getLocalData("lang");
   let wordToCheck = type === "audio" ? parentWords : wordToFill;
-
-  //console.log('Mechanics3', answer);
 
   useEffect(() => {
     const initializeFillInTheBlank = async () => {
@@ -80,7 +68,7 @@ const Mechanics2 = ({
         try {
           await getSimilarWords(wordsArr[randomIndex]);
           setWordToFill(wordsArr[randomIndex]);
-          // wordsArr[randomIndex] = "dash";
+          wordsArr[randomIndex] = "dash";
           setSentences(wordsArr);
           setSelectedWord("");
         } catch (error) {
@@ -105,6 +93,8 @@ const Mechanics2 = ({
     };
     initializeAudio();
   }, [contentId, parentWords]);
+
+  //console.log('Mechanics6');
 
   const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
@@ -173,34 +163,6 @@ const Mechanics2 = ({
     }
   };
 
-  useEffect(() => {
-    if (!enableNext) {
-      setAnswer({ text: "", audio_url: "", image_url: "", isAns: false });
-    }
-  }, [parentWords]);
-
-  const handleAnswerFillInTheBlank = (word) => {
-    setAnswer(word);
-
-    const isSoundCorrect = word.isAns;
-    let audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
-    if (!isSoundCorrect) {
-      setEnableNext(false);
-    }
-    audio.play();
-    setShake(true);
-    setTimeout(() => {
-      setShake(false);
-    }, 800);
-  };
-
-  const handleRemoveWord = () => {
-    let audio = new Audio(removeSound);
-    setAnswer({ text: "", audio_url: "", image_url: "", isAns: false });
-    audio.play();
-    setEnableNext(false);
-  };
-
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
   const [isReady, setIsReady] = React.useState(false);
@@ -220,27 +182,18 @@ const Mechanics2 = ({
   };
 
   const [currrentProgress, setCurrrentProgress] = React.useState(0);
-  const progressBarWidth = Number.isNaN(currrentProgress / duration)
+  const progressBarWidth = isNaN(currrentProgress / duration)
     ? 0
     : currrentProgress / duration;
 
-  const getEnableButton = () => {
-    if (type === "fillInTheBlank") {
-      return enableNext;
-    }
-    if (type === "audio") {
-      return selectedWord === wordToCheck;
-    }
-    return false;
-  };
   return (
     <MainLayout
+      pageName={"m6"}
       background={background}
       handleNext={handleNext}
-      enableNext={getEnableButton()}
+      enableNext={enableNext}
       showTimer={showTimer}
       points={points}
-      pageName={"m3"}
       {...{
         steps,
         currentStep,
@@ -346,89 +299,122 @@ const Mechanics2 = ({
           </Box>
         ) : (
           <>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                position: {
-                  xs: "relative", // For extra small screens
-                  sm: "relative", // For small screens
-                  md: "relative", // For medium screens
-                  lg: "absolute", // Change as needed for large screens
-                  xl: "absolute", // Change as needed for extra-large screens
-                },
-                left: {
-                  xs: 0, // For extra small screens
-                  sm: 0, // For small screens
-                  md: "-40px", // Adjust position for medium screens
-                  lg: "40px",
-                },
-                mt: {
-                  lg: "300px",
-                },
-              }}
-            >
-              {image && (
-                <img
-                  src={image}
-                  style={{
-                    borderRadius: "20px",
-                    maxWidth: "100%",
-                    height: "250px",
-                  }}
-                  alt=""
-                />
-              )}
-            </Grid>
-
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                mt: { xs: "20px", sm: "40px" }, // Add margin-top to create space below the image
+                position: "absolute",
+                left: 0,
+                marginTop: "40px",
+                marginLeft: "80px",
+                // Add responsiveness
+                width: "100%", // Full width on smaller screens
+                maxWidth: "500px", // Limit width on larger screens
+                "@media (max-width: 600px)": {
+                  position: "relative",
+                  marginTop: "20px", // Adjust margin on small screens
+                  marginLeft: "20px", // Adjust margin on small screens
+                  width: "70%", // Adjust width for smaller devices
+                },
+                "@media (min-width: 600px)": {
+                  marginTop: "30px",
+                  marginLeft: "50px",
+                },
               }}
             >
-              <Typography
-                variant="h5"
-                component="h4"
-                sx={{
-                  mb: { xs: 2, sm: 3, md: 4 },
-                  fontSize: { xs: "24px", sm: "32px", md: "40px" },
-                  color: "#303050",
-                  textAlign: "center",
-                  fontFamily: "Quicksand",
-                  lineHeight: "normal",
-                }}
-              >
-                {answer?.text !== "" ? (
-                  <>
-                    {parentWords?.split("_____")[0]} {/* Before the blank */}
-                    <span
-                      className={!answer.isAns && shake ? "shakeImage" : ""}
-                      style={{
-                        color: answer.isAns ? "#58CC02" : "#C30303",
-                        border: answer.isAns
-                          ? "2px solid #58CC02"
-                          : "2px solid rgb(195, 3, 3)",
-                        borderBottom: answer.isAns
-                          ? "2px solid #58CC02"
-                          : "2px solid rgb(195, 3, 3)",
-                        borderRadius: "10px",
-                        padding: "10px",
-                        cursor: "pointer",
-                        display: "inline-block",
-                      }}
-                      onClick={handleRemoveWord}
-                    >
-                      {answer?.text}
-                    </span>
-                    {parentWords?.split("_____")[1]} {/* After the blank */}
-                  </>
-                ) : (
-                  <>{parentWords}</>
-                )}
-              </Typography>
+              <img
+                src={image}
+                placeholder="image"
+                style={{ width: "100%", height: "auto", maxWidth: "200px" }}
+              />
             </Box>
+            {sentences?.map((elem, index) => (
+              <React.Fragment key={index}>
+                {elem === "dash" ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginLeft: index > 0 && "10px",
+                      minWidth: "120px",
+                      height: "80px",
+                      borderBottom: "3px solid #5F6C92",
+                      position: "relative",
+                    }}
+                  >
+                    {selectedWord && (
+                      <Box
+                        onClick={() => handleWord(selectedWord, true)}
+                        className={
+                          elem === "dash"
+                            ? selectedWord === wordToCheck
+                              ? `audioSelectedWord`
+                              : `audioSelectedWrongWord ${
+                                  shake ? "shakeImage" : ""
+                                }`
+                            : ""
+                        }
+                        sx={{
+                          textAlign: "center",
+                          px: "25px",
+                          py: "12px",
+                          // background: "transparent",
+                          m: 1,
+                          textTransform: "none",
+                          borderRadius: "12px",
+                          border: `1px solid ${
+                            elem === "dash"
+                              ? selectedWord === wordToCheck
+                                ? "#58CC02"
+                                : "#C30303"
+                              : "#333F61"
+                          }`,
+                          background: "#FFF",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color:
+                              elem === "dash"
+                                ? selectedWord === wordToCheck
+                                  ? "#58CC02"
+                                  : "#C30303"
+                                : "#333F61",
+                            fontWeight: 600,
+                            fontSize: "32px",
+                            fontFamily: "Quicksand",
+                          }}
+                        >
+                          {selectedWord}
+                        </span>
+                      </Box>
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginLeft: index > 0 && "10px",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      component="h4"
+                      sx={{
+                        mb: 4,
+                        mt: 4,
+                        fontSize: "40px",
+                        color: "#303050",
+                        textAlign: "center",
+                        fontFamily: "Quicksand",
+                      }}
+                    >
+                      {elem}
+                    </Typography>
+                  </Box>
+                )}
+              </React.Fragment>
+            ))}
           </>
         )}
       </Box>
@@ -440,119 +426,63 @@ const Mechanics2 = ({
           marginBottom: "30px",
         }}
       >
-        {type === "audio" &&
-          words?.map((elem, ind) => (
-            <Box
-              key={ind}
-              className={`${
-                type === "audio" && selectedWord === elem
-                  ? selectedWord === parentWords
-                    ? `audioSelectedWord`
-                    : `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
-                  : ""
-              }`}
-              onClick={() => handleWord(elem)}
-              sx={{
-                textAlign: "center",
-                px: "25px",
-                py: "12px",
-                // background: "transparent",
-                m: 1,
-                textTransform: "none",
-                borderRadius: "12px",
-                border: `1px solid rgba(51, 63, 97, 0.10)`,
-                background: "#FFF",
-                cursor: "pointer",
-                opacity: disabledWords ? 0.25 : 1,
-                pointerEvents: disabledWords ? "none" : "initial",
+        {words?.map((elem) => (
+          <Box
+            key={elem}
+            className={`${
+              type === "audio" && selectedWord === elem
+                ? selectedWord === parentWords
+                  ? `audioSelectedWord`
+                  : `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
+                : ""
+            }`}
+            onClick={() => handleWord(elem)}
+            sx={{
+              textAlign: "center",
+              px: "25px",
+              py: "12px",
+              // background: "transparent",
+              m: 1,
+              textTransform: "none",
+              borderRadius: "12px",
+              border: `1px solid rgba(51, 63, 97, 0.10)`,
+              background: "#FFF",
+              cursor: "pointer",
+              opacity: disabledWords ? 0.25 : 1,
+              pointerEvents: disabledWords ? "none" : "initial",
+            }}
+          >
+            <span
+              style={{
+                color:
+                  type === "audio" && selectedWord === elem
+                    ? selectedWord === parentWords
+                      ? "#58CC02"
+                      : "#C30303"
+                    : "#333F61",
+                fontWeight: 600,
+                fontSize: "32px",
+                fontFamily: "Quicksand",
               }}
             >
-              <span
-                style={{
-                  color:
-                    type === "audio" && selectedWord === elem
-                      ? selectedWord === parentWords
-                        ? "#58CC02"
-                        : "#C30303"
-                      : "#333F61",
-                  fontWeight: 600,
-                  fontSize: "32px",
-                  fontFamily: "Quicksand",
-                }}
-              >
-                {elem}
-              </span>
-            </Box>
-          ))}
-        <>
-          {type === "fillInTheBlank" &&
-            Array.isArray(options) &&
-            options.map(
-              (elem, ind) =>
-                answer?.text !== elem.text && (
-                  <Box
-                    key={ind}
-                    className={`${
-                      type === "audio" && selectedWord === elem
-                        ? selectedWord === parentWords
-                          ? `audioSelectedWord`
-                          : `audioSelectedWrongWord ${
-                              shake ? "shakeImage" : ""
-                            }`
-                        : ""
-                    }`}
-                    onClick={() => handleAnswerFillInTheBlank(elem)}
-                    sx={{
-                      textAlign: "center",
-                      px: { xs: "10px", sm: "20px", md: "25px" }, // Responsive padding
-                      py: { xs: "8px", sm: "10px", md: "12px" }, // Responsive padding
-                      m: 1,
-                      textTransform: "none",
-                      borderRadius: "12px",
-                      border: `1px solid rgba(51, 63, 97, 0.10)`,
-                      background: "#FFF",
-                      cursor: "pointer",
-                      opacity: disabledWords ? 0.25 : 1,
-                      pointerEvents: disabledWords ? "none" : "initial",
-                      display: "flex", // Flex display for better alignment
-                      justifyContent: "center", // Centering text
-                      alignItems: "center", // Centering text vertically
-                    }}
-                  >
-                    <span
-                      style={{
-                        color:
-                          type === "audio" && selectedWord === elem
-                            ? selectedWord === parentWords
-                              ? "#58CC02"
-                              : "#C30303"
-                            : "#333F61",
-                        fontWeight: 600,
-                        fontSize: "30px", // Responsive font size
-                        fontFamily: "Quicksand",
-                      }}
-                    >
-                      {elem?.text}
-                    </span>
-                  </Box>
-                )
-            )}
-        </>
+              {elem}
+            </span>
+          </Box>
+        ))}
       </Box>
       {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
+            pageName={"m6"}
             setVoiceText={setVoiceText}
-            pageName={"m3"}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
-            dontShowListen={type === "image" || isDiscover}
+            dontShowListen={true}
             // updateStory={updateStory}
             originalText={parentWords}
-            enableNext={getEnableButton()}
+            enableNext={enableNext}
             handleNext={handleNext}
-            audioLink={audio ? audio : null}
             {...{
               contentId,
               contentType,
@@ -561,7 +491,7 @@ const Mechanics2 = ({
               callUpdateLearner,
               isShowCase,
               setEnableNext,
-              showOnlyListen: !answer?.isAns,
+              showOnlyListen: selectedWord != wordToCheck,
               setOpenMessageDialog,
             }}
           />
