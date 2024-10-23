@@ -3430,7 +3430,7 @@ export const levelGetContent = {
       criteria: "sentence",
       template: "simple",
       competency: "L1.2",
-      mechanism: { id: "", name: "formASentence" },
+      mechanism: { id: "mechanic_3", name: "formASentence" },
     },
     {
       title: "P3",
@@ -3464,7 +3464,7 @@ export const levelGetContent = {
       criteria: "sentence",
       template: "simple",
       competency: "L1.1",
-      mechanism: { id: "", name: "formASentence" },
+      mechanism: { id: "mechanic_3", name: "formASentence" },
     },
     {
       title: "P7",
@@ -3501,7 +3501,7 @@ export const levelGetContent = {
       criteria: "sentence",
       template: "simple",
       competency: "L1.6",
-      mechanism: { id: "", name: "formASentence" },
+      mechanism: { id: "mechanic_3", name: "formASentence" },
     },
     {
       title: "P3",
@@ -3535,7 +3535,7 @@ export const levelGetContent = {
       criteria: "sentence",
       template: "simple",
       competency: "L1.5",
-      mechanism: { id: "", name: "formASentence" },
+      mechanism: { id: "mechanic_3", name: "formASentence" },
     },
     {
       title: "P7",
