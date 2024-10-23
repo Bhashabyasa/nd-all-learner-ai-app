@@ -21,6 +21,7 @@ import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
 import { Log } from "../../services/telementryService";
+import Mechanics6 from "../../components/Practice/Mechanics6";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -43,7 +44,8 @@ const Practice = () => {
   const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
-  const [play] = useSound(LevelCompleteAudio);
+
+  // const [play] = useSound(LevelCompleteAudio);
   const [livesData, setLivesData] = useState();
   const [gameOverData, setGameOverData] = useState();
   const [loading, setLoading] = useState();
@@ -69,7 +71,8 @@ const Practice = () => {
   }, [startShowCase]);
 
   const callConfettiAndPlay = () => {
-    play();
+    let audio = new Audio(LevelCompleteAudio);
+    audio.play();
     callConfetti();
   };
 
@@ -212,6 +215,10 @@ const Practice = () => {
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
+      const currentGetContent = levelGetContent?.[level]?.find(
+        (elem) => elem.title === practiceSteps?.[newPracticeStep]?.name
+      );
+
       if (currentQuestion === questions.length - 1 || isGameOver) {
         // navigate or setNextPracticeLevel
         let currentPracticeStep =
@@ -230,6 +237,10 @@ const Practice = () => {
               user_id: virtualId,
               totalSyllableCount: totalSyllableCount,
               language: localStorage.getItem("lang"),
+              is_mechanics:
+                currentGetContent && currentGetContent?.mechanism?.id
+                  ? true
+                  : false,
             }
           );
           const { data: getSetData } = getSetResultRes;
@@ -280,10 +291,6 @@ const Practice = () => {
           currentPracticeProgress = 0;
         }
 
-        const currentGetContent = levelGetContent?.[level]?.find(
-          (elem) => elem.title === practiceSteps?.[newPracticeStep].name
-        );
-
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
           {
@@ -302,7 +309,14 @@ const Practice = () => {
           return;
         }
         const resGetContent = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
+            (currentGetContent?.mechanism?.id
+              ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+              : "") +
+            (currentGetContent?.competency
+              ? `&level_competency=${currentGetContent?.competency}`
+              : "") +
+            (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
         );
 
         setTotalSyllableCount(resGetContent?.data?.totalSyllableCount);
@@ -438,7 +452,14 @@ const Practice = () => {
       );
 
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
+          (currentGetContent?.mechanism?.id
+            ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+            : "") +
+          (currentGetContent?.competency
+            ? `&level_competency=${currentGetContent?.competency}`
+            : "") +
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
@@ -451,6 +472,7 @@ const Practice = () => {
       });
       quesArr = [...quesArr, ...(resWord?.data?.content || [])];
       setCurrentContentType(currentGetContent.criteria);
+
       setCurrentCollectionId(resWord?.data?.content?.[0]?.collectionId);
       setAssessmentResponse(resWord);
 
@@ -528,7 +550,14 @@ const Practice = () => {
       );
       let quesArr = [];
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}` +
+          (currentGetContent?.mechanism?.id
+            ? `&mechanics_id=${currentGetContent?.mechanism?.id}`
+            : "") +
+          (currentGetContent?.competency
+            ? `&level_competency=${currentGetContent?.competency}`
+            : "") +
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
@@ -575,6 +604,7 @@ const Practice = () => {
     });
 
     let type = currentContentType?.toLowerCase();
+    // console.log(type, sentence, matchedChar);
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
@@ -601,7 +631,7 @@ const Practice = () => {
                     background: "#FFF0BD",
                   }}
                 >
-                  {substr}
+                  {i === 0 ? substr.toUpperCase() : substr}
                 </Typography>
               </React.Fragment>
             );
@@ -624,7 +654,7 @@ const Practice = () => {
                   lineHeight: "50px",
                 }}
               >
-                {word[i]}
+                {i === 0 ? word[i].toUpperCase() : word[i]}
               </Typography>
             </React.Fragment>
           );
@@ -685,7 +715,12 @@ const Practice = () => {
         const contentSourceData =
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
-        const length = stringLengths[0];
+        const length =
+          questions[currentQuestion]?.mechanics_data &&
+          questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
+            "mechanic_2"
+            ? 500
+            : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
       }
     }
@@ -743,7 +778,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism === "fillInTheBlank" || mechanism === "audio") {
+    } else if (mechanism.name === "fillInTheBlank" && mechanism.id !== "") {
       return (
         <Mechanics3
           page={page}
@@ -751,20 +786,28 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType === "image"
+              mechanism.name === "fillInTheBlank"
+                ? "Fill in the blank"
+                : questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
-            parentWords:
-              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            parentWords: questions[currentQuestion]?.mechanics_data?.[0]?.text,
             contentType: currentContentType,
             contentId: questions[currentQuestion]?.contentId,
             setVoiceText,
-            type: mechanism,
+            type: mechanism.name,
             setRecordedAudio,
             setVoiceAnimate,
             storyLine,
             handleNext,
-            // image: elephant,
+            image: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                questions[currentQuestion]?.mechanics_data[0]?.image_url
+              : null,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
             enableNext,
             showTimer: false,
             points,
@@ -786,10 +829,13 @@ const Practice = () => {
               [],
             loading,
             setOpenMessageDialog,
+            options: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0]?.options
+              : [],
           }}
         />
       );
-    } else if (mechanism === "formAWord") {
+    } else if (mechanism.name === "formAWord") {
       return (
         <Mechanics4
           page={page}
@@ -832,20 +878,189 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism === "readTheImage") {
+    } else if (mechanism.name === "readTheImage") {
+      const options = questions[currentQuestion]?.mechanics_data
+        ? questions[currentQuestion]?.mechanics_data[0]?.options
+        : [];
+      const audioLink =
+        options && options.length > 0
+          ? options.find((option) => option.isAns === true)?.audio_url || null
+          : null;
+
+      const mechanics_data = questions[currentQuestion]?.mechanics_data;
       return (
         <Mechanics5
           page={page}
           setPage={setPage}
-          {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
+          {...{
+            level: !isShowCase && level,
+            header: "Study the picture and speak the correct answer from below",
+            parentWords: mechanics_data
+              ? mechanics_data[0].text
+              : questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            question_audio: mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                mechanics_data[0].audio_url
+              : questions[currentQuestion]?.contentSourceData?.[0]?.audio_url,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            options: options,
+            correctness: mechanics_data ? mechanics_data[0]?.correctness : null,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            type: "word",
+            image: mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                mechanics_data[0]?.image_url
+              : null,
+
+            audio: mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                audioLink
+              : null,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            loading,
+            setOpenMessageDialog,
+            startShowCase,
+            setStartShowCase,
+            livesData,
+            setLivesData,
+            gameOverData,
+            highlightWords,
+            matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
+            percentage,
+            fluency,
+            isNextButtonCalled,
+            setIsNextButtonCalled,
+          }}
         />
       );
-    } else if (mechanism === "FormASentence") {
+    } else if (mechanism.name === "formASentence") {
       return (
         <Mechanics4
           page={page}
           setPage={setPage}
-          {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
+          {...{
+            level: !isShowCase && level,
+            header: "Form a sentence using the words and speak",
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            jumbled_text:
+              questions[currentQuestion]?.mechanics_data?.[0]?.jumbled_text,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            type: mechanism.name,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            // image: elephant,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            allWords:
+              questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
+              [],
+            loading,
+            setOpenMessageDialog,
+          }}
+        />
+      );
+    } else if (
+      mechanism.name === "audio" ||
+      (mechanism.name === "fillInTheBlank" && mechanism.id === "")
+    ) {
+      return (
+        <Mechanics6
+          page={page}
+          setPage={setPage}
+          {...{
+            level: !isShowCase && level,
+            header:
+              mechanism.name === "fillInTheBlank"
+                ? "Fill in the blank"
+                : questions[currentQuestion]?.contentType === "image"
+                ? `Guess the below image`
+                : `Speak the below ${questions[currentQuestion]?.contentType}`,
+            parentWords:
+              questions[currentQuestion]?.contentSourceData?.[0]?.text,
+            contentType: currentContentType,
+            contentId: questions[currentQuestion]?.contentId,
+            setVoiceText,
+            type: mechanism.name,
+            setRecordedAudio,
+            setVoiceAnimate,
+            storyLine,
+            handleNext,
+            image: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_images/` +
+                questions[currentQuestion]?.mechanics_data[0]?.image_url
+              : null,
+            audio: questions[currentQuestion]?.mechanics_data
+              ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/mechanics_audios/` +
+                questions[currentQuestion]?.mechanics_data[0]?.audio_url
+              : null,
+            enableNext,
+            showTimer: false,
+            points,
+            steps: questions?.length,
+            currentStep: currentQuestion + 1,
+            progressData,
+            showProgress: true,
+            background:
+              isShowCase &&
+              "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+            playTeacherAudio,
+            callUpdateLearner: isShowCase,
+            disableScreen,
+            isShowCase,
+            handleBack: !isShowCase && handleBack,
+            setEnableNext,
+            allWords:
+              questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
+              [],
+            loading,
+            setOpenMessageDialog,
+            options: questions[currentQuestion]?.mechanics_data
+              ? questions[currentQuestion]?.mechanics_data[0]?.options
+              : [],
+          }}
         />
       );
     } else if (page === 1) {

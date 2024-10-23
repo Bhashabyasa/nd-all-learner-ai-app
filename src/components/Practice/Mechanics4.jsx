@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import MainLayout from "../Layouts.jsx/MainLayout";
 // import useSound from "use-sound";
@@ -46,6 +46,7 @@ const Mechanics4 = ({
   setEnableNext,
   loading,
   setOpenMessageDialog,
+  audio,
 }) => {
   const [words, setWords] = useState(
     type === "word" ? [] : ["Friend", "She is", "My"]
@@ -56,8 +57,29 @@ const Mechanics4 = ({
     setSelectedWords([]);
   }, [contentId]);
 
+  const [shake, setShake] = useState(false);
+
+  function jumbleSentence(sentence) {
+    // Split the sentence into words
+    const words = sentence.split(" ");
+
+    // Shuffle the words using Fisher-Yates (Durstenfeld) shuffle algorithm
+    for (let i = words.length - 1; i > 0; i--) {
+      // Pick a random index from 0 to i
+      const j = Math.floor(Math.random() * (i + 1));
+
+      // Swap words[i] with the element at random index
+      [words[i], words[j]] = [words[j], words[i]];
+    }
+
+    // Join the jumbled words back into a sentence
+    return words;
+  }
+
+  //console.log('Mechanics4');
+
   useEffect(() => {
-    let wordsArr = splitGraphemes(parentWords);
+    let wordsArr = jumbleSentence(parentWords);
     if (parentWords) {
       for (let i = wordsArr.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * i);
@@ -86,10 +108,15 @@ const Mechanics4 = ({
   //   R: rPlay,
   // };
   const handleWords = (word, isSelected) => {
+    setShake(true);
+    setTimeout(() => {
+      setShake(false);
+    }, 3000);
     // audioPlay[word]();
     if (selectedWords?.length + 1 !== wordsAfterSplit?.length || isSelected) {
       let audio = new Audio(isSelected ? removeSound : addSound);
       audio.play();
+      setEnableNext(false);
     }
 
     if (isSelected) {
@@ -106,7 +133,7 @@ const Mechanics4 = ({
       setSelectedWords([...selectedWords, word]);
       if (selectedWords?.length + 1 === wordsAfterSplit?.length) {
         let audio = new Audio(
-          [...selectedWords, word]?.join("") === parentWords
+          [...selectedWords, word]?.join(" ") === parentWords
             ? correctSound
             : wrongSound
         );
@@ -118,7 +145,7 @@ const Mechanics4 = ({
   const answer =
     selectedWords?.length !== wordsAfterSplit?.length
       ? ""
-      : selectedWords?.join("") === parentWords
+      : selectedWords?.join(" ") === parentWords
       ? "correct"
       : "wrong";
 
@@ -129,6 +156,7 @@ const Mechanics4 = ({
       enableNext={enableNext}
       showTimer={showTimer}
       points={points}
+      pageName={"m4"}
       {...{
         steps,
         currentStep,
@@ -141,13 +169,30 @@ const Mechanics4 = ({
         loading,
       }}
     >
+      <div
+        style={{
+          left: `calc(50% - 258px / 2)`,
+          top: `calc(50% - 45px / 2 - 235.5px)`,
+          fontFamily: "Quicksand",
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: "36px",
+          lineHeight: "45px",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#333F61",
+        }}
+      >
+        {header}
+      </div>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2, mt: 8 }}>
         <Box
           sx={{
             minWidth: "250px",
-            minHeight: "70px",
+            minHeight: "75px",
             display: "flex",
             justifyContent: "center",
+            flexWrap: "wrap",
             alignItems: "center",
             borderRadius: "15px",
             border: `2px solid ${
@@ -160,7 +205,7 @@ const Mechanics4 = ({
                 : "rgba(51, 63, 97, 0.10)"
             }`,
             cursor: "pointer",
-            letterSpacing: "15px",
+            letterSpacing: answer != "correct" ? "5px" : "normal",
             background: "#FBFBFB",
             paddingX: type === "word" ? 0 : "20px",
           }}
@@ -168,7 +213,24 @@ const Mechanics4 = ({
           {selectedWords?.map((elem) => (
             <span
               onClick={() => handleWords(elem, true)}
+              className={
+                answer === "wrong"
+                  ? `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
+                  : ""
+              }
               style={{
+                borderRadius: "12px",
+                padding: "5px 10px 5px 10px",
+                border:
+                  answer != "wrong"
+                    ? answer === "correct"
+                      ? "none" // No border if the answer is correct
+                      : answer === "wrong"
+                      ? "2px solid #C30303" // Red border if the answer is wrong
+                      : !words.length && selectedWords.length && type === "word"
+                      ? "2px solid #1897DE" // Blue border for some specific condition
+                      : "2px solid rgba(51, 63, 97, 0.15)"
+                    : "", // Default light border,
                 color:
                   type === "word"
                     ? answer === "correct"
@@ -176,12 +238,15 @@ const Mechanics4 = ({
                       : answer === "wrong"
                       ? "#C30303"
                       : "#1897DE"
+                    : answer === "wrong"
+                    ? "#C30303"
                     : "#333F61",
                 fontWeight: type === "word" ? 600 : 700,
-                fontSize: "40px",
+                fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)",
                 fontFamily: "Quicksand",
                 cursor: "pointer",
-                marginLeft: type === "word" ? 0 : "20px",
+                marginLeft:
+                  type === "word" ? 0 : answer != "correct" ? "20px" : 0,
               }}
             >
               {elem}
@@ -189,9 +254,16 @@ const Mechanics4 = ({
           ))}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          mb: 3,
+        }}
+      >
         {words?.map((elem) => (
-          <>
+          <React.Fragment key={elem}>
             {type === "word" ? (
               <Box
                 onClick={() => handleWords(elem)}
@@ -199,20 +271,26 @@ const Mechanics4 = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "60px",
-                  minWidth: "60px",
+                  height: { xs: "50px", sm: "60px", md: "70px" },
+                  minWidth: { xs: "50px", sm: "60px", md: "70px" },
                   background: "#1897DE",
-                  m: 1,
+                  m: { xs: 0.5, sm: 1 },
                   cursor: "pointer",
                   borderRadius: "12px",
                   border: "5px solid #10618E",
+                  fontSize: { xs: "25px", sm: "30px", md: "35px", lg: "40px" },
                 }}
               >
                 <span
                   style={{
                     color: "white",
                     fontWeight: 600,
-                    fontSize: "40px",
+                    fontSize: {
+                      xs: "25px",
+                      sm: "35px",
+                      md: "40px",
+                      lg: "40px",
+                    },
                     fontFamily: "Quicksand",
                   }}
                 >
@@ -224,22 +302,21 @@ const Mechanics4 = ({
                 onClick={() => handleWords(elem)}
                 sx={{
                   textAlign: "center",
-                  px: "25px",
-                  py: "12px",
-                  // background: "transparent",
-                  m: 1,
+                  px: { xs: "15px", sm: "20px", md: "25px" },
+                  py: { xs: "8px", sm: "10px", md: "12px" },
+                  m: { xs: 0.5, sm: 1 },
                   textTransform: "none",
                   borderRadius: "12px",
                   border: `1px solid rgba(51, 63, 97, 0.10)`,
                   background: "#FFF",
                   cursor: "pointer",
+                  fontSize: { xs: "25px", sm: "30px", md: "35px", lg: "40px" },
                 }}
               >
                 <span
                   style={{
                     color: "#6F80B1",
                     fontWeight: 600,
-                    fontSize: "32px",
                     fontFamily: "Quicksand",
                   }}
                 >
@@ -247,19 +324,24 @@ const Mechanics4 = ({
                 </span>
               </Box>
             )}
-          </>
+          </React.Fragment>
         ))}
       </Box>
+
       {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
+            pageName={"m4"}
             setVoiceText={setVoiceText}
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
             dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
+            handleNext={handleNext}
+            enableNext={enableNext}
             originalText={parentWords}
+            audioLink={audio ? audio : null}
             {...{
               contentId,
               contentType,

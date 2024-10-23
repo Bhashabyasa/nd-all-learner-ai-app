@@ -71,6 +71,39 @@ export const questionsList = [
   },
 ];
 
+export const NextButtonRound = (props) => {
+  return (
+    <svg
+      width={70}
+      height={70}
+      viewBox="0 0 54 54"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      opacity={props?.disabled && 0.3}
+    >
+      <rect width={54} height={54} rx={27} fill="url(#paint0_linear_81_347)" />
+      <path
+        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
+        fill="white"
+        transform="translate(10, 10) scale(2.5)" /* Make arrow bigger and keep it centered */
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_81_347"
+          x1={0}
+          y1={27}
+          x2={54}
+          y2={27}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#E15404" />
+          <stop offset={1} stopColor="#FF9050" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
 export const NextButton = (props) => {
   return (
     <svg
@@ -132,7 +165,7 @@ export const ListenButton = (props) => {
         rx="35"
         fill="url(#paint0_linear_400_1331)"
       />
-      <g clip-path="url(#clip0_400_1331)">
+      <g clipPath="url(#clip0_400_1331)">
         <path
           d="M43.374 30.1609C43.1512 29.8851 42.828 29.7091 42.4754 29.6716C42.1228 29.6341 41.7698 29.7381 41.494 29.9609C41.2181 30.1837 41.0421 30.5069 41.0046 30.8595C40.9671 31.2121 41.0712 31.5651 41.294 31.8409C41.9676 32.7568 42.3309 33.864 42.3309 35.0009C42.3309 36.1379 41.9676 37.245 41.294 38.1609C41.135 38.3569 41.0349 38.5939 41.0053 38.8445C40.9757 39.095 41.0178 39.3489 41.1267 39.5765C41.2356 39.8041 41.4069 39.9961 41.6206 40.1302C41.8343 40.2644 42.0817 40.3351 42.334 40.3343C42.5332 40.3349 42.73 40.291 42.91 40.2056C43.0899 40.1202 43.2485 39.9956 43.374 39.8409C44.4316 38.449 45.0042 36.749 45.0042 35.0009C45.0042 33.2528 44.4316 31.5528 43.374 30.1609Z"
           fill="white"
@@ -155,8 +188,8 @@ export const ListenButton = (props) => {
           y2="56.914"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#710EDC" />
-          <stop offset="1" stop-color="#A856FF" />
+          <stop stopColor="#710EDC" />
+          <stop offset="1" stopColor="#A856FF" />
         </linearGradient>
         <clipPath id="clip0_400_1331">
           <rect
@@ -3297,118 +3330,357 @@ export const practiceSteps = [
 
 export const levelGetContent = {
   0: [
-    { title: "P1", criteria: "word", template: "simple" },
-    { title: "P2", criteria: "word", template: "simple" },
-    { title: "P3", criteria: "word", template: "simple" },
-    { title: "P4", criteria: "word", template: "simple" },
-    { title: "S1", criteria: "word", template: "simple" },
-    { title: "P5", criteria: "word", template: "simple" },
-    { title: "P6", criteria: "word", template: "simple" },
-    { title: "P7", criteria: "word", template: "simple" },
-    { title: "P8", criteria: "word", template: "simple" },
-    { title: "S2", criteria: "word", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P3", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P4", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "S1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P5", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P6", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P7", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P8", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
   ],
   1: [
-    { title: "P1", criteria: "word", template: "simple" },
-    { title: "P2", criteria: "word", template: "simple" },
-    { title: "P3", criteria: "word", template: "simple" },
-    { title: "P4", criteria: "word", template: "simple" },
-    { title: "S1", criteria: "word", template: "simple" },
-    { title: "P5", criteria: "word", template: "simple" },
-    { title: "P6", criteria: "word", template: "simple" },
-    { title: "P7", criteria: "word", template: "simple" },
-    { title: "P8", criteria: "word", template: "simple" },
-    { title: "S2", criteria: "word", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P3", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P4", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "S1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P5", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P6", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P7", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P8", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
   ],
   2: [
-    { title: "P1", criteria: "char", template: "simple" },
-    { title: "P2", criteria: "char", template: "simple" },
-    { title: "P3", criteria: "word", template: "simple", mechanism: "audio" },
-    { title: "P4", criteria: "word", template: "simple", mechanism: "audio" },
-    { title: "S1", criteria: "word", template: "simple" },
-    { title: "P5", criteria: "word", template: "simple" },
-    { title: "P6", criteria: "word", template: "simple" },
-    { title: "P7", criteria: "word", template: "simple", mechanism: "audio" },
-    { title: "P8", criteria: "word", template: "simple", mechanism: "audio" },
-    { title: "S2", criteria: "word", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    {
+      title: "P3",
+      criteria: "word",
+      template: "simple",
+      tags: "CEFR_ENG",
+    },
+    {
+      title: "P4",
+      criteria: "word",
+      template: "simple",
+      tags: "CEFR_ENG",
+    },
+    { title: "S1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P5", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    { title: "P6", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+    {
+      title: "P7",
+      criteria: "word",
+      template: "simple",
+      tags: "CEFR_ENG",
+    },
+    {
+      title: "P8",
+      criteria: "word",
+      template: "simple",
+      tags: "CEFR_ENG",
+    },
+    { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
   ],
   3: [
     {
       title: "P1",
       criteria: "word",
       template: "simple",
+      tags: "CEFR_ENG",
     },
     {
       title: "P2",
       criteria: "word",
       template: "simple",
+      tags: "CEFR_ENG",
     },
-    { title: "P3", criteria: "sentence", template: "simple" },
-    { title: "P4", criteria: "sentence", template: "simple" },
-    { title: "S1", criteria: "sentence", template: "simple" },
+    { title: "P3", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
+    { title: "P4", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
+    { title: "S1", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
     {
       title: "P5",
       criteria: "sentence",
       template: "simple",
-      mechanism: "fillInTheBlank",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
     },
     {
       title: "P6",
       criteria: "sentence",
       template: "simple",
-      mechanism: "fillInTheBlank",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
     },
-    { title: "P7", criteria: "sentence", template: "simple" },
-    { title: "P8", criteria: "sentence", template: "simple" },
-    { title: "S2", criteria: "sentence", template: "simple" },
+    { title: "P7", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
+    { title: "P8", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
+    { title: "S2", criteria: "sentence", template: "simple", tags: "CEFR_ENG" },
   ],
   4: [
-    { title: "P1", criteria: "word", template: "simple" },
-    { title: "P2", criteria: "word", template: "simple" },
-    { title: "P3", criteria: "sentence", template: "simple" },
-    { title: "P4", criteria: "sentence", template: "simple" },
-    { title: "S1", criteria: "sentence", template: "simple" },
-    { title: "P5", criteria: "sentence", template: "simple" },
-    { title: "P6", criteria: "sentence", template: "simple" },
-    { title: "P7", criteria: "sentence", template: "simple" },
-    { title: "P8", criteria: "sentence", template: "simple" },
-    { title: "S2", criteria: "sentence", template: "simple" },
+    {
+      title: "P1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.1",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
+    },
+    {
+      title: "P2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.2",
+      mechanism: { id: "mechanic_3", name: "formASentence" },
+    },
+    {
+      title: "P3",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.1",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "P4",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.2",
+    },
+    {
+      title: "S1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.1, L1.2",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "P5",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.2",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
+    },
+    {
+      title: "P6",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.1",
+      mechanism: { id: "mechanic_3", name: "formASentence" },
+    },
+    {
+      title: "P7",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.2",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "P8",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.1",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
+    },
+    {
+      title: "S2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.2",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
   ],
   5: [
-    { title: "P1", criteria: "sentence", template: "simple" },
-    { title: "P2", criteria: "sentence", template: "simple" },
-    { title: "P3", criteria: "sentence", template: "simple" },
-    { title: "P4", criteria: "sentence", template: "simple" },
-    { title: "S1", criteria: "sentence", template: "simple" },
-    { title: "P5", criteria: "sentence", template: "simple" },
-    { title: "P6", criteria: "sentence", template: "simple" },
-    { title: "P7", criteria: "sentence", template: "simple" },
-    { title: "P8", criteria: "sentence", template: "simple" },
-    { title: "S2", criteria: "sentence", template: "simple" },
+    {
+      title: "P1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.5",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
+    },
+    {
+      title: "P2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.6",
+      mechanism: { id: "mechanic_3", name: "formASentence" },
+    },
+    {
+      title: "P3",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.5",
+    },
+    {
+      title: "P4",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.6",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "S1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.5, L1.6",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "P5",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.6",
+      mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
+    },
+    {
+      title: "P6",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.5",
+      mechanism: { id: "mechanic_3", name: "formASentence" },
+    },
+    {
+      title: "P7",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.6",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
+    {
+      title: "P8",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.5",
+    },
+    {
+      title: "S2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.6",
+      mechanism: { id: "mechanic_2", name: "readTheImage" },
+    },
   ],
   6: [
-    { title: "P1", criteria: "sentence", template: "simple" },
-    { title: "P2", criteria: "sentence", template: "simple" },
-    { title: "P3", criteria: "paragraph", template: "simple" },
-    { title: "P4", criteria: "paragraph", template: "simple" },
-    { title: "S1", criteria: "paragraph", template: "simple" },
-    { title: "P5", criteria: "sentence", template: "simple" },
-    { title: "P6", criteria: "paragraph", template: "simple" },
-    { title: "P7", criteria: "paragraph", template: "simple" },
-    { title: "P8", criteria: "paragraph", template: "simple" },
-    { title: "S2", criteria: "paragraph", template: "simple" },
+    {
+      title: "P1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P3",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P4",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "S1",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P5",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P6",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P7",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "P8",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
+    {
+      title: "S2",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.3",
+    },
   ],
   7: [
-    { title: "P1", criteria: "sentence", template: "simple" },
-    { title: "P2", criteria: "sentence", template: "simple" },
-    { title: "P3", criteria: "paragraph", template: "simple" },
-    { title: "P4", criteria: "paragraph", template: "simple" },
-    { title: "S1", criteria: "paragraph", template: "simple" },
-    { title: "P5", criteria: "paragraph", template: "simple" },
-    { title: "P6", criteria: "paragraph", template: "simple" },
-    { title: "P7", criteria: "paragraph", template: "simple" },
-    { title: "P8", criteria: "paragraph", template: "simple" },
-    { title: "S2", criteria: "paragraph", template: "simple" },
+    {
+      title: "P1",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P2",
+      criteria: "sentence",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P3",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P4",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "S1",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P5",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P6",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P7",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "P8",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
+    {
+      title: "S2",
+      criteria: "paragraph",
+      template: "simple",
+      competency: "L1.8",
+    },
   ],
   8: [
     { title: "P1", criteria: "sentence", template: "simple" },
