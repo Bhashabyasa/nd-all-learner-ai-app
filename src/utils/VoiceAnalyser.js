@@ -331,6 +331,9 @@ function VoiceAnalyser(props) {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           requestBody
         );
+
+        //TODO: handle  Errors
+
         data = updateLearnerData;
         responseText = data.responseText;
         profanityWord = await filterBadWords(data.responseText);
@@ -492,15 +495,16 @@ function VoiceAnalyser(props) {
   };
 
   const handlePercentageForLife = (
-    percentage,
+    percentage, // subsessionTargetsCount
     contentType,
-    fluencyScore,
+    fluencyScore, // subsessionFluency
     language
   ) => {
     try {
       if (livesData) {
         let totalSyllables = livesData?.totalTargets;
         if (language === "en") {
+          // TODO: need to check why this is 50
           if (totalSyllables > 50) {
             totalSyllables = 50;
           }

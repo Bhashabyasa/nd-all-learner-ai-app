@@ -16,6 +16,7 @@ import wrongSound from "../../assets/audio/wrong.wav";
 import removeSound from "../../assets/audio/remove.wav";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 
+// TODO: update it as per File name OR update file name as per export variable name
 const Mechanics2 = ({
   page,
   setPage,
@@ -107,6 +108,8 @@ const Mechanics2 = ({
   }, [contentId, parentWords]);
 
   const getSimilarWords = async (wordForFindingHomophones) => {
+    // TODO: needs to pass as prop for mechanics data
+
     const lang = getLocalData("lang");
     // const isFillInTheBlanks = type === "fillInTheBlank";
     const wordToSimilar = wordForFindingHomophones
@@ -201,6 +204,7 @@ const Mechanics2 = ({
     setEnableNext(false);
   };
 
+  // TODO: Constants declaration Need to move up
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
   const [isReady, setIsReady] = React.useState(false);
@@ -219,6 +223,7 @@ const Mechanics2 = ({
     }
   };
 
+  // TODO: all the constants declaration Need to move up
   const [currrentProgress, setCurrrentProgress] = React.useState(0);
   const progressBarWidth = Number.isNaN(currrentProgress / duration)
     ? 0
