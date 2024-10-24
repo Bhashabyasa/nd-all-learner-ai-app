@@ -351,11 +351,17 @@ function VoiceAnalyser(props) {
         }
       }
 
-      if (responseText.toLowerCase() === originalText.toLowerCase()) {
-        setIsMatching(true);
-      } else {
-        setIsMatching(false);
-      }
+      //console.log('dataaaa', data);
+
+      // if (responseText.toLowerCase() === originalText.toLowerCase()) {
+      //   setIsMatching(true);
+      // } else {
+      //   setIsMatching(false);
+      // }
+
+      setIsMatching(
+        data?.createScoreData?.session?.count_diff?.character === 0
+      );
 
       //console.log('textss', recordedAudio, isMatching, responseText, originalText);
 
