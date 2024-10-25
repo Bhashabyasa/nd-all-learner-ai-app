@@ -719,7 +719,8 @@ const Practice = () => {
           (questions[currentQuestion]?.mechanics_data &&
             questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
               "mechanic_2") ||
-          "mechanic_1"
+          questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
+            "mechanic_1"
             ? 500
             : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
