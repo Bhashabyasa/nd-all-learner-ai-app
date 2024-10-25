@@ -68,110 +68,8 @@ const Mechanics2 = ({
   });
 
   const lang = getLocalData("lang");
-  let wordToCheck = type === "audio" ? parentWords : wordToFill;
 
   //console.log('Mechanics3', answer);
-
-  useEffect(() => {
-    const initializeFillInTheBlank = async () => {
-      if (type === "fillInTheBlank" && parentWords?.length) {
-        let wordsArr = parentWords.split(" ");
-        let randomIndex = Math.floor(Math.random() * wordsArr.length);
-        try {
-          await getSimilarWords(wordsArr[randomIndex]);
-          setWordToFill(wordsArr[randomIndex]);
-          // wordsArr[randomIndex] = "dash";
-          setSentences(wordsArr);
-          setSelectedWord("");
-        } catch (error) {
-          console.error("Error in initializeFillInTheBlank:", error);
-        }
-      }
-    };
-    initializeFillInTheBlank();
-  }, [contentId, parentWords]);
-
-  useEffect(() => {
-    const initializeAudio = async () => {
-      if (type === "audio" && parentWords) {
-        setDisabledWords(true);
-        setSelectedWord("");
-        try {
-          await getSimilarWords(parentWords);
-        } catch (error) {
-          console.error("Error in initializeAudio:", error);
-        }
-      }
-    };
-    initializeAudio();
-  }, [contentId, parentWords]);
-
-  const getSimilarWords = async (wordForFindingHomophones) => {
-    const lang = getLocalData("lang");
-    // const isFillInTheBlanks = type === "fillInTheBlank";
-    const wordToSimilar = wordForFindingHomophones
-      ? wordForFindingHomophones
-      : parentWords;
-
-    if (lang === "en") {
-      const finder = new HomophonesFinder();
-      const homophones = await finder.find(wordToSimilar);
-      let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
-      setWords(randomizeArray(wordsArr));
-    } else {
-      let wordsToShow = [];
-      if (type == "audio") {
-        wordsToShow = allWords?.filter((elem) => elem != wordToSimilar);
-      }
-      if (type == "fillInTheBlank") {
-        wordsToShow = allWords
-          ?.join(" ")
-          ?.split(" ")
-          .filter((elem) => elem !== wordToSimilar && elem.length > 2);
-      }
-
-      wordsToShow = randomizeArray(wordsToShow).slice(0, 2);
-      wordsToShow.push(wordToSimilar);
-      setWords(randomizeArray(wordsToShow));
-    }
-  };
-
-  const handleWord = (word, removeWord) => {
-    if (removeWord) {
-      setWords([...words, word]);
-      setSelectedWord("");
-      setEnableNext(false);
-    } else {
-      let wordsArr = [...words];
-
-      if (type !== "audio") {
-        let index = wordsArr?.findIndex((elem) => elem === word);
-        if (index !== -1) {
-          wordsArr?.splice(index, 1);
-        }
-      }
-
-      if (selectedWord && type !== "audio") {
-        wordsArr.push(selectedWord);
-      }
-
-      // if (type === "audio") {
-      const isSoundCorrect = word === wordToCheck;
-      let audio = new Audio(isSoundCorrect ? correctSound : wrongSound);
-      if (!isSoundCorrect) {
-        setEnableNext(false);
-      }
-      audio.play();
-      setShake(true);
-      setTimeout(() => {
-        setShake(false);
-      }, 800);
-      // }
-
-      setWords(wordsArr);
-      setSelectedWord(word);
-    }
-  };
 
   useEffect(() => {
     if (!enableNext) {
@@ -224,20 +122,11 @@ const Mechanics2 = ({
     ? 0
     : currrentProgress / duration;
 
-  const getEnableButton = () => {
-    if (type === "fillInTheBlank") {
-      return enableNext;
-    }
-    if (type === "audio") {
-      return selectedWord === wordToCheck;
-    }
-    return false;
-  };
   return (
     <MainLayout
       background={background}
       handleNext={handleNext}
-      enableNext={getEnableButton()}
+      enableNext={enableNext}
       showTimer={showTimer}
       points={points}
       pageName={"m3"}
@@ -354,17 +243,15 @@ const Mechanics2 = ({
                   xs: "relative", // For extra small screens
                   sm: "relative", // For small screens
                   md: "relative", // For medium screens
-                  lg: "absolute", // Change as needed for large screens
-                  xl: "absolute", // Change as needed for extra-large screens
+                  lg: "relative", // Change as needed for large screens
+                  xl: "relative", // Change as needed for extra-large screens
                 },
                 left: {
                   xs: 0, // For extra small screens
                   sm: 0, // For small screens
                   md: "-40px", // Adjust position for medium screens
-                  lg: "40px",
-                },
-                mt: {
-                  lg: "300px",
+                  lg: "0px",
+                  xl: "0px",
                 },
               }}
             >
@@ -374,7 +261,7 @@ const Mechanics2 = ({
                   style={{
                     borderRadius: "20px",
                     maxWidth: "100%",
-                    height: "250px",
+                    height: "clamp(150px, 20vw, 220px)",
                   }}
                   alt=""
                 />
@@ -385,7 +272,8 @@ const Mechanics2 = ({
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                mt: { xs: "20px", sm: "40px" }, // Add margin-top to create space below the image
+                mt: { xs: "20px", sm: "40px" },
+                width: "75%",
               }}
             >
               <Typography
@@ -402,7 +290,7 @@ const Mechanics2 = ({
               >
                 {answer?.text !== "" ? (
                   <>
-                    {parentWords?.split("_____")[0]} {/* Before the blank */}
+                    {parentWords?.split(/_+/)[0]}
                     <span
                       className={!answer.isAns && shake ? "shakeImage" : ""}
                       style={{
@@ -422,7 +310,7 @@ const Mechanics2 = ({
                     >
                       {answer?.text}
                     </span>
-                    {parentWords?.split("_____")[1]} {/* After the blank */}
+                    {parentWords?.split(/_+/)[1]}
                   </>
                 ) : (
                   <>{parentWords}</>
@@ -438,52 +326,9 @@ const Mechanics2 = ({
           justifyContent: "center",
           marginTop: "20px",
           marginBottom: "30px",
+          flexWrap: "wrap",
         }}
       >
-        {type === "audio" &&
-          words?.map((elem, ind) => (
-            <Box
-              key={ind}
-              className={`${
-                type === "audio" && selectedWord === elem
-                  ? selectedWord === parentWords
-                    ? `audioSelectedWord`
-                    : `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
-                  : ""
-              }`}
-              onClick={() => handleWord(elem)}
-              sx={{
-                textAlign: "center",
-                px: "25px",
-                py: "12px",
-                // background: "transparent",
-                m: 1,
-                textTransform: "none",
-                borderRadius: "12px",
-                border: `1px solid rgba(51, 63, 97, 0.10)`,
-                background: "#FFF",
-                cursor: "pointer",
-                opacity: disabledWords ? 0.25 : 1,
-                pointerEvents: disabledWords ? "none" : "initial",
-              }}
-            >
-              <span
-                style={{
-                  color:
-                    type === "audio" && selectedWord === elem
-                      ? selectedWord === parentWords
-                        ? "#58CC02"
-                        : "#C30303"
-                      : "#333F61",
-                  fontWeight: 600,
-                  fontSize: "32px",
-                  fontFamily: "Quicksand",
-                }}
-              >
-                {elem}
-              </span>
-            </Box>
-          ))}
         <>
           {type === "fillInTheBlank" &&
             Array.isArray(options) &&
@@ -550,7 +395,7 @@ const Mechanics2 = ({
             dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={parentWords}
-            enableNext={getEnableButton()}
+            enableNext={enableNext}
             handleNext={handleNext}
             audioLink={audio ? audio : null}
             {...{
