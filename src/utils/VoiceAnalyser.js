@@ -501,6 +501,15 @@ function VoiceAnalyser(props) {
       );
 
       setApiResponse(callUpdateLearner ? data.status : "success");
+
+      if (
+        callUpdateLearner &&
+        (props.pageName === "wordsorimage" || props.pageName === "m5")
+      ) {
+        const isMatching =
+          responseText.toLowerCase() === originalText.toLowerCase();
+        props.updateStoredData(recordedAudio, isMatching);
+      }
       if (props.handleNext) {
         props.handleNext();
         if (temp_audio !== null) {
@@ -712,12 +721,6 @@ function VoiceAnalyser(props) {
             <Box
               sx={{ cursor: "pointer" }}
               onClick={() => {
-                if (
-                  props.pageName === "wordsorimage" ||
-                  props.pageName === "m5"
-                ) {
-                  props.updateStoredData(recordedAudio, isMatching);
-                }
                 if (props.setIsNextButtonCalled) {
                   props.setIsNextButtonCalled(true);
                 } else {
