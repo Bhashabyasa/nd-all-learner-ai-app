@@ -716,11 +716,11 @@ const Practice = () => {
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
         const length =
-          questions[currentQuestion]?.mechanics_data &&
-          (questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
-            "mechanic_2" ||
+          (questions[currentQuestion]?.mechanics_data &&
             questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
-              "mechanic_1")
+              "mechanic_2") ||
+          questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
+            "mechanic_1"
             ? 500
             : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
