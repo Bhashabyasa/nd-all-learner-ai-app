@@ -261,6 +261,7 @@ const Mechanics2 = ({
               <Box sx={{ position: "relative", cursor: "zoom-in" }}>
                 {image && (
                   <img
+                    onClick={() => setZoomOpen(true)}
                     src={image}
                     style={{
                       borderRadius: "20px",
