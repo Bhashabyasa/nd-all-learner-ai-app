@@ -232,7 +232,14 @@ const Mechanics5 = ({
               justifyContent: "center",
             }}
           >
-            <Box sx={{ position: "relative", outline: "none" }}>
+            <Box
+              sx={{
+                position: "relative",
+                outline: "none",
+                height: "500px",
+                width: "500px",
+              }}
+            >
               {/* Subtle gradient overlay at the top of the zoomed image */}
               <Box
                 sx={{
@@ -269,8 +276,9 @@ const Mechanics5 = ({
                 src={image}
                 alt="Zoomed content"
                 style={{
-                  maxWidth: "90vw",
-                  maxHeight: "90vh",
+                  // maxWidth: "90vw",
+                  // maxHeight: "90vh",
+                  width: "100%",
                   borderRadius: "8px",
                 }}
               />
