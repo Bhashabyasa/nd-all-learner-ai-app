@@ -38,7 +38,7 @@ const Practice = () => {
   const [questions, setQuestions] = useState([]);
   const [enableNext, setEnableNext] = useState(false);
   const [progressData, setProgressData] = useState({});
-  const [level, setLevel] = useState("");
+  const [level, setLevel] = useState(0);
   const [isShowCase, setIsShowCase] = useState(false);
   const [startShowCase, setStartShowCase] = useState(false);
   const limit = 5;
@@ -215,7 +215,9 @@ const Practice = () => {
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
-      const currentGetContent = levelGetContent?.[level]?.find(
+      const currentGetContent = levelGetContent[
+        localStorage.getItem("lang") || "en"
+      ]?.[level]?.find(
         (elem) => elem.title === practiceSteps?.[newPracticeStep]?.name
       );
 
@@ -319,6 +321,8 @@ const Practice = () => {
             (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
         );
 
+        //TODO: required only for S1 and S2
+
         setTotalSyllableCount(resGetContent?.data?.totalSyllableCount);
         setLivesData({
           ...livesData,
@@ -334,11 +338,17 @@ const Practice = () => {
           currentPracticeStep === 3 || currentPracticeStep === 8;
         setIsShowCase(showcaseLevel);
 
+        // TODO: API returns contents if 200 status
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
         setCurrentContentType(resGetContent?.data?.content?.[0]?.contentType);
         setCurrentCollectionId(resGetContent?.data?.content?.[0]?.collectionId);
+
+        // TODO: not required - not using this anywhere
         setAssessmentResponse(resGetContent);
+
         setCurrentQuestion(0);
+
+        // TODO: not required - we are geting this data from API
         practiceProgress[virtualId] = {
           currentQuestion: newQuestionIndex,
           currentPracticeProgress,
@@ -349,11 +359,14 @@ const Practice = () => {
         localStorage.setItem("storyTitle", resGetContent?.name);
 
         setQuestions(quesArr);
+
+        // TODO: needs to revisit this logic
         setTimeout(() => {
           setMechanism(currentGetContent.mechanism);
         }, 1000);
       } else if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
+
         practiceProgress[virtualId] = {
           currentQuestion: newQuestionIndex,
           currentPracticeProgress,
@@ -412,6 +425,9 @@ const Practice = () => {
       const getMilestoneDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
+
+      // TODO: validate the getMilestoneDetails API return
+
       setLocalData(
         "getMilestone",
         JSON.stringify({ ...getMilestoneDetails.data })
@@ -427,9 +443,14 @@ const Practice = () => {
       const resLessons = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
       );
+
+      // TODO: Handle Error for lessons - no lesson progress - starting point should be P1
+
       const getPointersDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
+
+      // TODO: Just Opss icon - we are trying to fetch the score for you
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
       let userState = Number.isInteger(
@@ -438,6 +459,7 @@ const Practice = () => {
         ? Number(resLessons.data?.result?.result?.lesson)
         : 0;
 
+      // TODO: revisit this - looks like not required
       let practiceProgress = getLocalData("practiceProgress");
       practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
 
@@ -447,7 +469,9 @@ const Practice = () => {
         currentPracticeStep: userState || 0,
       };
 
-      const currentGetContent = levelGetContent?.[level]?.find(
+      const currentGetContent = levelGetContent[
+        localStorage.getItem("lang") || "en"
+      ]?.[level]?.find(
         (elem) => elem.title === practiceSteps?.[userState].name
       );
 
@@ -461,6 +485,9 @@ const Practice = () => {
             : "") +
           (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
       );
+
+      // TODO: handle error if resWord is empty
+
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
         ...livesData,
@@ -545,7 +572,9 @@ const Practice = () => {
 
       setProgressData(practiceProgress[virtualId]);
 
-      const currentGetContent = levelGetContent?.[level]?.find(
+      const currentGetContent = levelGetContent[
+        localStorage.getItem("lang") || "en"
+      ]?.[level]?.find(
         (elem) => elem.title === practiceSteps?.[newCurrentPracticeStep].name
       );
       let quesArr = [];
@@ -717,8 +746,10 @@ const Practice = () => {
         const stringLengths = contentSourceData.map((item) => item.text.length);
         const length =
           questions[currentQuestion]?.mechanics_data &&
-          questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
-            "mechanic_2"
+          (questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
+            "mechanic_2" ||
+            questions[currentQuestion]?.mechanics_data[0]?.mechanics_id ===
+              "mechanic_1")
             ? 500
             : stringLengths[0];
         window.parent.postMessage({ type: "stringLengths", length }, "*");
@@ -953,7 +984,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism.name === "FormASentence") {
+    } else if (mechanism.name === "formASentence") {
       return (
         <Mechanics4
           page={page}

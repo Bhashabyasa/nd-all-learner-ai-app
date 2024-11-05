@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import MainLayout from "../Layouts.jsx/MainLayout";
 // import useSound from "use-sound";
@@ -133,7 +133,7 @@ const Mechanics4 = ({
       setSelectedWords([...selectedWords, word]);
       if (selectedWords?.length + 1 === wordsAfterSplit?.length) {
         let audio = new Audio(
-          [...selectedWords, word]?.join("") === parentWords
+          [...selectedWords, word]?.join(" ") === parentWords
             ? correctSound
             : wrongSound
         );
@@ -192,6 +192,7 @@ const Mechanics4 = ({
             minHeight: "75px",
             display: "flex",
             justifyContent: "center",
+            flexWrap: "wrap",
             alignItems: "center",
             borderRadius: "15px",
             border: `2px solid ${
@@ -241,7 +242,7 @@ const Mechanics4 = ({
                     ? "#C30303"
                     : "#333F61",
                 fontWeight: type === "word" ? 600 : 700,
-                fontSize: "40px",
+                fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)",
                 fontFamily: "Quicksand",
                 cursor: "pointer",
                 marginLeft:
@@ -253,9 +254,16 @@ const Mechanics4 = ({
           ))}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          mb: 3,
+        }}
+      >
         {words?.map((elem) => (
-          <>
+          <React.Fragment key={elem}>
             {type === "word" ? (
               <Box
                 onClick={() => handleWords(elem)}
@@ -263,20 +271,26 @@ const Mechanics4 = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "60px",
-                  minWidth: "60px",
+                  height: { xs: "50px", sm: "60px", md: "70px" },
+                  minWidth: { xs: "50px", sm: "60px", md: "70px" },
                   background: "#1897DE",
-                  m: 1,
+                  m: { xs: 0.5, sm: 1 },
                   cursor: "pointer",
                   borderRadius: "12px",
                   border: "5px solid #10618E",
+                  fontSize: { xs: "25px", sm: "30px", md: "35px", lg: "40px" },
                 }}
               >
                 <span
                   style={{
                     color: "white",
                     fontWeight: 600,
-                    fontSize: "40px",
+                    fontSize: {
+                      xs: "25px",
+                      sm: "35px",
+                      md: "40px",
+                      lg: "40px",
+                    },
                     fontFamily: "Quicksand",
                   }}
                 >
@@ -288,22 +302,21 @@ const Mechanics4 = ({
                 onClick={() => handleWords(elem)}
                 sx={{
                   textAlign: "center",
-                  px: "25px",
-                  py: "12px",
-                  // background: "transparent",
-                  m: 1,
+                  px: { xs: "15px", sm: "20px", md: "25px" },
+                  py: { xs: "8px", sm: "10px", md: "12px" },
+                  m: { xs: 0.5, sm: 1 },
                   textTransform: "none",
                   borderRadius: "12px",
                   border: `1px solid rgba(51, 63, 97, 0.10)`,
                   background: "#FFF",
                   cursor: "pointer",
+                  fontSize: { xs: "25px", sm: "30px", md: "35px", lg: "40px" },
                 }}
               >
                 <span
                   style={{
                     color: "#6F80B1",
                     fontWeight: 600,
-                    fontSize: "32px",
                     fontFamily: "Quicksand",
                   }}
                 >
@@ -311,9 +324,10 @@ const Mechanics4 = ({
                 </span>
               </Box>
             )}
-          </>
+          </React.Fragment>
         ))}
       </Box>
+
       {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
