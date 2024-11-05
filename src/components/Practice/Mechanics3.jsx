@@ -19,6 +19,7 @@ import { Modal } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import CloseIcon from "@mui/icons-material/Close";
 
+// TODO: update it as per File name OR update file name as per export variable name
 const Mechanics2 = ({
   page,
   setPage,
@@ -102,6 +103,7 @@ const Mechanics2 = ({
     setEnableNext(false);
   };
 
+  // TODO: Constants declaration Need to move up
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
   const [isReady, setIsReady] = React.useState(false);
@@ -120,6 +122,7 @@ const Mechanics2 = ({
     }
   };
 
+  // TODO: all the constants declaration Need to move up
   const [currrentProgress, setCurrrentProgress] = React.useState(0);
   const progressBarWidth = Number.isNaN(currrentProgress / duration)
     ? 0
