@@ -782,7 +782,7 @@ const MainLayout = (props) => {
                                 <Typography textAlign="center" sx={{ mt: 2 }}>
                                   You need{" "}
                                   <span style={{ fontWeight: "bold" }}>
-                                    {percentage <= 0 ? 70 : 70 - percentage}
+                                    {Math.abs(70 - percentage)}
                                   </span>{" "}
                                   more.
                                 </Typography>
