@@ -3,7 +3,7 @@ name: ALL tn new dev Deployment
 on:
   push:
     branches:
-      - all-1.3-tn-dev
+      - all-1.3-tn-dev-hotfix
 
 jobs:
   deploy:

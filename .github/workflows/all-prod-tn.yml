@@ -3,7 +3,7 @@ name: ALL tn staging Deployment
 on:
   push:
     branches:
-      - all-1.3-tn-prod
+      - all-1.3-tn-prod-hotfix
 
 jobs:
   deploy:
