@@ -3624,14 +3624,13 @@ export const levelGetContent = {
         template: "simple",
         competency: "L1.3",
         storyMode: true,
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
+        mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
         title: "P3",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P4",
@@ -3644,7 +3643,6 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P5",
@@ -3658,15 +3656,12 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
-        storyMode: true,
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P7",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P8",
@@ -3679,7 +3674,6 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
     ],
     7: [
@@ -3703,7 +3697,6 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P4",
@@ -3716,7 +3709,6 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P5",
@@ -3731,14 +3723,12 @@ export const levelGetContent = {
         template: "simple",
         competency: "L1.8",
         storyMode: true,
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P7",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P8",
@@ -3751,7 +3741,6 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
     ],
     8: [
