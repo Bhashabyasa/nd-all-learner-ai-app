@@ -315,7 +315,12 @@ const Practice = () => {
             (currentGetContent?.competency
               ? `&level_competency=${currentGetContent?.competency}`
               : "") +
-            (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+            (currentGetContent?.tags
+              ? `&tags=${currentGetContent?.tags}`
+              : "") +
+            (currentGetContent?.storyMode
+              ? `&story_mode=${currentGetContent?.storyMode}`
+              : "")
         );
 
         //TODO: required only for S1 and S2
@@ -480,7 +485,10 @@ const Practice = () => {
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
             : "") +
-          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "") +
+          (currentGetContent?.storyMode
+            ? `&story_mode=${currentGetContent?.storyMode}`
+            : "")
       );
 
       // TODO: handle error if resWord is empty
@@ -583,7 +591,10 @@ const Practice = () => {
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
             : "") +
-          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "") +
+          (currentGetContent?.storyMode
+            ? `&story_mode=${currentGetContent?.storyMode}`
+            : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({

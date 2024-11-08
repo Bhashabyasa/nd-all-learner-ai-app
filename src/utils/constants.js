@@ -3331,7 +3331,13 @@ export const practiceSteps = [
 export const levelGetContent = {
   en: {
     0: [
-      { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+      {
+        title: "P1",
+        criteria: "word",
+        template: "simple",
+        tags: "CEFR_ENG",
+        storyMode: true,
+      },
       { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
       { title: "P3", criteria: "word", template: "simple", tags: "CEFR_ENG" },
       { title: "P4", criteria: "word", template: "simple", tags: "CEFR_ENG" },
@@ -3343,7 +3349,13 @@ export const levelGetContent = {
       { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
     ],
     1: [
-      { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+      {
+        title: "P1",
+        criteria: "word",
+        template: "simple",
+        tags: "CEFR_ENG",
+        storyMode: true,
+      },
       { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
       { title: "P3", criteria: "word", template: "simple", tags: "CEFR_ENG" },
       { title: "P4", criteria: "word", template: "simple", tags: "CEFR_ENG" },
@@ -3355,7 +3367,13 @@ export const levelGetContent = {
       { title: "S2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
     ],
     2: [
-      { title: "P1", criteria: "word", template: "simple", tags: "CEFR_ENG" },
+      {
+        title: "P1",
+        criteria: "word",
+        template: "simple",
+        tags: "CEFR_ENG",
+        storyMode: true,
+      },
       { title: "P2", criteria: "word", template: "simple", tags: "CEFR_ENG" },
       {
         title: "P3",
@@ -3392,6 +3410,7 @@ export const levelGetContent = {
         criteria: "word",
         template: "simple",
         tags: "CEFR_ENG",
+        storyMode: true,
       },
       {
         title: "P2",
@@ -3454,6 +3473,7 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         competency: "L1.1",
+        storyMode: true,
         mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
@@ -3525,6 +3545,7 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         competency: "L1.5",
+        storyMode: true,
         mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
@@ -3595,18 +3616,22 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         competency: "L1.3",
+        storyMode: true,
       },
       {
         title: "P2",
         criteria: "sentence",
         template: "simple",
         competency: "L1.3",
+        storyMode: true,
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P3",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P4",
@@ -3619,24 +3644,29 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P5",
         criteria: "sentence",
         template: "simple",
         competency: "L1.3",
+        storyMode: true,
       },
       {
         title: "P6",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
+        storyMode: true,
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P7",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P8",
@@ -3649,6 +3679,7 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.3",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
     ],
     7: [
@@ -3657,18 +3688,22 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         competency: "L1.8",
+        storyMode: true,
       },
       {
         title: "P2",
         criteria: "sentence",
         template: "simple",
         competency: "L1.8",
+        storyMode: true,
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P3",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P4",
@@ -3681,24 +3716,29 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P5",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        storyMode: true,
       },
       {
         title: "P6",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        storyMode: true,
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P7",
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P8",
@@ -3711,6 +3751,7 @@ export const levelGetContent = {
         criteria: "paragraph",
         template: "simple",
         competency: "L1.8",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
     ],
     8: [
