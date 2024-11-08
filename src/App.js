@@ -74,28 +74,17 @@ const App = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       // Destructure the message data
-      const { token, buddyToken, messageType, contentSessionId, virtualId } =
-        event.data;
-
-      // Check if the expected data exists
+      const { messageType, localStorageKeyValue } = event.data;
       if (messageType === "customData") {
-        if (token) {
-          localStorage.setItem("token", token);
-        }
-        if (buddyToken) {
-          localStorage.setItem("buddyToken", buddyToken);
-        }
-        if (contentSessionId) {
-          localStorage.setItem("contentSessionId", contentSessionId);
-        }
-        if (virtualId) {
-          localStorage.setItem("virtualId", virtualId);
+        for (const item of localStorageKeyValue) {
+          const key = item.key;
+          const value = item.value;
+
+          localStorage.setItem(key, value);
         }
       }
     };
-
     window.addEventListener("message", handleMessage);
-
     return () => {
       window.removeEventListener("message", handleMessage);
     };
