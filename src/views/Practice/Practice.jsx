@@ -933,7 +933,8 @@ const Practice = () => {
           setPage={setPage}
           {...{
             level: !isShowCase && level,
-            header: "Study the picture and speak the correct answer from below",
+            header:
+              "Look at the picture and speak the correct answer from below",
             parentWords: mechanics_data
               ? mechanics_data[0].text
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
