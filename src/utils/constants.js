@@ -3429,6 +3429,8 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         tags: "CEFR_ENG",
+        competency: "L1.1",
+        mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
         title: "S1",
@@ -3440,13 +3442,11 @@ export const levelGetContent = {
         title: "P5",
         criteria: "sentence",
         template: "simple",
-        mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
         title: "P6",
         criteria: "sentence",
         template: "simple",
-        mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
         title: "P7",
@@ -3459,6 +3459,8 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         tags: "CEFR_ENG",
+        competency: "L1.1",
+        mechanism: { id: "mechanic_1", name: "fillInTheBlank" },
       },
       {
         title: "S2",
@@ -3560,13 +3562,13 @@ export const levelGetContent = {
         criteria: "sentence",
         template: "simple",
         competency: "L1.5",
+        mechanism: { id: "mechanic_2", name: "readTheImage" },
       },
       {
         title: "P4",
         criteria: "sentence",
         template: "simple",
-        competency: "L1.6",
-        mechanism: { id: "mechanic_2", name: "readTheImage" },
+        competency: "L1.5",
       },
       {
         title: "S1",
@@ -3630,19 +3632,16 @@ export const levelGetContent = {
         title: "P3",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "P4",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "S1",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "P5",
@@ -3655,25 +3654,21 @@ export const levelGetContent = {
         title: "P6",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "P7",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "P8",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
       {
         title: "S2",
         criteria: "paragraph",
         template: "simple",
-        competency: "L1.3",
       },
     ],
     7: [
