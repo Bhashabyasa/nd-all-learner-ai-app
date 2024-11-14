@@ -21,7 +21,7 @@ import pauseButton from "../../assets/pause.png";
 import {
   GreenTick,
   HeartBlack,
-  HeartRed,
+  Diamond,
   LevelEight,
   LevelFive,
   LevelFour,
@@ -373,7 +373,7 @@ const MainLayout = (props) => {
                     <Box display={"flex"}>
                       {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
                         (elem) => (
-                          <HeartRed />
+                          <Diamond />
                         )
                       )}
 
