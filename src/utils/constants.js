@@ -3148,6 +3148,13 @@ export const HeartBlack = (props) => (
   </svg>
 );
 
+export function getParameter(key, location) {
+  if (key) {
+    const query = new URLSearchParams(location);
+    return query.get(key);
+  }
+}
+
 export const SessionID = "13900744731701973109305";
 export const UserID = "1390074473";
 
