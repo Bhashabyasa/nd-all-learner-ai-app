@@ -14,6 +14,7 @@ import {
   SelectLanguageButton,
   StartAssessmentButton,
   getLocalData,
+  getParameter,
   languages,
   levelConfig,
   setLocalData,
@@ -602,7 +603,14 @@ const Assesment = ({ discoverStart }) => {
       })();
     } else {
       (async () => {
-        const virtualId = getLocalData("virtualId");
+        let virtualId;
+
+        if (getParameter("virtualId", window.location.search)) {
+          virtualId = getParameter("virtualId", window.location.search);
+        } else {
+          virtualId = localStorage.getItem("virtualId");
+        }
+        localStorage.setItem("virtualId", virtualId);
         const language = lang;
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
