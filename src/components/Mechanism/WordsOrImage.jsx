@@ -243,7 +243,7 @@ const WordsOrImage = ({
                   lineHeight: "50px",
                 }}
               >
-                {words[0].toUpperCase() + words.slice(1) || ""}
+                {words ? words[0].toUpperCase() + words.slice(1) : ""}
               </Typography>
             )}
             {matchedChar && (
