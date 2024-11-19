@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site":"nd-dev-ekstep-bhashabyasa",
-    "public": "dist",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
