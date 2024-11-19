@@ -564,6 +564,12 @@ const Assesment = ({ discoverStart }) => {
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
+    console.log(
+      "klaslakslklska",
+      discoverStart,
+      username,
+      localStorage.getItem("virtualId")
+    );
     if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
         setLocalData("profileName", username);
@@ -573,6 +579,8 @@ const Assesment = ({ discoverStart }) => {
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
+
+        console.log(getMilestoneDetails);
 
         localStorage.setItem(
           "getMilestone",
@@ -596,6 +604,7 @@ const Assesment = ({ discoverStart }) => {
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
         );
+
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
         dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
@@ -638,6 +647,7 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
+    console.log(profileName);
     if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
@@ -673,7 +683,6 @@ const Assesment = ({ discoverStart }) => {
     backgroundSize: "auto",
     position: "relative",
   };
-
   return (
     <>
       {!!openMessageDialog && (
