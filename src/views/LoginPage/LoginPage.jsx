@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   // Get the value of the 'token' parameter
   const usernameFromUrl = urlParams.get("username");
-
+  console.log(usernameFromUrl);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +37,7 @@ const LoginPage = () => {
     }
   };
   useEffect(() => {
-    if (usernameFromUrl !== "") {
+    if (usernameFromUrl !== "" && usernameFromUrl !== null) {
       handleAutoLogin(usernameFromUrl);
     }
   }, [usernameFromUrl]);
