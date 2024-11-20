@@ -22,7 +22,7 @@ const LoginPage = () => {
       );
 
       if (usernameDetails?.data?.result?.virtualID) {
-        localStorage.setItem("profileName", username);
+        localStorage.setItem("profileName", props);
         localStorage.setItem(
           "virtualId",
           usernameDetails?.data?.result?.virtualID
