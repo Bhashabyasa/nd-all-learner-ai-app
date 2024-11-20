@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
@@ -6,9 +6,41 @@ import config from "../../utils/urlConstants.json";
 import "./LoginPage.css"; // Import the CSS file
 
 const LoginPage = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Get the value of the 'token' parameter
+  const usernameFromUrl = urlParams.get("username");
+
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleAutoLogin = async (props) => {
+    try {
+      const usernameDetails = await axios.post(
+        `https://all-learnerai-tn-dev.theall.ai/all-orchestration-services/${config.URLS.GET_VIRTUAL_ID}?username=${props}`
+      );
+
+      if (usernameDetails?.data?.result?.virtualID) {
+        localStorage.setItem("profileName", username);
+        localStorage.setItem(
+          "virtualId",
+          usernameDetails?.data?.result?.virtualID
+        );
+        navigate("/discover-start");
+      } else {
+        alert("Enter correct username and password");
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
+  useEffect(() => {
+    if (usernameFromUrl !== "") {
+      handleAutoLogin(usernameFromUrl);
+    }
+  }, [usernameFromUrl]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
