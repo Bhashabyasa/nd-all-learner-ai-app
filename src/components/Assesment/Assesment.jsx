@@ -564,12 +564,7 @@ const Assesment = ({ discoverStart }) => {
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
-    console.log(
-      "klaslakslklska",
-      discoverStart,
-      username,
-      localStorage.getItem("virtualId")
-    );
+
     if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
         setLocalData("profileName", username);

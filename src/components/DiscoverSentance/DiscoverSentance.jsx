@@ -265,7 +265,7 @@ const SpeakSentenceComponent = () => {
         // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
         const resAssessment = await axios.post(
-          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
+          `${config.URLS.GET_ASSESSMENT}`,
           {
             ...{ tags: ["ASER"], language: lang },
           }
@@ -276,7 +276,7 @@ const SpeakSentenceComponent = () => {
         );
 
         const resPagination = await axios.get(
-          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
+          `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
         );
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount);

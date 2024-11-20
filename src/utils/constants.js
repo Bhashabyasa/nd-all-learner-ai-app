@@ -4440,7 +4440,7 @@ const AllLanguages = [
 ];
 
 const appLanguages = process.env.REACT_APP_LANGUAGES
-  ? ["en", "ta"]
+  ? ["kn", "ta"]
   : //  JSON.parse(process.env.REACT_APP_LANGUAGES)
     [];
 
