@@ -100,7 +100,6 @@ const SpeakSentenceComponent = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    console.log("score", score);
     if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
       window.parent.postMessage(
         {
@@ -120,8 +119,6 @@ const SpeakSentenceComponent = () => {
       const lang = getLocalData("lang");
 
       if (!(localStorage.getItem("contentSessionId") !== null)) {
-        console.log("if ");
-
         const pointsRes = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
           {
@@ -132,11 +129,8 @@ const SpeakSentenceComponent = () => {
             milestone: "m0",
           }
         );
-        console.log("pointsRes", pointsRes);
         setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
       } else {
-        console.log("else ");
-
         send(1);
         // setPoints(localStorage.getItem("currentLessonScoreCount"));
       }
@@ -276,7 +270,6 @@ const SpeakSentenceComponent = () => {
             ...{ tags: ["ASER"], language: lang },
           }
         );
-        console.log("resAssessment", resAssessment);
 
         const sentences = resAssessment?.data?.data?.find(
           (elem) => elem.category === "Sentence"
