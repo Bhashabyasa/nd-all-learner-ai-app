@@ -70,6 +70,7 @@ function VoiceAnalyser(props) {
   const [isStudentAudioPlaying, setIsStudentAudioPlaying] = useState(false);
   const [temp_Student_audio, set_temp_Student_audio] = useState(null);
   const { callUpdateLearner } = props;
+  console.log("callUpdateLearner", callUpdateLearner);
   const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
@@ -270,6 +271,7 @@ function VoiceAnalyser(props) {
   }, [recordedAudio]);
 
   useEffect(() => {
+    console.log("props.isNextButtonCalled", props.isNextButtonCalled);
     if (props.isNextButtonCalled) {
       if (recordedAudioBase64 !== "") {
         const lang = getLocalData("lang") || "ta";
@@ -364,9 +366,11 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          `https://all-learnerai-tn-dev.theall.ai/lais/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           requestBody
         );
+
+        console.log("updateLearnerData", updateLearnerData);
 
         //TODO: handle  Errors
 
