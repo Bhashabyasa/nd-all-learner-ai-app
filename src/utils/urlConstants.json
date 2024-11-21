@@ -6,7 +6,7 @@
         "GET_ASSESSMENT": "https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment",
         "ADD_POINTER": "api/pointer/addPoints",
         "ADD_LESSON": "api/lesson/addLesson",
-        "GET_SET_RESULT": "scores/getSetResult",
+        "GET_SET_RESULT": "lais/scores/getSetResult",
         "GET_PAGINATION": "https://www.learnerai-dev.theall.ai/content-service/v1/content/pagination",
         "UPDATE_LEARNER_PROFILE": "scores/updateLearnerProfile",
         "GET_CONTENT": "lais/scores/GetContent",
@@ -14,3 +14,5 @@
         "CREATE_LEARNER_PROGRESS": "api/learnerProgress/createLearnerProgress"
     }
 }
+
+

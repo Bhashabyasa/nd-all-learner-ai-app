@@ -219,7 +219,7 @@ const SpeakSentenceComponent = () => {
             (elem) => elem.category === "Word"
           );
           const resWordsPagination = await axios.get(
-            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.collectionId}`
+            `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.collectionId}`
           );
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
