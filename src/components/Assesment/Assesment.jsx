@@ -871,7 +871,7 @@ const Assesment = ({ discoverStart }) => {
           }}
         >
           <iframe
-            src="https://www.youtube.com/embed/fEHF_SL331U?autoplay=1"
+            src={process.env.REACT_APP_SHOW_HELP_VIDEO_LINK}
             title="YouTube video"
             frameBorder="0"
             allow="autoplay; encrypted-media"
