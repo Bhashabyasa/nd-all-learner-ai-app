@@ -68,6 +68,7 @@ function VoiceAnalyser(props) {
   const [currentIndex, setCurrentIndex] = useState();
   const [temp_audio, set_temp_audio] = useState(null);
   const [isStudentAudioPlaying, setIsStudentAudioPlaying] = useState(false);
+  const [temp_Student_audio, set_temp_Student_audio] = useState(null);
   const { callUpdateLearner } = props;
   const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
@@ -107,7 +108,11 @@ function VoiceAnalyser(props) {
       audio.addEventListener("canplaythrough", () => {
         set_temp_audio(audio);
         setPauseAudio(val);
-        audio.play();
+        if (val) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
       });
 
       audio.addEventListener("error", (e) => {
@@ -127,19 +132,49 @@ function VoiceAnalyser(props) {
     }
     try {
       const audio = new Audio(recordedAudio);
-
-      if (val) {
-        audio.play();
-        setIsStudentAudioPlaying(true);
-        audio.onended = () => setIsStudentAudioPlaying(false);
-      } else {
-        audio.pause();
+      audio.addEventListener("canplaythrough", () => {
+        setIsStudentAudioPlaying(val);
+        set_temp_Student_audio(audio);
+        if (val) {
+          audio.play();
+          audio.onended = () => setIsStudentAudioPlaying(false);
+        } else {
+          audio.pause();
+        }
+      });
+      audio.addEventListener("error", (e) => {
+        console.error("Audio failed to load", e);
         setIsStudentAudioPlaying(false);
-      }
+        alert("Failed to load the audio. Please try again.");
+      });
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (temp_Student_audio !== null) {
+      if (!isStudentAudioPlaying) {
+        temp_Student_audio.pause();
+        props.setVoiceAnimate(false);
+      } else {
+        temp_Student_audio.play();
+        props.setVoiceAnimate(true);
+      }
+      temp_Student_audio.onended = function () {
+        setPauseAudio(false);
+        props.setVoiceAnimate(false);
+      };
+      temp_Student_audio.addEventListener("ended", () =>
+        setIsStudentAudioPlaying(false)
+      );
+    }
+    return () => {
+      if (temp_Student_audio !== null) {
+        temp_Student_audio.pause();
+      }
+    };
+  }, [temp_Student_audio]);
 
   useEffect(() => {
     if (temp_audio !== null) {
@@ -472,6 +507,17 @@ function VoiceAnalyser(props) {
       );
 
       setApiResponse(callUpdateLearner ? data.status : "success");
+
+      if (
+        callUpdateLearner &&
+        (props.pageName === "wordsorimage" || props.pageName === "m5")
+      ) {
+        const isMatching =
+          data?.createScoreData?.session?.error_rate?.character === 0;
+        if (typeof props.updateStoredData === "function") {
+          props.updateStoredData(recordedAudio, isMatching);
+        }
+      }
       if (props.handleNext) {
         props.handleNext();
         if (temp_audio !== null) {
@@ -677,28 +723,24 @@ function VoiceAnalyser(props) {
           }
         })()
       )}
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        {props.enableNext && (
-          <Box
-            sx={{ cursor: "pointer" }}
-            onClick={() => {
-              if (
-                props.pageName === "wordsorimage" ||
-                props.pageName === "m5"
-              ) {
-                props.updateStoredData(recordedAudio, isMatching);
-              }
-              if (props.setIsNextButtonCalled) {
-                props.setIsNextButtonCalled(true);
-              } else {
-                props.handleNext();
-              }
-            }}
-          >
-            <NextButtonRound />
-          </Box>
-        )}
-      </Box>
+      {!loader && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          {props.enableNext && (
+            <Box
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                if (props.setIsNextButtonCalled) {
+                  props.setIsNextButtonCalled(true);
+                } else {
+                  props.handleNext();
+                }
+              }}
+            >
+              <NextButtonRound />
+            </Box>
+          )}
+        </Box>
+      )}
     </div>
   );
 }
