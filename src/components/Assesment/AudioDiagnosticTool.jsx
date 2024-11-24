@@ -338,7 +338,7 @@ function AudioDiagnosticTool() {
               </thead>
               <tbody>
                 {idealRanges.map((range, index) => (
-                  <tr key={index}>
+                  <tr key={range}>
                     <td
                       style={{
                         border: "1px solid lightgrey",
@@ -409,7 +409,7 @@ function AudioDiagnosticTool() {
             Latency Test
           </span>
           {!isRecording && !audioBlob && (
-            <div onClick={startRecording} role="button">
+            <div onClick={startRecording} role="button" tabIndex="0">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -443,7 +443,7 @@ function AudioDiagnosticTool() {
             Noise Level Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording} role="button">
+            <div onClick={startRecording} role="button" tabIndex="0">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -477,7 +477,7 @@ function AudioDiagnosticTool() {
             Audio Quality Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording} role="button">
+            <div onClick={startRecording} role="button" tabIndex="0">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
