@@ -411,6 +411,10 @@ function AudioDiagnosticTool() {
           {!isRecording && !audioBlob && (
             <div
               onClick={startRecording}
+              //onClick={audioBlob}
+              // style={{
+              //   margin: "20px 10px",
+              // }}
               role="button"
               tabIndex="0"
               onKeyDown={(e) => {
@@ -454,10 +458,13 @@ function AudioDiagnosticTool() {
           {!isRecording && (
             <div
               onClick={startRecording}
+              // style={{
+              //   padding: "20px 10px",
+              // }}
               role="button"
               tabIndex="0"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === "1") {
                   startRecording();
                 }
               }}
@@ -498,9 +505,12 @@ function AudioDiagnosticTool() {
             <div
               onClick={startRecording}
               role="button"
+              // style={{
+              //   margin: "20px 10px",
+              // }}
               tabIndex="0"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === " ") {
                   startRecording();
                 }
               }}
