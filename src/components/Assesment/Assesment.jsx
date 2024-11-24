@@ -622,6 +622,7 @@ export const ProfileHeader = ({
                     e.target.style.transform = "scale(1)";
                   }}
                   role="button"
+                  tabIndex="0"
                 >
                   <span style={{ fontWeight: "bold", marginBottom: "2px" }}>
                     ?
