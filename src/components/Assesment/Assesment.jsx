@@ -621,6 +621,7 @@ export const ProfileHeader = ({
                   onMouseLeave={(e) => {
                     e.target.style.transform = "scale(1)";
                   }}
+                  role="button"
                 >
                   <span style={{ fontWeight: "bold", marginBottom: "2px" }}>
                     ?

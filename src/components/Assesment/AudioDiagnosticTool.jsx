@@ -30,7 +30,6 @@ function AudioDiagnosticTool() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
-  const [report, setReport] = useState(null);
   const [latencyData, setLatencyData] = useState([]);
   const [latency, setLatency] = useState(null);
   const [testResults, setTestResults] = useState([]);
@@ -114,7 +113,6 @@ function AudioDiagnosticTool() {
     blobToAudioBuffer(audioBlob)
       .then(analyzeAudioBuffer)
       .then((analysisReport) => {
-        setReport(analysisReport);
         setTestResults((prev) => [
           ...prev,
           { test: "Noise Level", result: analysisReport.noiseLevelDescription },
@@ -257,7 +255,7 @@ function AudioDiagnosticTool() {
           </span>
           <ul>
             {testResults.map((result, index) => (
-              <li key={index}>
+              <li key={result.test}>
                 <span
                   style={{
                     fontWeight: 600,
@@ -411,7 +409,7 @@ function AudioDiagnosticTool() {
             Latency Test
           </span>
           {!isRecording && !audioBlob && (
-            <div onClick={startRecording}>
+            <div onClick={startRecording} role="button">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -445,7 +443,7 @@ function AudioDiagnosticTool() {
             Noise Level Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording}>
+            <div onClick={startRecording} role="button">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -479,7 +477,7 @@ function AudioDiagnosticTool() {
             Audio Quality Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording}>
+            <div onClick={startRecording} role="button">
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
