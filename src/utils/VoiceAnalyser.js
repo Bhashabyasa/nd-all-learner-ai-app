@@ -77,8 +77,6 @@ function VoiceAnalyser(props) {
   );
   const [isMatching, setIsMatching] = useState(false);
 
-  //console.log('audio', recordedAudio, isMatching);
-
   useEffect(() => {
     if (!props.enableNext) {
       setRecordedAudio("");
@@ -398,8 +396,6 @@ function VoiceAnalyser(props) {
         data?.createScoreData?.session?.count_diff?.character === 0
       );
 
-      //console.log('textss', recordedAudio, isMatching, responseText, originalText);
-
       const responseEndTime = new Date().getTime();
       const responseDuration = Math.round(
         (responseEndTime - responseStartTime) / 1000
@@ -664,8 +660,6 @@ function VoiceAnalyser(props) {
         //alert("Microphone Permission Denied");
       });
   };
-
-  //console.log('textss', recordedAudio, isMatching);
 
   return (
     <div>

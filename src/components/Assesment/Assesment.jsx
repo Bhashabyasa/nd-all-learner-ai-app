@@ -20,7 +20,7 @@ import {
 } from "../../utils/constants";
 import practicebg from "../../assets/images/practice-bg.svg";
 import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
-import { useEffect, useState, createRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
 // import { useDispatch } from 'react-redux';
 import { setVirtualId } from "../../store/slices/user.slice";
@@ -615,10 +615,12 @@ export const ProfileHeader = ({
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     transition: "background-color 0.3s, transform 0.3s",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.transform = "scale(1.1)")
-                  }
-                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "scale(1.1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "scale(1)";
+                  }}
                 >
                   <span style={{ fontWeight: "bold", marginBottom: "2px" }}>
                     ?

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import loaderGif from "../.././assets/Hourglass.gif";
 import record from "../.././assets/mic.png";
 import { StopButton } from "../../utils/constants";
@@ -316,7 +316,7 @@ function AudioDiagnosticTool() {
                       padding: "8px",
                       textAlign: "left",
                       fontWeight: 600,
-                      fontsize: "16px",
+                      fontSize: "16px",
                       fontFamily: "Quicksand",
                       borderTopLeftRadius: "10px",
                     }}
@@ -329,7 +329,7 @@ function AudioDiagnosticTool() {
                       padding: "8px",
                       textAlign: "left",
                       fontWeight: 600,
-                      fontsize: "16px",
+                      fontSize: "16px",
                       fontFamily: "Quicksand",
                       borderTopRightRadius: "10px",
                     }}
@@ -347,7 +347,7 @@ function AudioDiagnosticTool() {
                         padding: "8px",
                         textAlign: "left",
                         fontWeight: 600,
-                        fontsize: "16px",
+                        fontSize: "16px",
                         fontFamily: "Quicksand",
                         borderBottomLeftRadius:
                           index === idealRanges.length - 1 ? "10px" : "0",
@@ -361,7 +361,7 @@ function AudioDiagnosticTool() {
                         padding: "8px",
                         textAlign: "left",
                         fontWeight: 600,
-                        fontsize: "16px",
+                        fontSize: "16px",
                         fontFamily: "Quicksand",
                         borderBottomRightRadius:
                           index === idealRanges.length - 1 ? "10px" : "0",
