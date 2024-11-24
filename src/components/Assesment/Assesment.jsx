@@ -623,6 +623,11 @@ export const ProfileHeader = ({
                   }}
                   role="button"
                   tabIndex="0"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.target.style.transform = "scale(1)";
+                    }
+                  }}
                 >
                   <span style={{ fontWeight: "bold", marginBottom: "2px" }}>
                     ?

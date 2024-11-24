@@ -409,7 +409,16 @@ function AudioDiagnosticTool() {
             Latency Test
           </span>
           {!isRecording && !audioBlob && (
-            <div onClick={startRecording} role="button" tabIndex="0">
+            <div
+              onClick={startRecording}
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  startRecording();
+                }
+              }}
+            >
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -443,7 +452,16 @@ function AudioDiagnosticTool() {
             Noise Level Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording} role="button" tabIndex="0">
+            <div
+              onClick={startRecording}
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  startRecording();
+                }
+              }}
+            >
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
@@ -477,7 +495,16 @@ function AudioDiagnosticTool() {
             Audio Quality Test
           </span>
           {!isRecording && (
-            <div onClick={startRecording} role="button" tabIndex="0">
+            <div
+              onClick={startRecording}
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  startRecording();
+                }
+              }}
+            >
               <img src={record} alt={"Record"} style={{ height: "50px" }} />
             </div>
           )}
