@@ -377,6 +377,66 @@ function AudioDiagnosticTool() {
     }
   };
 
+  const TestSection = ({
+    title,
+    isRecording,
+    startRecording,
+    stopRecording,
+    record,
+    testIndex,
+    currentIndex,
+    loading,
+  }) => {
+    if (testIndex !== currentIndex || loading) return null;
+
+    return (
+      <div
+        style={{
+          margin: "20px 10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            margin: "20px 10px",
+            fontWeight: 600,
+            fontSize: "17px",
+            fontFamily: "Quicksand",
+            alignItems: "center",
+          }}
+        >
+          {title}
+        </span>
+        {!isRecording && (
+          <RecordingButton startRecording={startRecording} record={record} />
+        )}
+        {isRecording && (
+          <Box sx={{ cursor: "pointer" }} onClick={stopRecording}>
+            <StopButton />
+          </Box>
+        )}
+      </div>
+    );
+  };
+
+  const RecordingButton = ({ startRecording, record }) => (
+    <div
+      onClick={startRecording}
+      role="button"
+      tabIndex="0"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          startRecording();
+        }
+      }}
+    >
+      <img src={record} alt="Record" style={{ height: "50px" }} />
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -387,144 +447,37 @@ function AudioDiagnosticTool() {
       }}
     >
       {/* Show record button or next step button based on testIndex */}
-      {testIndex === 0 && !loading && (
-        <div
-          style={{
-            margin: "20px 10px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              margin: "20px 10px",
-              fontWeight: 600,
-              fontSize: "17px",
-              fontFamily: "Quicksand",
-              alignItems: "center",
-            }}
-          >
-            Latency Test
-          </span>
-          {!isRecording && !audioBlob && (
-            <div
-              onClick={startRecording}
-              //onClick={audioBlob}
-              // style={{
-              //   margin: "20px 10px",
-              // }}
-              role="button"
-              tabIndex="0"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  startRecording();
-                }
-              }}
-            >
-              <img src={record} alt={"Record"} style={{ height: "50px" }} />
-            </div>
-          )}
-          {isRecording && (
-            <Box sx={{ cursor: "pointer" }} onClick={stopRecording}>
-              <StopButton />
-            </Box>
-          )}
-        </div>
-      )}
 
-      {testIndex === 1 && !loading && (
-        <div
-          style={{
-            margin: "20px 10px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              margin: "20px 10px",
-              fontWeight: 600,
-              fontSize: "17px",
-              fontFamily: "Quicksand",
-              alignItems: "center",
-            }}
-          >
-            Noise Level Test
-          </span>
-          {!isRecording && (
-            <div
-              onClick={startRecording}
-              // style={{
-              //   padding: "20px 10px",
-              // }}
-              role="button"
-              tabIndex="0"
-              onKeyDown={(e) => {
-                if (e.key === "1") {
-                  startRecording();
-                }
-              }}
-            >
-              <img src={record} alt={"Record"} style={{ height: "50px" }} />
-            </div>
-          )}
-          {isRecording && (
-            <Box sx={{ cursor: "pointer" }} onClick={stopRecording}>
-              <StopButton />
-            </Box>
-          )}
-        </div>
-      )}
-
-      {testIndex === 2 && !loading && (
-        <div
-          style={{
-            margin: "20px 10px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              margin: "20px 10px",
-              fontWeight: 600,
-              fontSize: "17px",
-              fontFamily: "Quicksand",
-              alignItems: "center",
-            }}
-          >
-            Audio Quality Test
-          </span>
-          {!isRecording && (
-            <div
-              onClick={startRecording}
-              role="button"
-              // style={{
-              //   margin: "20px 10px",
-              // }}
-              tabIndex="0"
-              onKeyDown={(e) => {
-                if (e.key === " ") {
-                  startRecording();
-                }
-              }}
-            >
-              <img src={record} alt={"Record"} style={{ height: "50px" }} />
-            </div>
-          )}
-          {isRecording && (
-            <Box sx={{ cursor: "pointer" }} onClick={stopRecording}>
-              <StopButton />
-            </Box>
-          )}
-        </div>
-      )}
+      <TestSection
+        title="Latency Test"
+        isRecording={isRecording}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        record={record}
+        testIndex={testIndex}
+        currentIndex={0}
+        loading={loading}
+      />
+      <TestSection
+        title="Noise Level Test"
+        isRecording={isRecording}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        record={record}
+        testIndex={testIndex}
+        currentIndex={1}
+        loading={loading}
+      />
+      <TestSection
+        title="Audio Quality Test"
+        isRecording={isRecording}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        record={record}
+        testIndex={testIndex}
+        currentIndex={2}
+        loading={loading}
+      />
 
       {loading && (
         <div
