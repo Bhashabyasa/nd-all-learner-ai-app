@@ -208,7 +208,7 @@ const SpeakSentenceComponent = () => {
           );
           console.log("resSentencesPagination1");
           const resSentencesPagination = await axios.get(
-            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.collectionId}`
+            `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.collectionId}`
           );
           console.log("resSentencesPagination", resSentencesPagination);
           setCurrentContentType("Sentence");
