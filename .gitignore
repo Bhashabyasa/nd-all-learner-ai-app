@@ -7,8 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 
 #env
-
 .env
+
+env
 
 #build
 build
@@ -109,3 +110,4 @@ dist
 
 # TernJS port file
 .tern-port
+.env
