@@ -7,7 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 
 #env
+
 .env
+
 #build
 build
 

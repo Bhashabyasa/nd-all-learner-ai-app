@@ -87,7 +87,7 @@ const WordsOrImage = ({
     }
   };
   const [currrentProgress, setCurrrentProgress] = useState(0);
-
+  console.log("type", type);
   return (
     <MainLayout
       background={background}

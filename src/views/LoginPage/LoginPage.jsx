@@ -10,7 +10,6 @@ const LoginPage = () => {
 
   // Get the value of the 'token' parameter
   const usernameFromUrl = urlParams.get("username");
-  console.log(usernameFromUrl);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +17,7 @@ const LoginPage = () => {
   const handleAutoLogin = async (props) => {
     try {
       const usernameDetails = await axios.post(
-        `https://all-learnerai-tn-dev.theall.ai/all-orchestration-services/${config.URLS.GET_VIRTUAL_ID}?username=${props}`
+        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${props}`
       );
 
       if (usernameDetails?.data?.result?.virtualID) {
@@ -52,7 +51,7 @@ const LoginPage = () => {
 
     try {
       const usernameDetails = await axios.post(
-        `https://all-learnerai-tn-dev.theall.ai/all-orchestration-services/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
       );
 
       if (usernameDetails?.data?.result?.virtualID) {

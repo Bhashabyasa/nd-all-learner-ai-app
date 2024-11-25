@@ -107,6 +107,7 @@ function VoiceAnalyser(props) {
           : `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
       );
 
+      console.log(audio);
       audio.addEventListener("canplaythrough", () => {
         set_temp_audio(audio);
         setPauseAudio(val);
@@ -366,7 +367,7 @@ function VoiceAnalyser(props) {
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
-          `https://all-learnerai-tn-dev.theall.ai/lais/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          `${process.env.REACT_APP_LEARNER_AI_BASE_URL}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           requestBody
         );
 

@@ -37,6 +37,8 @@ const SpeakSentenceComponent = () => {
   const [totalSyllableCount, setTotalSyllableCount] = useState("");
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
+  console.log(questions?.length, "questions");
+
   const callConfettiAndPlay = () => {
     let audio = new Audio(LevelCompleteAudio);
     audio.play();
@@ -71,6 +73,7 @@ const SpeakSentenceComponent = () => {
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
         );
+        console.log("getPointersDetails", getPointersDetails);
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
       })();
     }
@@ -166,10 +169,18 @@ const SpeakSentenceComponent = () => {
         );
         setInitialAssesment(false);
         const { data: getSetData } = getSetResultRes;
+        console.log(
+          "🚀 ~ handleNext ~  getSetData.data.sessionResult:",
+          getSetData.data.sessionResult
+        );
+        console.log(
+          "🚀 ~ handleNext ~ getSetData.data.currentLevel :",
+          getSetData.data.currentLevel
+        );
         const data = JSON.stringify(getSetData?.data);
         Log(data, "discovery", "ET");
         if (process.env.REACT_APP_POST_LEARNER_PROGRESS === "true") {
-          await axios.post(
+          const updatelearnerProfile = await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
               userId: localStorage.getItem("virtualId"),
@@ -179,7 +190,10 @@ const SpeakSentenceComponent = () => {
               language: localStorage.getItem("lang"),
             }
           );
+          console.log("updatelearnerProfile", updatelearnerProfile);
+          updatelearnerProfile();
         }
+        console.log(sentencePassedCounter, "sentencePassedCounter");
         if (
           getSetData.data.sessionResult === "pass" &&
           currentContentType === "Sentence" &&
@@ -192,9 +206,11 @@ const SpeakSentenceComponent = () => {
           const sentences = assessmentResponse?.data?.data?.filter(
             (elem) => elem.category === "Sentence"
           );
+          console.log("resSentencesPagination1");
           const resSentencesPagination = await axios.get(
-            `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.collectionId}`
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.collectionId}`
           );
+          console.log("resSentencesPagination", resSentencesPagination);
           setCurrentContentType("Sentence");
           setTotalSyllableCount(
             resSentencesPagination?.data?.totalSyllableCount
@@ -218,9 +234,13 @@ const SpeakSentenceComponent = () => {
           const words = assessmentResponse?.data?.data?.find(
             (elem) => elem.category === "Word"
           );
+          console.log("🚀 ~ resWordsPagination1");
+
           const resWordsPagination = await axios.get(
-            `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.collectionId}`
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.collectionId}`
           );
+          console.log("🚀 ~ resWordsPagination:", resWordsPagination);
+
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
           setCurrentCollectionId(words?.collectionId);
@@ -264,20 +284,36 @@ const SpeakSentenceComponent = () => {
         // const resPara = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/paragraph/${UserID}`);
         // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
+
         const resAssessment = await axios.post(
-          `${config.URLS.GET_ASSESSMENT}`,
+          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
           {
             ...{ tags: ["ASER"], language: lang },
           }
         );
+        console.log("🚀 ~ resAssessment:", resAssessment);
+
+        // const resAssessment = await axios.post(
+        //   `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_ASSESSMENT}`,
+        //   {
+        //     ...{ tags: ["ASER",'set1'], language: lang },
+        //   }
+        // );
 
         const sentences = resAssessment?.data?.data?.find(
           (elem) => elem.category === "Sentence"
         );
 
+        // const sentences = resAssessment?.data?.data?.find(
+        //   (elem) => elem.category === "Word"
+        // );
+
         const resPagination = await axios.get(
-          `${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
+          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
         );
+
+        console.log("🚀 ~ resPagination:", resPagination);
+
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
@@ -286,13 +322,13 @@ const SpeakSentenceComponent = () => {
         quesArr = [...quesArr, ...(resPagination?.data?.data || [])];
         // quesArr[1].contentType = 'image';
         // quesArr[0].contentType = 'phonics';
-        console.log("quesArr", quesArr);
         setQuestions(quesArr);
       } catch (error) {
         console.log("err", error);
       }
     })();
   }, []);
+
   const handleBack = () => {
     const destination =
       process.env.REACT_APP_IS_APP_IFRAME === "true" ? "/" : "/discover-start";

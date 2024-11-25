@@ -916,6 +916,7 @@ const Practice = () => {
           : null;
 
       const mechanics_data = questions[currentQuestion]?.mechanics_data;
+
       return (
         <Mechanics5
           page={page}

@@ -8,12 +8,8 @@ import back from "../../assets/images/back-arrow.svg";
 import discoverEndLeft from "../../assets/images/discover-end-left.svg";
 import discoverEndRight from "../../assets/images/discover-end-right.svg";
 import textureImage from "../../assets/images/textureImage.png";
-import {
-  LetsStart,
-  getLocalData,
-  setLocalData,
-} from "../../utils/constants";
-import config from '../../utils/urlConstants.json';
+import { LetsStart, getLocalData, setLocalData } from "../../utils/constants";
+import config from "../../utils/urlConstants.json";
 
 const sectionStyle = {
   backgroundImage: `url(${textureImage})`,
@@ -34,7 +30,6 @@ const SpeakSentenceComponent = () => {
   const [level, setLevel] = useState("");
 
   useEffect(() => {
-    
     (async () => {
       let audio = new Audio(LevelCompleteAudio);
       audio.play();
@@ -44,6 +39,7 @@ const SpeakSentenceComponent = () => {
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
+
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
     })();
@@ -54,10 +50,10 @@ const SpeakSentenceComponent = () => {
 
   const handleProfileBack = () => {
     try {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-        navigate("/")
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+        navigate("/");
       } else {
-        navigate("/discover-start")
+        navigate("/discover-start");
       }
     } catch (error) {
       console.error("Error posting message:", error);
@@ -132,7 +128,7 @@ const SpeakSentenceComponent = () => {
           </Typography>
 
           <Box
-           onClick={() => handleProfileBack()}
+            onClick={() => handleProfileBack()}
             sx={{
               display: "flex",
               justifyContent: "center",
