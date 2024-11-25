@@ -563,6 +563,7 @@ const Assesment = ({ discoverStart }) => {
     setLocalData("lang", lang);
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
+
     localStorage.setItem("sessionId", contentSessionId);
 
     if (discoverStart && username && !localStorage.getItem("virtualId")) {
@@ -575,7 +576,7 @@ const Assesment = ({ discoverStart }) => {
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
 
-        console.log(getMilestoneDetails);
+        console.log("getMilestoneDetails", getMilestoneDetails);
 
         localStorage.setItem(
           "getMilestone",

@@ -219,6 +219,7 @@ const MainLayout = (props) => {
       : livesData?.lives;
 
   const navigate = useNavigate();
+
   return (
     <Box sx={sectionStyle}>
       <ProfileHeader

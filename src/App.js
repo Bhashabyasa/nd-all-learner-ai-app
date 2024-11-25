@@ -9,6 +9,7 @@ import theme from "./assets/styles/theme";
 import { initialize } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
 import "@project-sunbird/telemetry-sdk/index.js";
+import axios from "axios";
 
 const App = () => {
   const ranonce = useRef(false);
@@ -70,11 +71,7 @@ const App = () => {
 
     setFp();
   }, []);
-  const urlParams = new URLSearchParams(window.location.search);
 
-  // Get the value of the 'token' parameter
-  const usernameFromUrl = urlParams.get("username");
-  console.log("usernameFromUrl", usernameFromUrl);
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
