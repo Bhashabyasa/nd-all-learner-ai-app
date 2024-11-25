@@ -651,7 +651,6 @@ const Assesment = ({ discoverStart }) => {
     if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
       window.parent.postMessage(
         {
-          helpVideo: process.env.REACT_APP_SHOW_HELP_VIDEO_LINK,
           message: "help-video-link",
         },
         "*"
