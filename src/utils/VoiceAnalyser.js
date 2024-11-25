@@ -77,8 +77,6 @@ function VoiceAnalyser(props) {
   );
   const [isMatching, setIsMatching] = useState(false);
 
-  //console.log('audio', recordedAudio, isMatching);
-
   useEffect(() => {
     if (!props.enableNext) {
       setRecordedAudio("");
@@ -389,13 +387,17 @@ function VoiceAnalyser(props) {
         }
       }
 
-      if (responseText.toLowerCase() === originalText.toLowerCase()) {
-        setIsMatching(true);
-      } else {
-        setIsMatching(false);
-      }
+      //console.log('dataaaa', data);
 
-      //console.log('textss', recordedAudio, isMatching, responseText, originalText);
+      // if (responseText.toLowerCase() === originalText.toLowerCase()) {
+      //   setIsMatching(true);
+      // } else {
+      //   setIsMatching(false);
+      // }
+
+      setIsMatching(
+        data?.createScoreData?.session?.count_diff?.character === 0
+      );
 
       const responseEndTime = new Date().getTime();
       const responseDuration = Math.round(
@@ -662,8 +664,6 @@ function VoiceAnalyser(props) {
         //alert("Microphone Permission Denied");
       });
   };
-
-  //console.log('textss', recordedAudio, isMatching);
 
   return (
     <div>

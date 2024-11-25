@@ -114,6 +114,7 @@ const MainLayout = (props) => {
     progressData,
     showProgress,
     setOpenLangModal,
+    setOpenTestModal,
     lang,
     handleBack,
     disableScreen,
@@ -222,7 +223,14 @@ const MainLayout = (props) => {
   return (
     <Box sx={sectionStyle}>
       <ProfileHeader
-        {...{ level: LEVEL, setOpenLangModal, lang, points, handleBack }}
+        {...{
+          level: LEVEL,
+          setOpenLangModal,
+          setOpenTestModal,
+          lang,
+          points,
+          handleBack,
+        }}
       />
 
       {LEVEL && (
@@ -1179,6 +1187,7 @@ MainLayout.propTypes = {
   isShowCase: PropTypes.bool,
   showProgress: PropTypes.bool,
   setOpenLangModal: PropTypes.func,
+  setOpenTestModal: PropTypes.func,
   points: PropTypes.number,
   handleNext: PropTypes.any,
   enableNext: PropTypes.bool,

@@ -49,6 +49,7 @@ import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
 import { end } from "../../services/telementryService";
+import AudioDiagnosticTool from "./AudioDiagnosticTool";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -216,6 +217,96 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   );
 };
 
+export const TestModal = ({ setOpenTestModal }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        background: "rgba(0, 0, 0, 0.5)",
+        zIndex: 9999,
+      }}
+    >
+      <Box
+        sx={{
+          width: "750px",
+          minHeight: "424px",
+          borderRadius: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundImage: `url(${textureImage})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "round",
+          boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
+          backdropFilter: "blur(25px)",
+        }}
+      >
+        <Box
+          sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+          mt={2}
+          mb={1}
+          mr={3}
+        >
+          <Box
+            onClick={() => {
+              setOpenTestModal(false);
+            }}
+            sx={{
+              cursor: "pointer",
+              background: "red",
+              width: "25px",
+              height: "25px",
+              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "2px solid black", // Add black border
+            }}
+          >
+            <span
+              style={{
+                color: "#FFFFFF",
+                fontWeight: 600,
+                fontSize: "12px",
+                fontFamily: "Quicksand",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              X
+            </span>
+          </Box>
+        </Box>
+
+        <Box mt="32px">
+          <span
+            style={{
+              color: "#000000",
+              fontWeight: 600,
+              fontSize: "36px",
+              fontFamily: "Quicksand",
+              lineHeight: "45px",
+            }}
+          >
+            {`Audio Diagnostic`}
+          </span>
+        </Box>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <AudioDiagnosticTool />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 export const MessageDialog = ({
   message,
   closeDialog,
@@ -336,6 +427,7 @@ export const MessageDialog = ({
 
 export const ProfileHeader = ({
   setOpenLangModal,
+  setOpenTestModal,
   lang,
   profileName,
   points = 0,
@@ -494,36 +586,90 @@ export const ProfileHeader = ({
               </span>
             </Box>
           </Box> */}
-
-          <Box
-            mr={{ xs: "10px", sm: "90px" }}
-            onClick={() =>
-              setOpenLangModal
-                ? setOpenLangModal(true)
-                : setOpenMessageDialog({
-                    message: "go to homescreen to change language",
-                    dontShowHeader: true,
-                  })
-            }
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            <Box sx={{ position: "relative", cursor: "pointer" }}>
-              <SelectLanguageButton />
-              <Box sx={{ position: "absolute", top: 9, left: 20 }}>
-                <span
+            <Box
+              mr={{ xs: "15px", sm: "15px" }}
+              onClick={() =>
+                setOpenTestModal
+                  ? setOpenTestModal(true)
+                  : setOpenMessageDialog({
+                      message: "go to homescreen to change language",
+                      dontShowHeader: true,
+                    })
+              }
+            >
+              <Box sx={{ position: "relative", cursor: "pointer" }}>
+                <div
                   style={{
-                    color: "#000000",
-                    fontWeight: 700,
-                    fontSize: { xs: "14px", sm: "16px" },
-                    fontFamily: "Quicksand",
-                    lineHeight: "25px",
+                    display: "inline-flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    transition: "background-color 0.3s, transform 0.3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "scale(1.1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "scale(1)";
+                  }}
+                  role="button"
+                  tabIndex="0"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.target.style.transform = "scale(1)";
+                    }
                   }}
                 >
-                  {languages?.find((elem) => elem.lang === language)?.name ||
-                    "Select Language"}
-                </span>
+                  <span style={{ fontWeight: "bold", marginBottom: "2px" }}>
+                    ?
+                  </span>
+                </div>
               </Box>
             </Box>
-          </Box>
+            <Box
+              mr={{ xs: "10px", sm: "90px" }}
+              onClick={() =>
+                setOpenLangModal
+                  ? setOpenLangModal(true)
+                  : setOpenMessageDialog({
+                      message: "go to homescreen to change language",
+                      dontShowHeader: true,
+                    })
+              }
+            >
+              <Box sx={{ position: "relative", cursor: "pointer" }}>
+                <SelectLanguageButton />
+                <Box sx={{ position: "absolute", top: 9, left: 20 }}>
+                  <span
+                    style={{
+                      color: "#000000",
+                      fontWeight: 700,
+                      fontSize: { xs: "14px", sm: "16px" },
+                      fontFamily: "Quicksand",
+                      lineHeight: "25px",
+                    }}
+                  >
+                    {languages?.find((elem) => elem.lang === language)?.name ||
+                      "Select Language"}
+                  </span>
+                </Box>
+              </Box>
+            </Box>
+          </div>
           {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
             <CustomTooltip title="Logout">
               <Box>
@@ -559,6 +705,7 @@ const Assesment = ({ discoverStart }) => {
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
+  const [openTestModal, setOpenTestModal] = useState(false);
   const [lang, setLang] = useState(getLocalData("lang") || "en");
   const [points, setPoints] = useState(0);
 
@@ -711,10 +858,18 @@ const Assesment = ({ discoverStart }) => {
       {openLangModal && (
         <LanguageModal {...{ lang, setLang, setOpenLangModal }} />
       )}
+      {openTestModal && <TestModal {...{ setOpenTestModal }} />}
       {level > 0 ? (
         <Box style={sectionStyle}>
           <ProfileHeader
-            {...{ level, lang, setOpenLangModal, points, setOpenMessageDialog }}
+            {...{
+              level,
+              lang,
+              setOpenLangModal,
+              setOpenTestModal,
+              points,
+              setOpenMessageDialog,
+            }}
           />
           <Box>
             {process.env.REACT_APP_SHOW_HELP_VIDEO === "true" && (
@@ -783,6 +938,7 @@ const Assesment = ({ discoverStart }) => {
           backgroundImage={practicebg}
           {...{
             setOpenLangModal,
+            setOpenTestModal,
             lang,
             points,
           }}
