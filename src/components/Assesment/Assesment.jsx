@@ -647,14 +647,16 @@ const Assesment = ({ discoverStart }) => {
 
   const { virtualId } = useSelector((state) => state.user);
 
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
-
   const handleOpenVideo = () => {
-    setIsVideoOpen(true);
-  };
-
-  const handleCloseVideo = () => {
-    setIsVideoOpen(false);
+    if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
+      window.parent.postMessage(
+        {
+          helpVideo: process.env.REACT_APP_SHOW_HELP_VIDEO_LINK,
+          message: "help-video-link",
+        },
+        "*"
+      );
+    }
   };
 
   const navigate = useNavigate();
@@ -855,48 +857,6 @@ const Assesment = ({ discoverStart }) => {
           </Box>
         </MainLayout>
       )}
-      {/* Video Modal */}
-      <Dialog
-        open={isVideoOpen}
-        onClose={handleCloseVideo}
-        maxWidth="lg"
-        fullWidth
-      >
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            paddingTop: "56.25%", // Maintain 16:9 aspect ratio
-            backgroundColor: "black", // Optional: Ensure a dark background
-          }}
-        >
-          <iframe
-            src={process.env.REACT_APP_SHOW_HELP_VIDEO_LINK}
-            title="YouTube video"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </Box>
-        <IconButton
-          onClick={handleCloseVideo}
-          sx={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            zIndex: 1,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Dialog>
     </>
   );
 };
