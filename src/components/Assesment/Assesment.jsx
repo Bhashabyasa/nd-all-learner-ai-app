@@ -649,12 +649,35 @@ const Assesment = ({ discoverStart }) => {
 
   const handleOpenVideo = () => {
     if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
-      window.parent.postMessage(
-        {
-          message: "help-video-link",
-        },
-        "*"
-      );
+      let allowedOrigins = [];
+      try {
+        allowedOrigins = JSON.parse(
+          process.env.REACT_APP_PARENT_ORIGIN_URL || "[]"
+        );
+      } catch (error) {
+        console.error(
+          "Invalid JSON format in REACT_APP_PARENT_ORIGIN_URL:",
+          error
+        );
+      }
+
+      const parentOrigin =
+        window?.location?.ancestorOrigins?.[0] || window.parent.location.origin;
+
+      if (allowedOrigins.includes(parentOrigin)) {
+        try {
+          window.parent.postMessage(
+            {
+              message: "help-video-link",
+            },
+            parentOrigin
+          );
+        } catch (error) {
+          console.error("Error sending postMessage:", error);
+        }
+      } else {
+        console.warn(`Parent origin "${parentOrigin}" is not allowed.`);
+      }
     }
   };
 
