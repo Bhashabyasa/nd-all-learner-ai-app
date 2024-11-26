@@ -544,6 +544,7 @@ const Assesment = ({ discoverStart }) => {
   if (localStorage.getItem("token") !== null) {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
+    console.log("userDetails", userDetails);
     username = userDetails.student_name;
     setLocalData("profileName", username);
   }
