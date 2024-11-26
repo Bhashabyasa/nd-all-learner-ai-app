@@ -1,4 +1,4 @@
-name: ALL tn new dev Deployment
+name: ALL new tn dev Deployment
 
 on:
   push:
