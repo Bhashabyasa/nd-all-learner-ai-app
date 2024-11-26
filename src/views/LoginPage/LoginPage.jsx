@@ -10,30 +10,16 @@ const LoginPage = () => {
 
   // Get the value of the 'token' parameter
   const usernameFromUrl = urlParams.get("username");
+  const virtualIDFromUrl = urlParams.get("virtualID");
+
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleAutoLogin = async (props) => {
-    try {
-      const usernameDetails = await axios.post(
-        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${props}`
-      );
-
-      if (usernameDetails?.data?.result?.virtualID) {
-        localStorage.setItem("profileName", props);
-        localStorage.setItem(
-          "virtualId",
-          usernameDetails?.data?.result?.virtualID
-        );
-        navigate("/discover-start");
-      } else {
-        alert("Enter correct username and password");
-      }
-    } catch (error) {
-      console.error("Error occurred:", error);
-      alert("An error occurred. Please try again later.");
-    }
+    localStorage.setItem("profileName", usernameFromUrl);
+    localStorage.setItem("virtualId", virtualIDFromUrl);
+    navigate("/discover-start");
   };
   useEffect(() => {
     if (usernameFromUrl !== "" && usernameFromUrl !== null) {
