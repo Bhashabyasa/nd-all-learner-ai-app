@@ -12,11 +12,13 @@ const LoginPage = () => {
   const usernameFromUrl = urlParams.get("username");
   const virtualIDFromUrl = urlParams.get("virtualID");
 
+  console.log(usernameFromUrl, virtualIDFromUrl);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleAutoLogin = async (props) => {
+    localStorage.clear();
     localStorage.setItem("profileName", usernameFromUrl);
     localStorage.setItem("virtualId", virtualIDFromUrl);
     navigate("/discover-start");
