@@ -3,7 +3,11 @@ name: ALL tn staging Deployment
 on:
   push:
     branches:
+<<<<<<< HEAD
       - all-1.3-tn-staging
+=======
+      - all-1.3-tn-staging-hotfix
+>>>>>>> 2531baf655b4385e638bca59c9c8ca712b2ef90d
 
 jobs:
   deploy:
@@ -77,6 +81,12 @@ jobs:
           REACT_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
           REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
           REACT_APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
+<<<<<<< HEAD
+=======
+          REACT_APP_SHOW_HELP_VIDEO: ${{ vars.REACT_APP_SHOW_HELP_VIDEO }}
+          REACT_APP_PARENT_ORIGIN_URL: ${{ vars.REACT_APP_PARENT_ORIGIN_URL }}
+          REACT_APP_SHOW_HELP_VIDEO_LINK: ${{ vars.REACT_APP_SHOW_HELP_VIDEO_LINK }}
+>>>>>>> 2531baf655b4385e638bca59c9c8ca712b2ef90d
           CI: false # Disabling CI to not treat warnings as errors
         run: npm run build
 

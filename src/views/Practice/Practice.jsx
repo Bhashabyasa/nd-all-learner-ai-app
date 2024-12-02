@@ -315,7 +315,12 @@ const Practice = () => {
             (currentGetContent?.competency
               ? `&level_competency=${currentGetContent?.competency}`
               : "") +
-            (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+            (currentGetContent?.tags
+              ? `&tags=${currentGetContent?.tags}`
+              : "") +
+            (currentGetContent?.storyMode
+              ? `&story_mode=${currentGetContent?.storyMode}`
+              : "")
         );
 
         //TODO: required only for S1 and S2
@@ -480,7 +485,10 @@ const Practice = () => {
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
             : "") +
-          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "") +
+          (currentGetContent?.storyMode
+            ? `&story_mode=${currentGetContent?.storyMode}`
+            : "")
       );
 
       // TODO: handle error if resWord is empty
@@ -583,7 +591,10 @@ const Practice = () => {
           (currentGetContent?.competency
             ? `&level_competency=${currentGetContent?.competency}`
             : "") +
-          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "")
+          (currentGetContent?.tags ? `&tags=${currentGetContent?.tags}` : "") +
+          (currentGetContent?.storyMode
+            ? `&story_mode=${currentGetContent?.storyMode}`
+            : "")
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
@@ -923,7 +934,8 @@ const Practice = () => {
           setPage={setPage}
           {...{
             level: !isShowCase && level,
-            header: "Study the picture and speak the correct answer from below",
+            header:
+              "Look at the picture and speak the correct answer from below",
             parentWords: mechanics_data
               ? mechanics_data[0].text
               : questions[currentQuestion]?.contentSourceData?.[0]?.text,
