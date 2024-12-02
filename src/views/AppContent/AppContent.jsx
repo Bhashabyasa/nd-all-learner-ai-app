@@ -1,9 +1,17 @@
 import React, { useEffect, Fragment } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
+import { getParameter } from "../../utils/constants";
 
 const PrivateRoute = (props) => {
-  const virtualId = localStorage.getItem('virtualId');
+  let virtualId;
+
+  if (getParameter("virtualId", window.location.search)) {
+    virtualId = getParameter("virtualId", window.location.search);
+  } else {
+    virtualId = localStorage.getItem("virtualId");
+  }
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!virtualId && props.requiresAuth) {

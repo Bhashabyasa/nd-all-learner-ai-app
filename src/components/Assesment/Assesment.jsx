@@ -6,6 +6,7 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  Dialog,
 } from "../../../node_modules/@mui/material/index";
 import LogoutImg from "../../assets/images/logout.svg";
 import { styled } from "@mui/material/styles";
@@ -14,6 +15,7 @@ import {
   SelectLanguageButton,
   StartAssessmentButton,
   getLocalData,
+  getParameter,
   languages,
   levelConfig,
   setLocalData,
@@ -21,6 +23,9 @@ import {
 import practicebg from "../../assets/images/practice-bg.svg";
 import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
+import HelpLogo from "../../assets/help.png";
+import CloseIcon from "@mui/icons-material/Close";
+
 import axios from "../../../node_modules/axios/index";
 // import { useDispatch } from 'react-redux';
 import { setVirtualId } from "../../store/slices/user.slice";
@@ -608,7 +613,14 @@ const Assesment = ({ discoverStart }) => {
       })();
     } else {
       (async () => {
-        const virtualId = getLocalData("virtualId");
+        let virtualId;
+
+        if (getParameter("virtualId", window.location.search)) {
+          virtualId = getParameter("virtualId", window.location.search);
+        } else {
+          virtualId = localStorage.getItem("virtualId");
+        }
+        localStorage.setItem("virtualId", virtualId);
         const language = lang;
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
@@ -640,6 +652,40 @@ const Assesment = ({ discoverStart }) => {
   }, [lang]);
 
   const { virtualId } = useSelector((state) => state.user);
+
+  const handleOpenVideo = () => {
+    if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
+      let allowedOrigins = [];
+      try {
+        allowedOrigins = JSON.parse(
+          process.env.REACT_APP_PARENT_ORIGIN_URL || "[]"
+        );
+      } catch (error) {
+        console.error(
+          "Invalid JSON format in REACT_APP_PARENT_ORIGIN_URL:",
+          error
+        );
+      }
+
+      const parentOrigin =
+        window?.location?.ancestorOrigins?.[0] || window.parent.location.origin;
+
+      if (allowedOrigins.includes(parentOrigin)) {
+        try {
+          window.parent.postMessage(
+            {
+              message: "help-video-link",
+            },
+            parentOrigin
+          );
+        } catch (error) {
+          console.error("Error sending postMessage:", error);
+        }
+      } else {
+        console.warn(`Parent origin "${parentOrigin}" is not allowed.`);
+      }
+    }
+  };
 
   const navigate = useNavigate();
   const handleRedirect = () => {
@@ -700,45 +746,62 @@ const Assesment = ({ discoverStart }) => {
           <ProfileHeader
             {...{ level, lang, setOpenLangModal, points, setOpenMessageDialog }}
           />
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 60,
-              right: 0,
-              width: "237px",
-              height: "112px",
-              background: "rgba(255, 255, 255, 0.2)",
-              borderRadius: "20px 0px 0px 20px",
-              backdropFilter: "blur(3px)",
-            }}
-          >
-            <Box
-              sx={{
-                width: "165px",
-                height: "64px",
-                background: levelConfig[level].color,
-                borderRadius: "10px",
-                margin: "24px 48px 24px 24px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                boxShadow: `3px 3px 10px ${levelConfig[level].color}80`,
-              }}
-              onClick={handleRedirect}
-            >
-              <span
-                style={{
-                  color: "#F0EEEE",
-                  fontWeight: 600,
-                  fontSize: "20px",
-                  fontFamily: "Quicksand",
-                  lineHeight: "25px",
-                  textShadow: "#000 1px 0 10px",
+          <Box>
+            {process.env.REACT_APP_SHOW_HELP_VIDEO === "true" && (
+              <Box
+                onClick={handleOpenVideo}
+                sx={{
+                  position: "absolute",
+                  bottom: 40,
+                  right: 80,
+                  width: "237px",
+                  height: "112px",
+                  cursor: "pointer",
                 }}
               >
-                {`Start Level ${level}`}
-              </span>
+                <img src={HelpLogo} alt="help_video_link" />
+              </Box>
+            )}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 60,
+                right: 0,
+                width: "237px",
+                height: "112px",
+                background: "rgba(255, 255, 255, 0.2)",
+                borderRadius: "20px 0px 0px 20px",
+                backdropFilter: "blur(3px)",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "165px",
+                  height: "64px",
+                  background: levelConfig[level].color,
+                  borderRadius: "10px",
+                  margin: "24px 48px 24px 24px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  boxShadow: `3px 3px 10px ${levelConfig[level].color}80`,
+                }}
+                onClick={handleRedirect}
+              >
+                <span
+                  style={{
+                    color: "#F0EEEE",
+                    fontWeight: 600,
+                    fontSize: "20px",
+                    fontFamily: "Quicksand",
+                    lineHeight: "25px",
+                    textShadow: "#000 1px 0 10px",
+                  }}
+                >
+                  {`Start Level ${level}`}
+                </span>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -795,14 +858,29 @@ const Assesment = ({ discoverStart }) => {
                   : "Take the assessment to discover your level"}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                cursor: "pointer",
-                mt: { xs: 1, md: 2 },
-              }}
-              onClick={handleRedirect}
-            >
-              <StartAssessmentButton />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              {process.env.REACT_APP_SHOW_HELP_VIDEO === "true" && (
+                <Box
+                  onClick={handleOpenVideo}
+                  sx={{
+                    mt: { xs: 1, md: 1 },
+                    mr: { xs: 2, md: 2 },
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                >
+                  <img src={HelpLogo} alt="help_video_link" />
+                </Box>
+              )}
+              <Box
+                sx={{
+                  cursor: "pointer",
+                  mt: { xs: 1, md: 2 },
+                }}
+                onClick={handleRedirect}
+              >
+                <StartAssessmentButton />
+              </Box>
             </Box>
           </Box>
         </MainLayout>

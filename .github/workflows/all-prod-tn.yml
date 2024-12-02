@@ -3,7 +3,7 @@ name: ALL tn staging Deployment
 on:
   push:
     branches:
-      - all-1.3-tn-prod
+      - all-1.3-tn-prod-hotfix
 
 jobs:
   deploy:
@@ -75,6 +75,9 @@ jobs:
           REACT_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
           REACT_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
           REACT_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
+          REACT_APP_SHOW_HELP_VIDEO: ${{ vars.REACT_APP_SHOW_HELP_VIDEO }}
+          REACT_APP_PARENT_ORIGIN_URL: ${{ vars.REACT_APP_PARENT_ORIGIN_URL }}
+          REACT_APP_SHOW_HELP_VIDEO_LINK: ${{ vars.REACT_APP_SHOW_HELP_VIDEO_LINK }}
           CI: false  # Disabling CI to not treat warnings as errors
         run: npm run build
 
