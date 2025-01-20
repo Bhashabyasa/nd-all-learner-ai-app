@@ -134,8 +134,6 @@ const MainLayout = (props) => {
   const [audioPlaying, setAudioPlaying] = useState(null);
   const audioRefs = useRef([]);
 
-  //console.log('Main Layout Array', storedData, pageName);
-
   const handleAudioPlay = (index) => {
     const audioElem = audioRefs.current[index];
 

@@ -44,6 +44,7 @@ const Practice = () => {
   const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
+  // console.log("mechanism", mechanism);
 
   // const [play] = useSound(LevelCompleteAudio);
   const [livesData, setLivesData] = useState();
@@ -378,7 +379,7 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -536,7 +537,7 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log("err", error);
+      // console.log("err", error);
     }
   };
 
@@ -641,7 +642,7 @@ const Practice = () => {
     });
 
     let type = currentContentType?.toLowerCase();
-    // console.log(type, sentence, matchedChar);
+    // // console.log(type, sentence, matchedChar);
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "

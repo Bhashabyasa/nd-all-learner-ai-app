@@ -7,7 +7,7 @@
     "@aws-sdk/client-s3": "^3.388.0",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
-    "@fingerprintjs/fingerprintjs": "^4.2.2",
+    "@fingerprintjs/fingerprintjs": "^4.5.1",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.2",
     "@mui/styles": "^5.2.3",

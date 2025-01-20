@@ -70,7 +70,7 @@ function VoiceAnalyser(props) {
   const [isStudentAudioPlaying, setIsStudentAudioPlaying] = useState(false);
   const [temp_Student_audio, set_temp_Student_audio] = useState(null);
   const { callUpdateLearner } = props;
-  console.log("callUpdateLearner", callUpdateLearner);
+  // console.log("callUpdateLearner", callUpdateLearner);
   const lang = getLocalData("lang");
   const { livesData, setLivesData } = props;
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
@@ -78,7 +78,7 @@ function VoiceAnalyser(props) {
   );
   const [isMatching, setIsMatching] = useState(false);
 
-  //console.log('audio', recordedAudio, isMatching);
+  //// console.log('audio', recordedAudio, isMatching);
 
   useEffect(() => {
     if (!props.enableNext) {
@@ -107,7 +107,7 @@ function VoiceAnalyser(props) {
           : `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
       );
 
-      console.log(audio);
+      // console.log(audio);
       audio.addEventListener("canplaythrough", () => {
         set_temp_audio(audio);
         setPauseAudio(val);
@@ -151,7 +151,7 @@ function VoiceAnalyser(props) {
         alert("Failed to load the audio. Please try again.");
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -272,7 +272,7 @@ function VoiceAnalyser(props) {
   }, [recordedAudio]);
 
   useEffect(() => {
-    console.log("props.isNextButtonCalled", props.isNextButtonCalled);
+    // console.log("props.isNextButtonCalled", props.isNextButtonCalled);
     if (props.isNextButtonCalled) {
       if (recordedAudioBase64 !== "") {
         const lang = getLocalData("lang") || "ta";
@@ -371,7 +371,7 @@ function VoiceAnalyser(props) {
           requestBody
         );
 
-        console.log("updateLearnerData", updateLearnerData);
+        // console.log("updateLearnerData", updateLearnerData);
 
         //TODO: handle  Errors
 
@@ -401,7 +401,7 @@ function VoiceAnalyser(props) {
         setIsMatching(false);
       }
 
-      //console.log('textss', recordedAudio, isMatching, responseText, originalText);
+      //// console.log('textss', recordedAudio, isMatching, responseText, originalText);
 
       const responseEndTime = new Date().getTime();
       const responseDuration = Math.round(
@@ -542,7 +542,7 @@ function VoiceAnalyser(props) {
       }
       setRecordedAudioBase64("");
       setApiResponse("error");
-      console.log("err", error);
+      // console.log("err", error);
     }
   };
 
@@ -633,7 +633,7 @@ function VoiceAnalyser(props) {
         setLivesData(newLivesData);
       }
     } catch (e) {
-      console.log("error", e);
+      // console.log("error", e);
     }
   };
 
@@ -646,11 +646,11 @@ function VoiceAnalyser(props) {
   //   navigator.getUserMedia(
   //     { audio: true },
   //     () => {
-  //       console.log("Permission Granted");
+  //       // console.log("Permission Granted");
   //       setAudioPermission(true);
   //     },
   //     () => {
-  //       console.log("Permission Denied");
+  //       // console.log("Permission Denied");
   //       setAudioPermission(false);
   //       //alert("Microphone Permission Denied");
   //     }
@@ -663,13 +663,13 @@ function VoiceAnalyser(props) {
         setAudioPermission(true);
       })
       .catch((error) => {
-        console.log("Permission Denied");
+        // console.log("Permission Denied");
         setAudioPermission(false);
         //alert("Microphone Permission Denied");
       });
   };
 
-  //console.log('textss', recordedAudio, isMatching);
+  //// console.log('textss', recordedAudio, isMatching);
 
   return (
     <div>

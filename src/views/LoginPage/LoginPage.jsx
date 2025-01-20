@@ -12,7 +12,7 @@ const LoginPage = () => {
   const usernameFromUrl = urlParams.get("username");
   const virtualIDFromUrl = urlParams.get("virtualID");
 
-  console.log(usernameFromUrl, virtualIDFromUrl);
+  // console.log(usernameFromUrl, virtualIDFromUrl);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

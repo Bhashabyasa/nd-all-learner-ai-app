@@ -549,7 +549,6 @@ const Assesment = ({ discoverStart }) => {
   if (localStorage.getItem("token") !== null) {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
-    console.log("userDetails", userDetails);
     username = userDetails.student_name;
     setLocalData("profileName", username);
   }
@@ -581,8 +580,6 @@ const Assesment = ({ discoverStart }) => {
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
-
-        console.log("getMilestoneDetails", getMilestoneDetails);
 
         localStorage.setItem(
           "getMilestone",
@@ -690,7 +687,6 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    console.log(profileName);
     if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({

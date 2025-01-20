@@ -37,8 +37,6 @@ const SpeakSentenceComponent = () => {
   const [totalSyllableCount, setTotalSyllableCount] = useState("");
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
-  console.log(questions?.length, "questions");
-
   const callConfettiAndPlay = () => {
     let audio = new Audio(LevelCompleteAudio);
     audio.play();
@@ -73,7 +71,6 @@ const SpeakSentenceComponent = () => {
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
         );
-        console.log("getPointersDetails", getPointersDetails);
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
       })();
     }
@@ -169,14 +166,7 @@ const SpeakSentenceComponent = () => {
         );
         setInitialAssesment(false);
         const { data: getSetData } = getSetResultRes;
-        console.log(
-          "🚀 ~ handleNext ~  getSetData.data.sessionResult:",
-          getSetData.data.sessionResult
-        );
-        console.log(
-          "🚀 ~ handleNext ~ getSetData.data.currentLevel :",
-          getSetData.data.currentLevel
-        );
+
         const data = JSON.stringify(getSetData?.data);
         Log(data, "discovery", "ET");
         if (process.env.REACT_APP_POST_LEARNER_PROGRESS === "true") {
@@ -190,10 +180,8 @@ const SpeakSentenceComponent = () => {
               language: localStorage.getItem("lang"),
             }
           );
-          console.log("updatelearnerProfile", updatelearnerProfile);
           updatelearnerProfile();
         }
-        console.log(sentencePassedCounter, "sentencePassedCounter");
         if (
           getSetData.data.sessionResult === "pass" &&
           currentContentType === "Sentence" &&
@@ -206,11 +194,9 @@ const SpeakSentenceComponent = () => {
           const sentences = assessmentResponse?.data?.data?.filter(
             (elem) => elem.category === "Sentence"
           );
-          console.log("resSentencesPagination1");
           const resSentencesPagination = await axios.get(
             `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.[newSentencePassedCounter]?.collectionId}`
           );
-          console.log("resSentencesPagination", resSentencesPagination);
           setCurrentContentType("Sentence");
           setTotalSyllableCount(
             resSentencesPagination?.data?.totalSyllableCount
@@ -234,12 +220,10 @@ const SpeakSentenceComponent = () => {
           const words = assessmentResponse?.data?.data?.find(
             (elem) => elem.category === "Word"
           );
-          console.log("🚀 ~ resWordsPagination1");
 
           const resWordsPagination = await axios.get(
             `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${words?.collectionId}`
           );
-          console.log("🚀 ~ resWordsPagination:", resWordsPagination);
 
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.data?.totalSyllableCount);
@@ -269,7 +253,7 @@ const SpeakSentenceComponent = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -291,7 +275,6 @@ const SpeakSentenceComponent = () => {
             ...{ tags: ["ASER"], language: lang },
           }
         );
-        console.log("🚀 ~ resAssessment:", resAssessment);
 
         // const resAssessment = await axios.post(
         //   `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_ASSESSMENT}`,
@@ -312,8 +295,6 @@ const SpeakSentenceComponent = () => {
           `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
         );
 
-        console.log("🚀 ~ resPagination:", resPagination);
-
         setCurrentContentType("Sentence");
         setTotalSyllableCount(resPagination?.data?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
@@ -324,7 +305,7 @@ const SpeakSentenceComponent = () => {
         // quesArr[0].contentType = 'phonics';
         setQuestions(quesArr);
       } catch (error) {
-        console.log("err", error);
+        return error;
       }
     })();
   }, []);
