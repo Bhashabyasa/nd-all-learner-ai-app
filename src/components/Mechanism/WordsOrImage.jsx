@@ -55,6 +55,8 @@ const WordsOrImage = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [storedData, setStoredData] = useState([]);
 
+  //console.log('wordsORimage', words, storedData);
+
   const updateStoredData = (audio, isCorrect) => {
     if (audio && words) {
       const newEntry = {
@@ -85,7 +87,7 @@ const WordsOrImage = ({
     }
   };
   const [currrentProgress, setCurrrentProgress] = useState(0);
-  // console.log("type", type);
+
   return (
     <MainLayout
       background={background}

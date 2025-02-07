@@ -8,7 +8,7 @@ import {
 
 export function* handleSignin(action) {
   try {
-    // console.log(action.payload);
+    console.log(action.payload);
     const response = yield retry(0, 0, requestSignin, action.payload);
     const { data } = response;
 
@@ -22,22 +22,22 @@ export function* handleSignin(action) {
     localStorage.setItem("refreshToken", refresh);
 
     yield put(setUser({ userData }));
-    // console.log(userData);
+    console.log(userData);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 }
 
 export function* fetchOTP(action) {
   try {
-    // console.log(action.payload);
+    console.log(action.payload);
     const accessTokenObj = JSON.parse(localStorage.getItem("accessToken"));
-    // console.log(accessTokenObj);
+    console.log(accessTokenObj);
     const response = yield retry(0, 0, generateOtp, accessTokenObj.token);
 
     const { data } = response;
 
-    // console.log(data.tokens.otp);
+    console.log(data.tokens.otp);
     // Otp Token Save to local Storage
 
     const otp = JSON.stringify(data.tokens.otp);
@@ -45,24 +45,24 @@ export function* fetchOTP(action) {
 
     yield put(setOTPSent({ otpSent: true }));
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 }
 
 export function* handleVerifyOtp(action) {
   try {
-    // console.log(`handleVerifyOtp:: `, action.payload);
+    console.log(`handleVerifyOtp:: `, action.payload);
     const accessTokenObj = JSON.parse(localStorage.getItem("accessToken"));
     const otpTokenObj = JSON.parse(localStorage.getItem("otpToken"));
     action.payload.accessToken = accessTokenObj.token;
     action.payload.otpToken = otpTokenObj.token;
-    // console.log('access:', action.payload.accessToken);
-    // console.log('otpToken:', action.payload.otpToken);
+    console.log("access:", action.payload.accessToken);
+    console.log("otpToken:", action.payload.otpToken);
     yield retry(0, 0, verifyOtp, action.payload);
 
     yield put(setOtpVerified({ isOtpVerified: true }));
   } catch (error) {
     yield put(setOtpVerified({ isOtpVerified: false }));
-    // console.log(error);
+    console.log(error);
   }
 }

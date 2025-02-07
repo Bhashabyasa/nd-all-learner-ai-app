@@ -79,7 +79,7 @@ const Mechanics2 = ({
 
   const lang = getLocalData("lang");
 
-  //// console.log('Mechanics3', answer);
+  //console.log('Mechanics3', answer);
 
   useEffect(() => {
     if (!enableNext) {

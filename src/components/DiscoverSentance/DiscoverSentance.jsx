@@ -223,7 +223,6 @@ const SpeakSentenceComponent = () => {
           const resWordsPagination = await fetchPaginatedContent(
             words?.collectionId
           );
-
           setCurrentContentType("Word");
           setTotalSyllableCount(resWordsPagination?.totalSyllableCount);
           setCurrentCollectionId(words?.collectionId);
@@ -252,7 +251,7 @@ const SpeakSentenceComponent = () => {
         }
       }
     } catch (error) {
-      return error;
+      console.log(error);
     }
   };
 
@@ -266,10 +265,6 @@ const SpeakSentenceComponent = () => {
         const sentences = resAssessment?.data?.find(
           (elem) => elem.category === "Sentence"
         );
-
-        // const sentences = resAssessment?.data?.data?.find(
-        //   (elem) => elem.category === "Word"
-        // );
 
         if (!sentences?.collectionId) {
           console.error("No collection ID found for sentences.");
