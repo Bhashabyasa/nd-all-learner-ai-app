@@ -3,7 +3,7 @@
 {
     "URLS": {
         "GET_VIRTUAL_ID": "api/virtualId/generateVirtualID",
-        "GET_MILESTONE": "scores/getMilestone/user",
+        "GET_MILESTONE": "scores/getMilestone",
         "GET_POINTER": "api/pointer/getPoints",
         "GET_ASSESSMENT": "v1/content/getAssessment",
         "ADD_POINTER": "api/pointer/addPoints",

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import RecordRTC from "recordrtc";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ListenButton, RetryIcon, SpeakButton, StopButton } from "./constants";
 import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
 import playButton from "../../src/assets/listen.png";
 import pauseButton from "../../src/assets/pause.png";
+import PropTypes from "prop-types";
 
 const AudioRecorder = (props) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -12,6 +13,7 @@ const AudioRecorder = (props) => {
   const [audioBlob, setAudioBlob] = useState(null);
   const recorderRef = useRef(null);
   const mediaStreamRef = useRef(null);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     // Cleanup when component unmounts
@@ -26,12 +28,12 @@ const AudioRecorder = (props) => {
   }, []);
 
   const startRecording = async () => {
-    setStatus("recording");
-    if (props.setEnableNext) {
-      props.setEnableNext(false);
-    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (props.setEnableNext) {
+        props.setEnableNext(false);
+      }
+      setStatus("recording");
       mediaStreamRef.current = stream;
 
       // Use RecordRTC with specific configurations to match the blob structure
@@ -53,29 +55,29 @@ const AudioRecorder = (props) => {
   };
 
   const stopRecording = () => {
-    setStatus("inactive");
-    if (recorderRef.current) {
-      recorderRef.current.stopRecording(() => {
-        const blob = recorderRef.current.getBlob();
+    setShowLoader(true);
+    const timeoutId = setTimeout(() => {
+      setShowLoader(false);
+      setStatus("inactive");
+      if (recorderRef.current) {
+        recorderRef.current.stopRecording(() => {
+          const blob = recorderRef.current.getBlob();
+          if (blob) {
+            setAudioBlob(blob);
+            saveBlob(blob);
+          } else {
+            console.error("Failed to retrieve audio blob.");
+          }
+          if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+          }
+          setIsRecording(false);
+          props.setEnableNext?.(true);
+        });
+      }
+    }, 500);
 
-        if (blob) {
-          setAudioBlob(blob);
-          saveBlob(blob); // Persist the blob
-        } else {
-          console.error("Failed to retrieve audio blob.");
-        }
-
-        // Stop the media stream
-        if (mediaStreamRef.current) {
-          mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-        }
-
-        setIsRecording(false);
-      });
-    }
-    if (props.setEnableNext) {
-      props.setEnableNext(true);
-    }
+    return () => clearTimeout(timeoutId);
   };
 
   const saveBlob = (blob) => {
@@ -104,9 +106,13 @@ const AudioRecorder = (props) => {
                 >
                   <StopButton />
                 </Box>
-                <Box style={{ marginTop: "50px", marginBottom: "50px" }}>
-                  <RecordVoiceVisualizer />
-                </Box>
+                {showLoader ? (
+                  <div className="loader"></div>
+                ) : (
+                  <Box style={{ marginTop: "50px", marginBottom: "50px" }}>
+                    <RecordVoiceVisualizer />
+                  </Box>
+                )}
               </div>
             );
           } else {
@@ -119,7 +125,8 @@ const AudioRecorder = (props) => {
                 }}
                 className="game-action-button"
               >
-                {props?.originalText &&
+                {props.enableAfterLoad &&
+                  props?.originalText &&
                   (!props.dontShowListen || props.recordedAudio) && (
                     <>
                       {!props.isShowCase && (
@@ -175,17 +182,24 @@ const AudioRecorder = (props) => {
                   )}
 
                 <div>
-                  {props?.originalText && !props.showOnlyListen && (
-                    <Box
-                      marginLeft={
-                        !props.dontShowListen || props.recordedAudio
-                          ? "32px"
-                          : "0px"
-                      }
-                      sx={{ cursor: "pointer" }}
-                      onClick={startRecording}
-                    >
-                      {!props.recordedAudio ? <SpeakButton /> : <RetryIcon />}
+                  {props.enableAfterLoad ? (
+                    props?.originalText &&
+                    !props.showOnlyListen && (
+                      <Box
+                        marginLeft={
+                          !props.dontShowListen || props.recordedAudio
+                            ? "32px"
+                            : "0px"
+                        }
+                        sx={{ cursor: "pointer" }}
+                        onClick={startRecording}
+                      >
+                        {!props.recordedAudio ? <SpeakButton /> : <RetryIcon />}
+                      </Box>
+                    )
+                  ) : (
+                    <Box sx={{ display: "flex" }}>
+                      <CircularProgress size="3rem" sx={{ color: "#E15404" }} />
                     </Box>
                   )}
                 </div>
@@ -196,6 +210,13 @@ const AudioRecorder = (props) => {
       </div>
     </div>
   );
+};
+
+AudioRecorder.propTypes = {
+  enableAfterLoad: PropTypes.bool,
+  showOnlyListen: PropTypes.bool,
+  recordedAudio: PropTypes.string,
+  originalText: PropTypes.string,
 };
 
 export default AudioRecorder;

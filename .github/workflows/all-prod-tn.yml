@@ -3,11 +3,7 @@ name: ALL tn staging Deployment
 on:
   push:
     branches:
-<<<<<<< HEAD
-      - all-1.3-tn-prod
-=======
-      - all-1.3-tn-prod-hotfix
->>>>>>> 2531baf655b4385e638bca59c9c8ca712b2ef90d
+      - all-1.3.1-tn-prod
 
 jobs:
   deploy:
@@ -22,11 +18,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
-      - name: Install AWS CLI
-        run: |
-          sudo DEBIAN_FRONTEND=noninteractive apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
 
       - name: Configure AWS credentials
         run: |
@@ -79,12 +70,9 @@ jobs:
           REACT_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
           REACT_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
           REACT_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
-<<<<<<< HEAD
-=======
           REACT_APP_SHOW_HELP_VIDEO: ${{ vars.REACT_APP_SHOW_HELP_VIDEO }}
           REACT_APP_PARENT_ORIGIN_URL: ${{ vars.REACT_APP_PARENT_ORIGIN_URL }}
           REACT_APP_SHOW_HELP_VIDEO_LINK: ${{ vars.REACT_APP_SHOW_HELP_VIDEO_LINK }}
->>>>>>> 2531baf655b4385e638bca59c9c8ca712b2ef90d
           CI: false  # Disabling CI to not treat warnings as errors
         run: npm run build
 

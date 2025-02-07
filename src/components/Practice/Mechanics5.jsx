@@ -185,42 +185,44 @@ const Mechanics5 = ({
       >
         <Grid item xs={4} position="relative">
           {/* Image with full-width gradient overlay on top */}
-          <Box sx={{ position: "relative", cursor: "zoom-in" }}>
-            <img
-              src={image}
-              style={{
-                borderRadius: "20px",
-                maxWidth: "100%",
-                height: "250px",
-              }}
-              alt="contentImage"
-              onClick={() => setZoomOpen(true)} // Open modal on click
-            />
-
-            {/* Subtle gradient overlay across the top */}
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "40px", // Height of the gradient overlay
-                background:
-                  "linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent)",
-                borderTopLeftRadius: "20px",
-                borderTopRightRadius: "20px",
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: "8px",
-              }}
-            >
-              {/* Zoom icon positioned in the top-left corner */}
-              <ZoomInIcon
-                onClick={() => setZoomOpen(true)}
-                sx={{ color: "white", fontSize: "22px", cursor: "pointer" }}
+          {image?.split("/")?.[4] && (
+            <Box sx={{ position: "relative", cursor: "zoom-in" }}>
+              <img
+                src={image}
+                style={{
+                  borderRadius: "20px",
+                  maxWidth: "100%",
+                  height: "250px",
+                }}
+                alt="contentImage"
+                onClick={() => setZoomOpen(true)} // Open modal on click
               />
+
+              {/* Subtle gradient overlay across the top */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "40px", // Height of the gradient overlay
+                  background:
+                    "linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent)",
+                  borderTopLeftRadius: "20px",
+                  borderTopRightRadius: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "8px",
+                }}
+              >
+                {/* Zoom icon positioned in the top-left corner */}
+                <ZoomInIcon
+                  onClick={() => setZoomOpen(true)}
+                  sx={{ color: "white", fontSize: "22px", cursor: "pointer" }}
+                />
+              </Box>
             </Box>
-          </Box>
+          )}
 
           {/* Modal for zoomed image with gradient and close icon */}
           <Modal

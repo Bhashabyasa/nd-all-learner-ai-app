@@ -1,33 +1,71 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
-import config from "../../utils/urlConstants.json";
+import { fetchVirtualId } from "../../services/userservice/userService";
+import { jwtDecode } from "jwt-decode";
 import "./LoginPage.css"; // Import the CSS file
 
 const LoginPage = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  // Get the value of the 'token' parameter
-  const usernameFromUrl = urlParams.get("username");
-  const virtualIDFromUrl = urlParams.get("virtualID");
-
-  // console.log(usernameFromUrl, virtualIDFromUrl);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [virtualID, setVirtualID] = useState("");
+  const [token, setToken] = useState("");
 
-  const handleAutoLogin = async (props) => {
+  const handleAutoLogin = () => {
     localStorage.clear();
-    localStorage.setItem("profileName", usernameFromUrl);
-    localStorage.setItem("virtualId", virtualIDFromUrl);
+    localStorage.setItem("profileName", username);
+    localStorage.setItem("virtualId", virtualID);
+    localStorage.setItem("apiToken", token);
     navigate("/discover-start");
   };
+
   useEffect(() => {
-    if (usernameFromUrl !== "" && usernameFromUrl !== null) {
-      handleAutoLogin(usernameFromUrl);
+    const handleMessage = (event) => {
+      // console.log("Received message from origin:", event.origin);
+
+      // List all the trusted origins you expect messages from
+      const trustedOrigins = ["https://bhashabyasa.navadhiti.com"];
+
+      // Log each condition being checked
+      if (!trustedOrigins.includes(event.origin)) {
+        // console.log("Blocked message from an untrusted origin:", event.origin);
+        return;
+      }
+
+      const {
+        username: receivedUsername,
+        virtualID: receivedVirtualID,
+        token: receivedToken,
+      } = event.data;
+
+      if (receivedUsername && receivedVirtualID && receivedToken) {
+        setUsername(receivedUsername);
+        setVirtualID(receivedVirtualID);
+        setToken(receivedToken);
+        // console.log(
+        //   "All values received and set:",
+        //   receivedUsername,
+        //   receivedVirtualID,
+        //   receivedToken
+        // );
+      } else {
+        console.log("Incomplete data received, skipping state update.");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (username && virtualID && token) {
+      handleAutoLogin();
     }
-  }, [usernameFromUrl]);
+  }, [username, virtualID, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,11 +76,12 @@ const LoginPage = () => {
     localStorage.clear();
 
     try {
-      const usernameDetails = await axios.post(
-        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
-      );
+      const usernameDetails = await fetchVirtualId(username);
+      let token = usernameDetails?.result?.token;
+      localStorage.setItem("apiToken", token);
 
-      if (usernameDetails?.data?.result?.virtualID) {
+      const tokenDetails = jwtDecode(token);
+      if (tokenDetails?.virtual_id) {
         localStorage.setItem("profileName", username);
         localStorage.setItem(
           "virtualId",
@@ -53,7 +92,6 @@ const LoginPage = () => {
         alert("Enter correct username and password");
       }
     } catch (error) {
-      console.error("Error occurred:", error);
       alert("An error occurred. Please try again later.");
     }
   };

@@ -1,14 +1,14 @@
-name: ALL rig dev Deployment
+name: ALL temp rig staging Deployment
 
 on:
   push:
     branches:
-      - all-1.2
+      - all-1.4.0
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-dev-rig
+    environment: all-temp-staging
 
     steps:
       - name: Checkout code
@@ -18,11 +18,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-
-      - name: Install AWS CLI
-        run: |
-          sudo DEBIAN_FRONTEND=noninteractive apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
 
       - name: Configure AWS credentials
         run: |

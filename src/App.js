@@ -6,28 +6,19 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import routes from "./routes";
 import { AppContent } from "./views";
 import theme from "./assets/styles/theme";
-import { initialize } from "./services/telementryService";
+import { initialize, end } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
-import "@project-sunbird/telemetry-sdk/index.js";
-import { getParameter } from "./utils/constants";
+import "@tekdi/all-telemetry-sdk/index.js";
 
 const App = () => {
   const ranonce = useRef(false);
   useEffect(() => {
-    const initService = async () => {
-      var did;
-      if (localStorage.getItem("fpDetails_v2") !== null) {
-        let fpDetails_v2 = localStorage.getItem("fpDetails_v2");
-        did = fpDetails_v2.result;
-      } else {
-        did = localStorage.getItem("did");
-      }
-
+    const initService = async (visitorId) => {
       await initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: "", // Auth key to make  api calls
-          did: did, // Unique id to identify the device or browser
+          did: localStorage.getItem("deviceId") || visitorId, // Unique id to identify the device or browser
           uid: "anonymous",
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_ENV,
@@ -63,36 +54,29 @@ const App = () => {
       const fp = await FingerprintJS.load();
 
       const { visitorId } = await fp.get();
-      if (!localStorage.getItem("did")) {
-        localStorage.setItem("did", visitorId);
-      }
-      initService();
+      // //if (!localStorage.getItem("did")) {
+      //   localStorage.setItem("did", visitorId);
+      // //}
+      initService(visitorId);
     };
 
     setFp();
   }, []);
 
   useEffect(() => {
-    let virtualId;
+    const handleBeforeUnload = (event) => {
+      window.telemetry &&
+        window.telemetry.syncEvents &&
+        window.telemetry.syncEvents();
+    };
 
-    if (getParameter("virtualId", window.location.search)) {
-      virtualId = getParameter("virtualId", window.location.search);
-    } else {
-      virtualId = localStorage.getItem("virtualId");
-    }
-    localStorage.setItem("virtualId", virtualId);
+    // Add the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
-    const contentSessionId = getParameter(
-      "contentSessionId",
-      window.location.search
-    );
-    if (contentSessionId) {
-      localStorage.setItem("contentSessionId", contentSessionId);
-    }
-    const token = getParameter("token", window.location.search);
-    if (token) {
-      localStorage.setItem("token", token);
-    }
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   return (

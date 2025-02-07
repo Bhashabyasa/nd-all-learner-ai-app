@@ -33,6 +33,8 @@ import config from "./urlConstants.json";
 import { filterBadWords } from "./Badwords";
 import S3Client from "../config/awsS3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import usePreloadAudio from "../hooks/usePreloadAudio";
+import { updateLearnerProfile } from "../services/learnerAi/learnerAiService";
 /* eslint-disable */
 
 const AudioPath = {
@@ -63,6 +65,7 @@ function VoiceAnalyser(props) {
   const [pauseAudio, setPauseAudio] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState("");
   const [recordedAudioBase64, setRecordedAudioBase64] = useState("");
+  const [enableAfterLoad, setEnableAfterLoad] = useState(false);
   const [audioPermission, setAudioPermission] = useState(null);
   const [apiResponse, setApiResponse] = useState("");
   const [currentIndex, setCurrentIndex] = useState();
@@ -77,6 +80,8 @@ function VoiceAnalyser(props) {
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
   const [isMatching, setIsMatching] = useState(false);
+  const livesAddAudio = usePreloadAudio(livesAdd);
+  const livesCutAudio = usePreloadAudio(livesCut);
 
   //// console.log('audio', recordedAudio, isMatching);
 
@@ -278,9 +283,16 @@ function VoiceAnalyser(props) {
         const lang = getLocalData("lang") || "ta";
         fetchASROutput(lang, recordedAudioBase64);
         setLoader(true);
+        setEnableAfterLoad(false);
       }
     }
   }, [props.isNextButtonCalled]);
+
+  useEffect(() => {
+    if (props.originalText) {
+      setEnableAfterLoad(true);
+    }
+  }, [props.originalText]);
 
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
@@ -355,6 +367,7 @@ function VoiceAnalyser(props) {
         sub_session_id,
         contentId,
         contentType,
+        mechanics_id: localStorage.getItem("mechanism_id") || "",
       };
 
       if (props.selectedOption) {
@@ -366,15 +379,8 @@ function VoiceAnalyser(props) {
       }
 
       if (callUpdateLearner) {
-        const { data: updateLearnerData } = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_BASE_URL}${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
-          requestBody
-        );
-
-        // console.log("updateLearnerData", updateLearnerData);
-
+        const updateLearnerData = await updateLearnerProfile(lang, requestBody);
         //TODO: handle  Errors
-
         data = updateLearnerData;
         responseText = data.responseText;
         profanityWord = await filterBadWords(data.responseText);
@@ -626,7 +632,7 @@ function VoiceAnalyser(props) {
         } else {
           isLiveLost = false;
         }
-        const audio = new Audio(isLiveLost ? livesCut : livesAdd);
+        const audio = new Audio(isLiveLost ? livesCutAudio : livesAddAudio);
         audio.play();
 
         // Update the state or data structure with the new lives data.
@@ -701,6 +707,7 @@ function VoiceAnalyser(props) {
                     setEnableNext={props.setEnableNext}
                     showOnlyListen={props.showOnlyListen}
                     setOpenMessageDialog={props.setOpenMessageDialog}
+                    enableAfterLoad={enableAfterLoad}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>

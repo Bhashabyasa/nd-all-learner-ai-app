@@ -49,6 +49,9 @@ import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
 import { end } from "../../services/telementryService";
+import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
+import { fetchVirtualId } from "../../services/userservice/userService";
+import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -570,28 +573,24 @@ const Assesment = ({ discoverStart }) => {
     let contentSessionId = localStorage.getItem("contentSessionId");
 
     localStorage.setItem("sessionId", contentSessionId);
+    const TOKEN = localStorage.getItem("apiToken");
+    let virtualId;
+    if (TOKEN) {
+      const tokenDetails = jwtDecode(TOKEN);
+      virtualId = tokenDetails?.virtual_id;
+    }
 
-    if (discoverStart && username && !localStorage.getItem("virtualId")) {
+    if (discoverStart && username && !virtualId) {
       (async () => {
         setLocalData("profileName", username);
-        const usernameDetails = await axios.post(
-          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
-        );
-        const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
-        );
+        const usernameDetails = await fetchVirtualId(username);
+        const getMilestoneDetails = await getFetchMilestoneDetails(lang);
 
         localStorage.setItem(
           "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails.data })
+          JSON.stringify({ ...getMilestoneDetails })
         );
-        setLevel(
-          getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
-        );
-        localStorage.setItem(
-          "virtualId",
-          usernameDetails?.data?.result?.virtualID
-        );
+        setLevel(getMilestoneDetails?.data?.milestone_level?.replace("m", ""));
         let session_id = localStorage.getItem("sessionId");
 
         if (!session_id) {
@@ -600,36 +599,33 @@ const Assesment = ({ discoverStart }) => {
         }
 
         localStorage.setItem("lang", lang || "ta");
-        const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
-        );
-
-        setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+        if (
+          process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
+          localStorage.getItem("contentSessionId") !== null
+        ) {
+          fetchUserPoints()
+            .then((points) => {
+              setPoints(points);
+            })
+            .catch((error) => {
+              console.error("Error fetching user points:", error);
+              setPoints(0);
+            });
+        }
 
         dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
       })();
     } else {
       (async () => {
-        let virtualId;
-
-        if (getParameter("virtualId", window.location.search)) {
-          virtualId = getParameter("virtualId", window.location.search);
-        } else {
-          virtualId = localStorage.getItem("virtualId");
-        }
-        localStorage.setItem("virtualId", virtualId);
+        const virtualId = getLocalData("virtualId");
         const language = lang;
-        const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
-        );
+        const getMilestoneDetails = await getFetchMilestoneDetails(language);
         localStorage.setItem(
           "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails.data })
+          JSON.stringify({ ...getMilestoneDetails })
         );
         setLevel(
-          Number(
-            getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
-          )
+          Number(getMilestoneDetails?.data?.milestone_level?.replace("m", ""))
         );
         let sessionId = getLocalData("sessionId");
 
@@ -638,17 +634,30 @@ const Assesment = ({ discoverStart }) => {
           localStorage.setItem("sessionId", sessionId);
         }
 
-        if (virtualId) {
-          const getPointersDetails = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
-          );
-          setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+        if (
+          process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
+          virtualId &&
+          localStorage.getItem("contentSessionId") !== null
+        ) {
+          fetchUserPoints()
+            .then((points) => {
+              setPoints(points);
+            })
+            .catch((error) => {
+              console.error("Error fetching user points:", error);
+              setPoints(0);
+            });
         }
       })();
     }
   }, [lang]);
 
-  const { virtualId } = useSelector((state) => state.user);
+  const TOKEN = localStorage.getItem("apiToken");
+  let virtualId;
+  if (TOKEN) {
+    const tokenDetails = jwtDecode(TOKEN);
+    virtualId = JSON.stringify(tokenDetails?.virtual_id);
+  }
 
   const handleOpenVideo = () => {
     if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
@@ -833,6 +842,7 @@ const Assesment = ({ discoverStart }) => {
                 lineHeight: { xs: "36px", md: "62px" },
                 textAlign: "center",
               }}
+              fontSize={{ md: "40px", xs: "30px" }}
             >
               {discoverStart
                 ? "Let's test your language skills"
@@ -848,6 +858,7 @@ const Assesment = ({ discoverStart }) => {
                   lineHeight: { xs: "30px", md: "50px" },
                   textAlign: "center",
                 }}
+                fontSize={{ md: "30px", xs: "20px" }}
               >
                 {level > 0
                   ? `Take the assessment to complete Level ${level}.`
