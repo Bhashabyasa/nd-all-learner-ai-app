@@ -57,7 +57,6 @@ const Practice = () => {
   const limit = 5;
   const [disableScreen, setDisableScreen] = useState(false);
   const [mechanism, setMechanism] = useState("");
-  // console.log("mechanism", mechanism);
 
   const [livesData, setLivesData] = useState();
   const [gameOverData, setGameOverData] = useState();
@@ -346,7 +345,7 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     }
   };
 
@@ -494,7 +493,7 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      // console.log("err", error);
+      console.log("err", error);
     }
   };
 
@@ -597,7 +596,6 @@ const Practice = () => {
     });
 
     let type = currentContentType?.toLowerCase();
-    // console.log(type, sentence, matchedChar);
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
@@ -887,7 +885,6 @@ const Practice = () => {
           : null;
 
       const mechanics_data = questions[currentQuestion]?.mechanics_data;
-
       return (
         <Mechanics5
           page={page}

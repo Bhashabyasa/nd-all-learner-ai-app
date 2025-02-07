@@ -571,7 +571,6 @@ const Assesment = ({ discoverStart }) => {
     setLocalData("lang", lang);
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
-
     localStorage.setItem("sessionId", contentSessionId);
     const TOKEN = localStorage.getItem("apiToken");
     let virtualId;
@@ -613,11 +612,10 @@ const Assesment = ({ discoverStart }) => {
             });
         }
 
-        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
+        dispatch(setVirtualId(virtualId));
       })();
     } else {
       (async () => {
-        const virtualId = getLocalData("virtualId");
         const language = lang;
         const getMilestoneDetails = await getFetchMilestoneDetails(language);
         localStorage.setItem(
@@ -731,6 +729,7 @@ const Assesment = ({ discoverStart }) => {
     backgroundSize: "auto",
     position: "relative",
   };
+
   return (
     <>
       {!!openMessageDialog && (

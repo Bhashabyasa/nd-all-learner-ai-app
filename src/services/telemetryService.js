@@ -30,7 +30,7 @@ export const initialize = ({ did }) => {
         // ,
         // dispatcher : {
         //   dispatch: function (event) {
-        //     // console.log('Event', event);
+        //     console.log('Event', event);
         //   }
         // }
       },

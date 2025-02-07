@@ -94,7 +94,7 @@ const Mechanics2 = ({
     initializeAudio();
   }, [contentId, parentWords]);
 
-  //// console.log('Mechanics6');
+  //console.log('Mechanics6');
 
   const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");

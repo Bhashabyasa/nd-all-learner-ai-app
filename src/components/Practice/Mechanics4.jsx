@@ -83,7 +83,7 @@ const Mechanics4 = ({
     return words;
   }
 
-  //// console.log('Mechanics4');
+  //console.log('Mechanics4');
 
   useEffect(() => {
     let wordsArr = jumbleSentence(parentWords);

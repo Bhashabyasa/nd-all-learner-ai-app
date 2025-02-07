@@ -1,5 +1,3 @@
-
-
 {
     "URLS": {
         "GET_VIRTUAL_ID": "api/virtualId/generateVirtualID",
@@ -10,7 +8,7 @@
         "ADD_LESSON": "api/lesson/addLesson",
         "GET_SET_RESULT": "scores/getSetResult",
         "GET_PAGINATION": "v1/content/pagination",
-        "UPDATE_LEARNER_PROFILE": "lais/scores/updateLearnerProfile",
+        "UPDATE_LEARNER_PROFILE": "scores/updateLearnerProfile",
         "GET_CONTENT": "scores/GetContent",
         "GET_LESSON_PROGRESS_BY_ID": "api/lesson/getLessonProgressByUserId",
         "CREATE_LEARNER_PROGRESS": "api/learnerProgress/createLearnerProgress"

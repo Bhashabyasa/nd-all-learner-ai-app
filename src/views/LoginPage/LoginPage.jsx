@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
@@ -9,63 +9,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [virtualID, setVirtualID] = useState("");
-  const [token, setToken] = useState("");
-
-  const handleAutoLogin = () => {
-    localStorage.clear();
-    localStorage.setItem("profileName", username);
-    localStorage.setItem("virtualId", virtualID);
-    localStorage.setItem("apiToken", token);
-    navigate("/discover-start");
-  };
-
-  useEffect(() => {
-    const handleMessage = (event) => {
-      // console.log("Received message from origin:", event.origin);
-
-      // List all the trusted origins you expect messages from
-      const trustedOrigins = ["https://bhashabyasa.navadhiti.com"];
-
-      // Log each condition being checked
-      if (!trustedOrigins.includes(event.origin)) {
-        // console.log("Blocked message from an untrusted origin:", event.origin);
-        return;
-      }
-
-      const {
-        username: receivedUsername,
-        virtualID: receivedVirtualID,
-        token: receivedToken,
-      } = event.data;
-
-      if (receivedUsername && receivedVirtualID && receivedToken) {
-        setUsername(receivedUsername);
-        setVirtualID(receivedVirtualID);
-        setToken(receivedToken);
-        // console.log(
-        //   "All values received and set:",
-        //   receivedUsername,
-        //   receivedVirtualID,
-        //   receivedToken
-        // );
-      } else {
-        console.log("Incomplete data received, skipping state update.");
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (username && virtualID && token) {
-      handleAutoLogin();
-    }
-  }, [username, virtualID, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,15 +21,11 @@ const LoginPage = () => {
     try {
       const usernameDetails = await fetchVirtualId(username);
       let token = usernameDetails?.result?.token;
-      localStorage.setItem("apiToken", token);
 
+      localStorage.setItem("apiToken", token);
       const tokenDetails = jwtDecode(token);
       if (tokenDetails?.virtual_id) {
         localStorage.setItem("profileName", username);
-        localStorage.setItem(
-          "virtualId",
-          usernameDetails?.data?.result?.virtualID
-        );
         navigate("/discover-start");
       } else {
         alert("Enter correct username and password");
