@@ -6,17 +6,17 @@ import { jwtDecode } from "jwt-decode";
 const PrivateRoute = (props) => {
   let virtualId;
   const TOKEN = localStorage.getItem("apiToken");
-  if (TOKEN) {
-    const tokenDetails = jwtDecode(TOKEN);
-    virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  }
+  // if (TOKEN) {
+  //   const tokenDetails = jwtDecode(TOKEN);
+  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
+  // }
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!virtualId && props.requiresAuth) {
+    if (!TOKEN && props.requiresAuth) {
       navigate("/login");
     }
-  }, [virtualId]);
+  }, [TOKEN]);
 
   return <>{props.children}</>;
 };

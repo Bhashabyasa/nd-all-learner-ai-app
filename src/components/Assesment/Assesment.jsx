@@ -52,6 +52,7 @@ import { end } from "../../services/telementryService";
 import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
+import StorageService from "../../utils/secureStorage";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -578,21 +579,26 @@ const Assesment = ({ discoverStart }) => {
     localStorage.setItem("sessionId", contentSessionId);
     const TOKEN = localStorage.getItem("apiToken");
     let virtualId;
-    if (TOKEN) {
-      const tokenDetails = jwtDecode(TOKEN);
-      virtualId = tokenDetails?.virtual_id;
-    }
+    // if (TOKEN) {
+    //   // const tokenDetails = jwtDecode(TOKEN);
+    //   // virtualId = tokenDetails?.virtual_id;
+    // }
 
-    if (discoverStart && username && !virtualId) {
+    if (discoverStart && username && !TOKEN) {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await fetchVirtualId(username);
         const getMilestoneDetails = await getFetchMilestoneDetails(lang);
 
-        localStorage.setItem(
+        StorageService.setItem(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
+
+        // localStorage.setItem(
+        //   "getMilestone",
+        //   JSON.stringify({ ...getMilestoneDetails })
+        // );
         setLevel(getMilestoneDetails?.data?.milestone_level?.replace("m", ""));
         let session_id = localStorage.getItem("sessionId");
 
@@ -622,7 +628,11 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         const language = lang;
         const getMilestoneDetails = await getFetchMilestoneDetails(language);
-        localStorage.setItem(
+        // localStorage.setItem(
+        //   "getMilestone",
+        //   JSON.stringify({ ...getMilestoneDetails })
+        // );
+        StorageService.setItem(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
@@ -638,7 +648,7 @@ const Assesment = ({ discoverStart }) => {
 
         if (
           process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-          virtualId &&
+          TOKEN &&
           localStorage.getItem("contentSessionId") !== null
         ) {
           fetchUserPoints()
@@ -656,10 +666,10 @@ const Assesment = ({ discoverStart }) => {
 
   const TOKEN = localStorage.getItem("apiToken");
   let virtualId;
-  if (TOKEN) {
-    const tokenDetails = jwtDecode(TOKEN);
-    virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  }
+  // if (TOKEN) {
+  //   const tokenDetails = jwtDecode(TOKEN);
+  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
+  // }
 
   const handleOpenVideo = () => {
     if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
@@ -698,7 +708,7 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    if (!username && !profileName && !virtualId && level === 0) {
+    if (!username && !profileName && !TOKEN && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",

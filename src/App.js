@@ -10,8 +10,11 @@ import { initialize, end } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
 import "@tekdi/all-telemetry-sdk/index.js";
 import axios from "axios";
+import StorageService from "./utils/secureStorage";
 
 const App = () => {
+  console.log(StorageService.getItem("11111"));
+
   const navigate = useNavigate();
   const ranonce = useRef(false);
   useEffect(() => {

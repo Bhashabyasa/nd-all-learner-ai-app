@@ -273,7 +273,7 @@ export const getEventOptions = () => {
           type: "class_studying_id",
         },
         { id: userDetails?.udise_code, type: "udise_code" },
-        { id: getVirtualId() || null, type: "virtualId" },
+        { id: "anonymous" || null, type: "virtualId" },
       ],
       rollup: {},
     },

@@ -2,56 +2,48 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
-import { jwtDecode } from "jwt-decode";
 import "./LoginPage.css"; // Import the CSS file
+import StorageService from "../../utils/secureStorage";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [virtualID, setVirtualID] = useState("");
-  const [token, setToken] = useState("");
-
-  const handleAutoLogin = () => {
-    localStorage.clear();
-    localStorage.setItem("profileName", username);
-    localStorage.setItem("virtualId", virtualID);
-    localStorage.setItem("apiToken", token);
-    navigate("/discover-start");
-  };
+  const [setToken] = useState("");
 
   useEffect(() => {
     const handleMessage = (event) => {
       // console.log("Received message from origin:", event.origin);
-
       // List all the trusted origins you expect messages from
-      // const trustedOrigins = ["http://localhost:5173"];
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
+      // const trustedOrigins = "http://localhost:5173";
+      const trustedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+      // const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
 
       // Log each condition being checked
-      if (event.origin !== trustedOrigins) {
+      if (!trustedOrigins.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
         return;
       }
 
       const {
         username: receivedUsername,
-        virtualID: receivedVirtualID,
         token: receivedToken,
+        decriptKey: decriptedSecretKey,
       } = event.data;
 
-      if (receivedUsername && receivedVirtualID && receivedToken) {
+      // console.log("ajsjsijsaij", receivedToken, decriptedSecretKey, username);
+
+      if (receivedUsername && receivedToken) {
         setUsername(receivedUsername);
-        setVirtualID(receivedVirtualID);
         setToken(receivedToken);
-        // console.log(
-        //   "All values received and set:",
-        //   receivedUsername,
-        //   receivedVirtualID,
-        //   receivedToken
-        // );
+
+        localStorage.clear();
+        localStorage.setItem("apiToken", receivedToken);
+        localStorage.setItem("secretKey", decriptedSecretKey);
+        localStorage.setItem("profileName", receivedUsername);
+        navigate("/discover-start");
       } else {
-        // console.log("Incomplete data received, skipping state update.");
+        console.log("Incomplete data received, skipping state update.");
       }
     };
 
@@ -61,12 +53,6 @@ const LoginPage = () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
-
-  useEffect(() => {
-    if (username && virtualID && token) {
-      handleAutoLogin();
-    }
-  }, [username, virtualID, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,13 +67,13 @@ const LoginPage = () => {
       let token = usernameDetails?.result?.token;
       localStorage.setItem("apiToken", token);
 
-      const tokenDetails = jwtDecode(token);
-      if (tokenDetails?.virtual_id) {
+      // const tokenDetails = jwtDecode(token);
+      if (token) {
         localStorage.setItem("profileName", username);
-        localStorage.setItem(
-          "virtualId",
-          usernameDetails?.data?.result?.virtualID
-        );
+        // localStorage.setItem(
+        //   "virtualId",
+        //   usernameDetails?.data?.result?.virtualID
+        // );
         navigate("/discover-start");
       } else {
         alert("Enter correct username and password");

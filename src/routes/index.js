@@ -1,6 +1,5 @@
 /* Route declarations for the app */
 
-import { jwtDecode } from "jwt-decode";
 import * as reviews from "../views";
 
 const routData = [
@@ -67,18 +66,12 @@ const routData = [
     requiresAuth: false,
   },
 ];
+
 // add login route for test rig
 const TOKEN = localStorage.getItem("apiToken");
-let virtualId;
-if (TOKEN) {
-  const tokenDetails = jwtDecode(TOKEN);
-  virtualId = JSON.stringify(tokenDetails?.virtual_id);
-} else {
-  virtualId = null;
-}
 const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true";
 
-if (isLogin && !virtualId) {
+if (isLogin && !TOKEN) {
   routData.push({
     id: "route-000",
     path: "*",
