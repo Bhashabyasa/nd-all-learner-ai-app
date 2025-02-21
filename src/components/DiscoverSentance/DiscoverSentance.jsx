@@ -113,14 +113,19 @@ const SpeakSentenceComponent = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+    const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
+    console.log(trustedOrigin);
+
+    if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
       window.parent.postMessage(
         {
           score: score,
           message: "all-test-rig-score",
         },
-        "*"
+        trustedOrigin
       );
+    } else {
+      console.warn("Trusted origin is not defined or iframe mode is off.");
     }
   };
 
@@ -251,7 +256,7 @@ const SpeakSentenceComponent = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -282,10 +287,10 @@ const SpeakSentenceComponent = () => {
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data || [])];
-        console.log("quesArr", quesArr);
+        // console.log("quesArr", quesArr);
         setQuestions(quesArr);
       } catch (error) {
-        console.log("Error fetching data:", error);
+        return error;
       }
     })();
   }, []);

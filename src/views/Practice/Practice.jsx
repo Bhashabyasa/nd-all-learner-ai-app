@@ -70,6 +70,9 @@ const Practice = () => {
   const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
+  const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
+  console.log(trustedOrigin);
+
   const gameOver = (data, isUserPass) => {
     const userWon = isUserPass;
     const meetsFluencyCriteria = livesData?.meetsFluencyCriteria;
@@ -132,14 +135,16 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+    if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
       window.parent.postMessage(
         {
           score: score,
           message: "all-test-rig-score",
         },
-        "*"
+        trustedOrigin
       );
+    } else {
+      console.warn("Trusted origin is not defined or iframe mode is off.");
     }
   };
 
@@ -345,7 +350,7 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -493,7 +498,7 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log("err", error);
+      return error;
     }
   };
 
@@ -702,7 +707,7 @@ const Practice = () => {
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
         const contentSourceData =
           questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map((item) => item.text.length);
@@ -714,7 +719,10 @@ const Practice = () => {
               "mechanic_1")
             ? 500
             : stringLengths[0];
-        window.parent.postMessage({ type: "stringLengths", length }, "*");
+        window.parent.postMessage(
+          { type: "stringLengths", length },
+          trustedOrigin
+        );
       }
     }
   }, [questions[currentQuestion]]);

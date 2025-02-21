@@ -25,11 +25,12 @@ const LoginPage = () => {
       // console.log("Received message from origin:", event.origin);
 
       // List all the trusted origins you expect messages from
-      const trustedOrigins = ["https://bhashabyasa.navadhiti.com"];
+      // const trustedOrigins = ["http://localhost:5173"];
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
 
       // Log each condition being checked
-      if (!trustedOrigins.includes(event.origin)) {
-        // console.log("Blocked message from an untrusted origin:", event.origin);
+      if (event.origin !== trustedOrigins) {
+        console.warn("Blocked message from an untrusted origin:", event.origin);
         return;
       }
 
@@ -50,7 +51,7 @@ const LoginPage = () => {
         //   receivedToken
         // );
       } else {
-        console.log("Incomplete data received, skipping state update.");
+        // console.log("Incomplete data received, skipping state update.");
       }
     };
 

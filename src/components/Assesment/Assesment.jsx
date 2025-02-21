@@ -352,7 +352,18 @@ export const ProfileHeader = ({
   const handleProfileBack = () => {
     try {
       if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
-        window.parent.postMessage({ type: "restore-iframe-content" }, "*");
+        const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
+        console.log(trustedOrigin);
+
+        if (trustedOrigin) {
+          window.parent.postMessage(
+            { type: "restore-iframe-content" },
+            trustedOrigin
+          );
+        } else {
+          console.warn("Trusted origin is not defined in the .env file.");
+        }
+
         navigate("/");
       } else {
         navigate("/discover-start");

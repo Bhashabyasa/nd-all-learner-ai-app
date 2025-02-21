@@ -62,7 +62,7 @@ export const initialize = async ({ context, config, metadata }) => {
         telemetryConfig
       );
     } catch (error) {
-      console.log(":e", error);
+      return error;
     }
   }
 };
@@ -81,7 +81,7 @@ export const start = (duration) => {
       },
     });
   } catch (error) {
-    console.log("err", error);
+    return error;
   }
 };
 
