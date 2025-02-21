@@ -141,7 +141,7 @@ const Practice = () => {
           score: score,
           message: "all-test-rig-score",
         },
-        trustedOrigin
+        window?.location?.ancestorOrigins?.[0] || window.parent.location.origin
       );
     } else {
       console.warn("Trusted origin is not defined or iframe mode is off.");
@@ -350,7 +350,7 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
-      return error;
+      console.error(error);
     }
   };
 
@@ -498,7 +498,7 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      return error;
+      console.error("err", error);
     }
   };
 
@@ -721,7 +721,8 @@ const Practice = () => {
             : stringLengths[0];
         window.parent.postMessage(
           { type: "stringLengths", length },
-          trustedOrigin
+          window?.location?.ancestorOrigins?.[0] ||
+            window.parent.location.origin
         );
       }
     }

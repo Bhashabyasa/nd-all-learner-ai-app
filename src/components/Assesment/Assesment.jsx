@@ -352,18 +352,11 @@ export const ProfileHeader = ({
   const handleProfileBack = () => {
     try {
       if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
-        const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
-        console.log(trustedOrigin);
-
-        if (trustedOrigin) {
-          window.parent.postMessage(
-            { type: "restore-iframe-content" },
-            trustedOrigin
-          );
-        } else {
-          console.warn("Trusted origin is not defined in the .env file.");
-        }
-
+        window.parent.postMessage(
+          { type: "restore-iframe-content" },
+          window?.location?.ancestorOrigins?.[0] ||
+            window.parent.location.origin
+        );
         navigate("/");
       } else {
         navigate("/discover-start");

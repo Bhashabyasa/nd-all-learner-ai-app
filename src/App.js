@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { StyledEngineProvider } from "@mui/material/styles";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import routes from "./routes";
@@ -9,8 +9,10 @@ import theme from "./assets/styles/theme";
 import { initialize, end } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
 import "@tekdi/all-telemetry-sdk/index.js";
+import axios from "axios";
 
 const App = () => {
+  const navigate = useNavigate();
   const ranonce = useRef(false);
   useEffect(() => {
     const initService = async (visitorId) => {
@@ -79,12 +81,39 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          if (error?.response?.data?.error === "Unauthorized") {
+            if (
+              localStorage.getItem("contentSessionId") &&
+              process.env.REACT_APP_IS_APP_IFRAME === "true"
+            ) {
+              window.parent.postMessage(
+                {
+                  message: "Unauthorized",
+                },
+                window?.location?.ancestorOrigins?.[0] ||
+                  window.parent.location.origin
+              );
+            } else {
+              localStorage.clear();
+              sessionStorage.clear();
+              navigate("/login");
+            }
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+  }, []);
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-        <Router>
-          <AppContent routes={routes} />
-        </Router>
+        <AppContent routes={routes} />
       </ThemeProvider>
     </StyledEngineProvider>
   );

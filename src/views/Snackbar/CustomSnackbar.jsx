@@ -21,7 +21,6 @@ export default function CustomizedSnackbars() {
     dispatch(hideSnackBar());
   };
 
-  // console.log("here", virtulId);
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>

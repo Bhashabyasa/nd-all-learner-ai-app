@@ -73,6 +73,8 @@ let virtualId;
 if (TOKEN) {
   const tokenDetails = jwtDecode(TOKEN);
   virtualId = JSON.stringify(tokenDetails?.virtual_id);
+} else {
+  virtualId = null;
 }
 const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true";
 

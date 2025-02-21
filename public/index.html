@@ -8,6 +8,15 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self' https://*.squarespace-cdn.com https://*.googleapis.com https://*.gstatic.com https://*.cdnfonts.com https://*.jsdelivr.net;
+      img-src 'self' data: https://*.squarespace-cdn.com;
+      style-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.cdnfonts.com;
+      script-src 'self' https://*.jsdelivr.net;
+      font-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.cdnfonts.com;
+      connect-src 'self';
+      frame-ancestors 'self';
+    ">
     <meta
       name="description"
       content="Base React App structure for Devigital Systems Projects"

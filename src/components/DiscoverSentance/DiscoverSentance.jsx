@@ -122,7 +122,7 @@ const SpeakSentenceComponent = () => {
           score: score,
           message: "all-test-rig-score",
         },
-        trustedOrigin
+        window?.location?.ancestorOrigins?.[0] || window.parent.location.origin
       );
     } else {
       console.warn("Trusted origin is not defined or iframe mode is off.");
@@ -256,7 +256,7 @@ const SpeakSentenceComponent = () => {
         }
       }
     } catch (error) {
-      return error;
+      console.error(error);
     }
   };
 
@@ -287,10 +287,9 @@ const SpeakSentenceComponent = () => {
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data || [])];
-        // console.log("quesArr", quesArr);
         setQuestions(quesArr);
       } catch (error) {
-        return error;
+        console.error("Error fetching data:", error);
       }
     })();
   }, []);

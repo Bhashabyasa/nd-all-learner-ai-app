@@ -21,7 +21,7 @@ export function generateOtp(accessToken) {
 }
 
 export function verifyOtp(data) {
-  // console.log(`otp data:: `, data);
+  //console.log(`otp data:: `, data);
   return axios.post(
     `${API_URL}v1/auth/verify-otp?token=${data.otpToken}`,
     {
