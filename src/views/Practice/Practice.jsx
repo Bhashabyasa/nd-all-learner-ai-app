@@ -174,12 +174,12 @@ const Practice = () => {
     try {
       const lang = getLocalData("lang");
 
-      const virtualId = getLocalData("virtualId");
+      const virtualId = getLocalData("apiToken");
       const sessionId = getLocalData("sessionId");
 
       // let practiceProgress =  getLocalData("practiceProgress");
       let practiceProgress = StorageServiceGet("practiceProgress");
-
+      console.log("practiceProgress", practiceProgress);
       // practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
 
       let currentPracticeStep = "";
@@ -394,7 +394,7 @@ const Practice = () => {
     try {
       setLoading(true);
       const lang = getLocalData("lang");
-      const virtualId = getLocalData("virtualId");
+      const virtualId = getLocalData("apiToken");
       let sessionId = getLocalData("sessionId");
 
       if (!sessionId) {
@@ -527,7 +527,7 @@ const Practice = () => {
 
   const handleBack = async () => {
     if (progressData.currentPracticeStep > 0) {
-      const virtualId = getLocalData("virtualId");
+      const virtualId = getLocalData("apiToken");
       const sessionId = getLocalData("sessionId");
       const lang = getLocalData("lang");
       let practiceProgress = {};
@@ -535,7 +535,7 @@ const Practice = () => {
         progressData.currentPracticeStep === 5
           ? 3
           : progressData.currentPracticeStep - 1;
-      practiceProgress[virtualId] = {
+      practiceProgress = {
         currentQuestion: 0,
         currentPracticeProgress:
           (newCurrentPracticeStep / practiceSteps.length) * 100,

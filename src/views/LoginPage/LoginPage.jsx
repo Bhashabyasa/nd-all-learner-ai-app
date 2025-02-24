@@ -19,7 +19,7 @@ const LoginPage = () => {
       // console.log("Received message from origin:", event.origin);
       // List all the trusted origins you expect messages from
       // const trustedOrigins = "http://localhost:5173";
-      const trustedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN;
       // const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
 
       // Log each condition being checked
