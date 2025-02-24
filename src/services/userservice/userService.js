@@ -1,7 +1,6 @@
 import axios from "axios";
 import config from "../../utils/urlConstants.json";
 import { jwtDecode } from "jwt-decode";
-import { getLocalData } from "../../utils/constants";
 
 const API_HOST_VIRTUAL_ID_HOST = process.env.REACT_APP_VIRTUAL_ID_HOST;
 
@@ -18,8 +17,7 @@ export const fetchVirtualId = async (username) => {
 };
 
 export const getVirtualId = () => {
-  const TOKEN = getLocalData("apiToken");
-
+  const TOKEN = localStorage.getItem("apiToken");
   let virtualId;
   if (TOKEN) {
     try {

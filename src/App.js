@@ -10,9 +10,11 @@ import { initialize, end } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
 import "@tekdi/all-telemetry-sdk/index.js";
 import axios from "axios";
-import { getLocalData } from "./utils/constants";
+import StorageService from "./utils/secureStorage";
 
 const App = () => {
+  console.log(StorageService.getItem("11111"));
+
   const navigate = useNavigate();
   const ranonce = useRef(false);
   useEffect(() => {
@@ -21,7 +23,7 @@ const App = () => {
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: "", // Auth key to make  api calls
-          did: getLocalData("deviceId") || visitorId, // Unique id to identify the device or browser
+          did: localStorage.getItem("deviceId") || visitorId, // Unique id to identify the device or browser
           uid: "anonymous",
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_ENV,
@@ -46,7 +48,7 @@ const App = () => {
         metadata: {},
       });
       if (!ranonce.current) {
-        if (getLocalData("contentSessionId") === null) {
+        if (localStorage.getItem("contentSessionId") === null) {
           startEvent();
         }
         ranonce.current = true;
@@ -57,7 +59,9 @@ const App = () => {
       const fp = await FingerprintJS.load();
 
       const { visitorId } = await fp.get();
-
+      // //if (!localStorage.getItem("did")) {
+      //   localStorage.setItem("did", visitorId);
+      // //}
       initService(visitorId);
     };
 
@@ -87,7 +91,7 @@ const App = () => {
         if (error.response && error.response.status === 401) {
           if (error?.response?.data?.error === "Unauthorized") {
             if (
-              getLocalData("contentSessionId") &&
+              localStorage.getItem("contentSessionId") &&
               process.env.REACT_APP_IS_APP_IFRAME === "true"
             ) {
               window.parent.postMessage(

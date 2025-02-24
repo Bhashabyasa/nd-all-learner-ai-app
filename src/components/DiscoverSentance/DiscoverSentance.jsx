@@ -77,7 +77,7 @@ const SpeakSentenceComponent = () => {
   }, [currentQuestion]);
 
   useEffect(() => {
-    if (!getLocalData("contentSessionId")) {
+    if (!localStorage.getItem("contentSessionId")) {
       fetchUserPoints()
         .then((points) => {
           setPoints(points);
@@ -99,8 +99,7 @@ const SpeakSentenceComponent = () => {
     if (voiceText === "error") {
       // alert("");
       setOpenMessageDialog({
-        message:
-          "Sorry I couldn't hear a voice. Could you please speak again hello?",
+        message: "Sorry I couldn't hear a voice. Could you please speak again?",
         isError: true,
       });
       setVoiceText("");
@@ -114,7 +113,10 @@ const SpeakSentenceComponent = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+    const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
+    console.log(trustedOrigin);
+
+    if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
       window.parent.postMessage(
         {
           score: score,
@@ -157,7 +159,7 @@ const SpeakSentenceComponent = () => {
           currentCollectionId,
           totalSyllableCount
         );
-        if (!(getLocalData("contentSessionId") !== null)) {
+        if (!(localStorage.getItem("contentSessionId") !== null)) {
           let point = 1;
           let milestone = "m0";
           try {
@@ -283,7 +285,7 @@ const SpeakSentenceComponent = () => {
         setTotalSyllableCount(resPagination?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
         setAssessmentResponse(resAssessment);
-        setLocalData("storyTitle", sentences?.name);
+        localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data || [])];
         setQuestions(quesArr);
       } catch (error) {
