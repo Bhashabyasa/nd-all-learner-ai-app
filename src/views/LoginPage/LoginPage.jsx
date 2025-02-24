@@ -19,7 +19,7 @@ const LoginPage = () => {
       // console.log("Received message from origin:", event.origin);
       // List all the trusted origins you expect messages from
       // const trustedOrigins = "http://localhost:5173";
-      const trustedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN;
       // const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
 
       // Log each condition being checked
@@ -36,7 +36,6 @@ const LoginPage = () => {
 
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
-        localStorage.clear();
         localStorage.setItem("apiToken", receivedToken);
         localStorage.setItem("secretKey", decriptedSecretKey);
         // localStorage.setItem("profileName", receivedUsername);
@@ -54,6 +53,11 @@ const LoginPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (localStorage.getItem("apiToken") !== null) {
+      navigate("/discover-start");
+    }
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password) {
