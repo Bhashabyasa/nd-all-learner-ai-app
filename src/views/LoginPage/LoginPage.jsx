@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import "./LoginPage.css"; // Import the CSS file
-import {
-  StorageService,
-  StorageServiceGet,
-  StorageServiceSet,
-} from "../../utils/secureStorage";
+import { StorageServiceSet } from "../../utils/secureStorage";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -37,7 +33,7 @@ const LoginPage = () => {
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
         localStorage.setItem("apiToken", receivedToken);
-        localStorage.setItem("secretKey", decriptedSecretKey);
+        localStorage.setItem("discovery_id", decriptedSecretKey);
         // localStorage.setItem("profileName", receivedUsername);
         StorageServiceSet("profileName", receivedUsername);
         navigate("/discover-start");
@@ -73,7 +69,7 @@ const LoginPage = () => {
       // const tokenDetails = jwtDecode(token);
       if (token) {
         localStorage.setItem(
-          "secretKey",
+          "discovery_id",
           process.env.REACT_APP_SECRET_KEY_STORAGE
         );
         StorageServiceSet("profileName", username);
