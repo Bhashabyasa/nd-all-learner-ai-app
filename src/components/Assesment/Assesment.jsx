@@ -52,7 +52,10 @@ import { end } from "../../services/telementryService";
 import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
-import StorageService from "../../utils/secureStorage";
+import StorageService, {
+  StorageServiceGet,
+  StorageServiceSet,
+} from "../../utils/secureStorage";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -346,7 +349,7 @@ export const ProfileHeader = ({
   handleBack,
 }) => {
   const language = lang || getLocalData("lang");
-  const username = profileName || getLocalData("profileName");
+  const username = profileName || StorageServiceGet("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
 
@@ -558,7 +561,7 @@ const Assesment = ({ discoverStart }) => {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
-    setLocalData("profileName", username);
+    // setLocalData("profileName", username);
   }
   // const [searchParams, setSearchParams] = useSearchParams();
   // const [profileName, setProfileName] = useState(username);
@@ -586,14 +589,18 @@ const Assesment = ({ discoverStart }) => {
 
     if (discoverStart && username && !TOKEN) {
       (async () => {
-        setLocalData("profileName", username);
+        StorageServiceSet("profileName", username);
         const usernameDetails = await fetchVirtualId(username);
         const getMilestoneDetails = await getFetchMilestoneDetails(lang);
 
-        StorageService.setItem(
+        StorageServiceSet(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
+        // StorageService.setItem(
+        //   "getMilestone",
+        //   JSON.stringify({ ...getMilestoneDetails })
+        // );
 
         // localStorage.setItem(
         //   "getMilestone",
@@ -632,10 +639,14 @@ const Assesment = ({ discoverStart }) => {
         //   "getMilestone",
         //   JSON.stringify({ ...getMilestoneDetails })
         // );
-        StorageService.setItem(
+        StorageServiceSet(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
+        // StorageService.setItem(
+        //   "getMilestone",
+        //   JSON.stringify({ ...getMilestoneDetails })
+        // );
         setLevel(
           Number(getMilestoneDetails?.data?.milestone_level?.replace("m", ""))
         );
@@ -707,7 +718,7 @@ const Assesment = ({ discoverStart }) => {
 
   const navigate = useNavigate();
   const handleRedirect = () => {
-    const profileName = getLocalData("profileName");
+    const profileName = StorageServiceGet("profileName");
     if (!username && !profileName && !TOKEN && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({

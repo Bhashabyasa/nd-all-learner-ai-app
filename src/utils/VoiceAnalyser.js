@@ -35,6 +35,7 @@ import S3Client from "../config/awsS3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import usePreloadAudio from "../hooks/usePreloadAudio";
 import { updateLearnerProfile } from "../services/learnerAi/learnerAiService";
+import { StorageServiceGet } from "./secureStorage";
 /* eslint-disable */
 
 const AudioPath = {
@@ -363,7 +364,7 @@ function VoiceAnalyser(props) {
         sub_session_id,
         contentId,
         contentType,
-        mechanics_id: localStorage.getItem("mechanism_id") || "",
+        mechanics_id: StorageServiceGet("mechanism_id") || "",
       };
 
       if (props.selectedOption) {

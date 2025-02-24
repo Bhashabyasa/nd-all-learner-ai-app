@@ -25,6 +25,7 @@ import {
   fetchAssessmentData,
   fetchPaginatedContent,
 } from "../../services/content/contentService";
+import { StorageServiceSet } from "../../utils/secureStorage";
 
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -114,7 +115,6 @@ const SpeakSentenceComponent = () => {
 
   const send = (score) => {
     const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
-    console.log(trustedOrigin);
 
     if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
       window.parent.postMessage(
@@ -285,7 +285,8 @@ const SpeakSentenceComponent = () => {
         setTotalSyllableCount(resPagination?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
         setAssessmentResponse(resAssessment);
-        localStorage.setItem("storyTitle", sentences?.name);
+        StorageServiceSet("storyTitle", sentences?.name);
+        // localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data || [])];
         setQuestions(quesArr);
       } catch (error) {

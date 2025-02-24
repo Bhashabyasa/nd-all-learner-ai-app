@@ -3,10 +3,9 @@ import { dataDecrypt } from "./cripto";
 
 const StorageService = {
   setItem: (key, value, secretKeyProp) => {
-    const secretKey = dataDecrypt(
-      secretKeyProp || localStorage.getItem("secretKey")
-    );
+    const secretKey = secretKeyProp || localStorage.getItem("secretKey");
     if (!secretKey) {
+      localStorage.setItem(key, value);
       return "No valid secret key found for encryption";
     }
     try {
@@ -24,7 +23,7 @@ const StorageService = {
       ? dataDecrypt(localStorage.getItem("secretKey"))
       : null;
     if (!secretKey) {
-      return "No valid secret key found for decryption";
+      return localStorage.getItem(key);
     }
     try {
       const ciphertext = localStorage.getItem(key);
@@ -47,3 +46,21 @@ const StorageService = {
 };
 
 export default StorageService;
+
+export const StorageServiceSet = (key, value) => {
+  const secretKey = localStorage.getItem("secretKey");
+  const ciphertext = CryptoJS.AES.encrypt(
+    JSON.stringify(value),
+    secretKey
+  ).toString();
+  localStorage.setItem(key, ciphertext);
+};
+
+export const StorageServiceGet = (key) => {
+  const secretKey = localStorage.getItem("secretKey");
+  const ciphertext = localStorage.getItem(key);
+  if (!ciphertext) return null;
+  const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+  const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+  return JSON.parse(decryptedData) || localStorage.getItem(key);
+};

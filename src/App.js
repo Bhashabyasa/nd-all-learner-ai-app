@@ -10,11 +10,8 @@ import { initialize, end } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
 import "@tekdi/all-telemetry-sdk/index.js";
 import axios from "axios";
-import StorageService from "./utils/secureStorage";
 
 const App = () => {
-  console.log(StorageService.getItem("11111"));
-
   const navigate = useNavigate();
   const ranonce = useRef(false);
   useEffect(() => {
@@ -24,7 +21,7 @@ const App = () => {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: "", // Auth key to make  api calls
           did: localStorage.getItem("deviceId") || visitorId, // Unique id to identify the device or browser
-          uid: "anonymous",
+          uid: localStorage.getItem("apiToken"),
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_ENV,
 
