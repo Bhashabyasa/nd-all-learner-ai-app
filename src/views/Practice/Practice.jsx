@@ -444,7 +444,7 @@ const Practice = () => {
       let practiceProgress = JSON.parse(StorageServiceGet("practiceProgress"));
       // let practiceProgress = getLocalData("practiceProgress");
 
-      practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
+      practiceProgress = practiceProgress ? practiceProgress : {};
 
       practiceProgress[virtualId] = {
         currentQuestion: 0,
