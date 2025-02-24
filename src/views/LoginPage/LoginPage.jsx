@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import "./LoginPage.css"; // Import the CSS file
-import StorageService from "../../utils/secureStorage";
+import {
+  StorageService,
+  StorageServiceGet,
+  StorageServiceSet,
+} from "../../utils/secureStorage";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [setToken] = useState("");
 
   useEffect(() => {
     const handleMessage = (event) => {
@@ -31,17 +34,24 @@ const LoginPage = () => {
         decriptKey: decriptedSecretKey,
       } = event.data;
 
-      // console.log("ajsjsijsaij", receivedToken, decriptedSecretKey, username);
+      console.log("ajsjsijsaij", {
+        receivedToken: receivedToken,
+        decriptedSecretKey: decriptedSecretKey,
+        username: receivedUsername,
+      });
 
-      if (receivedUsername && receivedToken) {
+      if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
-        setToken(receivedToken);
-
         localStorage.clear();
         localStorage.setItem("apiToken", receivedToken);
         localStorage.setItem("secretKey", decriptedSecretKey);
-        localStorage.setItem("profileName", receivedUsername);
+        // localStorage.setItem("profileName", receivedUsername);
+        StorageServiceSet("profileName", receivedUsername);
         navigate("/discover-start");
+        console.log(
+          "🚀 ~ handleMessage ~ StorageServiceGet, receivedUsername);:",
+          StorageServiceGet("profileName")
+        );
       } else {
         console.log("Incomplete data received, skipping state update.");
       }
@@ -66,10 +76,11 @@ const LoginPage = () => {
       const usernameDetails = await fetchVirtualId(username);
       let token = usernameDetails?.result?.token;
       localStorage.setItem("apiToken", token);
-
       // const tokenDetails = jwtDecode(token);
       if (token) {
-        localStorage.setItem("profileName", username);
+        localStorage.setItem("secretKey", "e2I6%dJ3aU@6x!N7fC0kV$9tP1wZ8oY");
+        StorageServiceSet("profileName", username);
+        // localStorage.setItem("profileName", username);
         // localStorage.setItem(
         //   "virtualId",
         //   usernameDetails?.data?.result?.virtualID

@@ -35,6 +35,10 @@ import {
   getFetchMilestoneDetails,
   getSetResultPractice,
 } from "../../services/learnerAi/learnerAiService";
+import {
+  StorageServiceGet,
+  StorageServiceSet,
+} from "../../utils/secureStorage";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -174,9 +178,10 @@ const Practice = () => {
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
 
-      let practiceProgress = getLocalData("practiceProgress");
+      // let practiceProgress =  getLocalData("practiceProgress");
+      let practiceProgress = StorageServiceGet("practiceProgress");
 
-      practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
+      // practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
 
       let currentPracticeStep = "";
       let currentPracticeProgress = "";
@@ -328,10 +333,11 @@ const Practice = () => {
           currentPracticeProgress,
           currentPracticeStep: newPracticeStep,
         };
-        setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+        StorageServiceSet("practiceProgress", JSON.stringify(practiceProgress));
+        // setLocalData("practiceProgress", JSON.stringify(practiceProgress));
         setProgressData(practiceProgress[virtualId]);
-        localStorage.setItem("storyTitle", resGetContent?.name);
-
+        // localStorage.setItem("storyTitle", resGetContent?.name);
+        StorageServiceSet("storyTitle", resGetContent?.name);
         setQuestions(quesArr);
 
         // TODO: needs to revisit this logic
@@ -346,7 +352,8 @@ const Practice = () => {
           currentPracticeProgress,
           currentPracticeStep: newPracticeStep,
         };
-        setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+        StorageServiceSet("practiceProgress", JSON.stringify(practiceProgress));
+        // setLocalData("practiceProgress", JSON.stringify(practiceProgress));
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
@@ -399,7 +406,11 @@ const Practice = () => {
 
       // TODO: validate the getMilestoneDetails API return
 
-      setLocalData("getMilestone", JSON.stringify({ ...getMilestoneDetails }));
+      StorageServiceSet(
+        "getMilestone",
+        JSON.stringify({ ...getMilestoneDetails })
+      );
+      // setLocalData("getMilestone", JSON.stringify({ ...getMilestoneDetails }));
 
       let level =
         Number(getMilestoneDetails?.data?.milestone_level?.replace("m", "")) ||
@@ -432,7 +443,9 @@ const Practice = () => {
         : 0;
 
       // TODO: revisit this - looks like not required
-      let practiceProgress = getLocalData("practiceProgress");
+      let practiceProgress = StorageServiceGet("practiceProgress");
+      // let practiceProgress = getLocalData("practiceProgress");
+
       practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
 
       practiceProgress[virtualId] = {
@@ -473,8 +486,9 @@ const Practice = () => {
 
       setCurrentCollectionId(resWord?.content?.[0]?.collectionId);
       setAssessmentResponse(resWord);
+      StorageServiceSet("storyTitle", resWord?.name);
 
-      localStorage.setItem("storyTitle", resWord?.name);
+      // localStorage.setItem("storyTitle", resWord?.name);
 
       setQuestions(quesArr);
       setMechanism(currentGetContent.mechanism);
@@ -493,7 +507,8 @@ const Practice = () => {
       }
 
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
-      setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+      StorageServiceSet("practiceProgress", JSON.stringify(practiceProgress));
+      // setLocalData("practiceProgress", JSON.stringify(practiceProgress));
       setProgressData(practiceProgress[virtualId]);
       setLoading(false);
     } catch (error) {
@@ -507,7 +522,8 @@ const Practice = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("mechanism_id", (mechanism && mechanism.id) || "");
+    StorageServiceSet("mechanism_id", (mechanism && mechanism.id) || "");
+    // localStorage.setItem("mechanism_id", (mechanism && mechanism.id) || "");
   }, [mechanism]);
 
   const handleBack = async () => {
@@ -569,14 +585,15 @@ const Practice = () => {
       setCurrentContentType(currentGetContent.criteria);
       setCurrentCollectionId(resWord?.content?.[0]?.collectionId);
       setAssessmentResponse(resWord);
-
-      localStorage.setItem("storyTitle", resWord?.name);
+      StorageServiceSet("storyTitle", resWord?.name);
+      // localStorage.setItem("storyTitle", resWord?.name);
       setQuestions(quesArr);
       setTimeout(() => {
         setMechanism(currentGetContent.mechanism);
       }, 1000);
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
-      setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+      StorageServiceSet("practiceProgress", JSON.stringify(practiceProgress));
+      // setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
       if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
         navigate("/");

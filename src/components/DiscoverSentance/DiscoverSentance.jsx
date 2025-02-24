@@ -25,6 +25,7 @@ import {
   fetchAssessmentData,
   fetchPaginatedContent,
 } from "../../services/content/contentService";
+import { StorageServiceSet } from "../../utils/secureStorage";
 
 const SpeakSentenceComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -285,7 +286,8 @@ const SpeakSentenceComponent = () => {
         setTotalSyllableCount(resPagination?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
         setAssessmentResponse(resAssessment);
-        localStorage.setItem("storyTitle", sentences?.name);
+        StorageServiceSet("storyTitle", sentences?.name);
+        // localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data || [])];
         setQuestions(quesArr);
       } catch (error) {

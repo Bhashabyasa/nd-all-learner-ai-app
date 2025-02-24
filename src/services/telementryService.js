@@ -41,7 +41,7 @@ export const initialize = async ({ context, config, metadata }) => {
         channel: context.channel,
         did: context.did,
         authtoken: context.authToken || "",
-        uid: "anonymous",
+        uid: localStorage.getItem("apiToken"),
         sid: context.sid,
         batchsize: process.env.REACT_APP_BATCHSIZE,
         mode: context.mode,
@@ -215,12 +215,12 @@ function checkTelemetryMode(currentMode) {
 
 const getVirtualId = () => {
   const TOKEN = localStorage.getItem("apiToken");
-  let virtualId;
-  if (TOKEN) {
-    const tokenDetails = jwtDecode(TOKEN);
-    virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  }
-  return virtualId;
+  // let virtualId;
+  // if (TOKEN) {
+  //   const tokenDetails = jwtDecode(TOKEN);
+  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
+  // }
+  return TOKEN;
 };
 
 export const getEventOptions = () => {
@@ -254,11 +254,11 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_ENV,
-      uid: `${
-        isBuddyLogin
-          ? emis_username + "/" + buddyUserId
-          : emis_username || "anonymous"
-      }`,
+      uid: getVirtualId(),
+      // `${isBuddyLogin
+      //   ? emis_username + "/" + buddyUserId
+      //   : emis_username || "anonymous"
+      //   }`,
       cdata: [
         {
           id: localStorage.getItem("virtualStorySessionID") || contentSessionId,
@@ -273,7 +273,10 @@ export const getEventOptions = () => {
           type: "class_studying_id",
         },
         { id: userDetails?.udise_code, type: "udise_code" },
-        { id: "anonymous" || null, type: "virtualId" },
+        {
+          id: getVirtualId() || null,
+          type: "virtualId",
+        },
       ],
       rollup: {},
     },
