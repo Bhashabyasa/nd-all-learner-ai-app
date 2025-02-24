@@ -178,8 +178,7 @@ const Practice = () => {
       const sessionId = getLocalData("sessionId");
 
       // let practiceProgress =  getLocalData("practiceProgress");
-      let practiceProgress = StorageServiceGet("practiceProgress");
-      console.log("practiceProgress", practiceProgress);
+      let practiceProgress = JSON.parse(StorageServiceGet("practiceProgress"));
       // practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
 
       let currentPracticeStep = "";
@@ -442,7 +441,7 @@ const Practice = () => {
         : 0;
 
       // TODO: revisit this - looks like not required
-      let practiceProgress = StorageServiceGet("practiceProgress");
+      let practiceProgress = JSON.parse(StorageServiceGet("practiceProgress"));
       // let practiceProgress = getLocalData("practiceProgress");
 
       practiceProgress = practiceProgress ? JSON.parse(practiceProgress) : {};
