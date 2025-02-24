@@ -1,5 +1,6 @@
 /* Route declarations for the app */
 
+import { getLocalData } from "../utils/constants";
 import * as reviews from "../views";
 
 const routData = [
@@ -68,7 +69,8 @@ const routData = [
 ];
 
 // add login route for test rig
-const TOKEN = localStorage.getItem("apiToken");
+const TOKEN = getLocalData("apiToken");
+
 const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true";
 
 if (isLogin && !TOKEN) {

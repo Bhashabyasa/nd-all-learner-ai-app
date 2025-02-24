@@ -52,7 +52,6 @@ import { end } from "../../services/telementryService";
 import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
-import StorageService from "../../utils/secureStorage";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -554,12 +553,14 @@ export const ProfileHeader = ({
 
 const Assesment = ({ discoverStart }) => {
   let username;
-  if (localStorage.getItem("token") !== null) {
-    let jwtToken = localStorage.getItem("token");
-    var userDetails = jwtDecode(jwtToken);
-    username = userDetails.student_name;
-    setLocalData("profileName", username);
-  }
+  // if (getLocalData("token") !== null) {
+
+  //   let jwtToken = getLocalData("token");
+
+  //   var userDetails = jwtDecode(jwtToken);
+  //   username = userDetails.student_name;
+  //   setLocalData("profileName", username);
+  // }
   // const [searchParams, setSearchParams] = useSearchParams();
   // const [profileName, setProfileName] = useState(username);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
@@ -574,10 +575,11 @@ const Assesment = ({ discoverStart }) => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
     setLocalData("lang", lang);
-    dispatch(setVirtualId(localStorage.getItem("virtualId")));
-    let contentSessionId = localStorage.getItem("contentSessionId");
-    localStorage.setItem("sessionId", contentSessionId);
-    const TOKEN = localStorage.getItem("apiToken");
+    dispatch(setVirtualId(getLocalData("virtualId")));
+    let contentSessionId = getLocalData("contentSessionId");
+    setLocalData("sessionId", contentSessionId);
+    const TOKEN = getLocalData("apiToken");
+
     let virtualId;
     // if (TOKEN) {
     //   // const tokenDetails = jwtDecode(TOKEN);
@@ -590,27 +592,27 @@ const Assesment = ({ discoverStart }) => {
         const usernameDetails = await fetchVirtualId(username);
         const getMilestoneDetails = await getFetchMilestoneDetails(lang);
 
-        StorageService.setItem(
+        setLocalData(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
 
-        // localStorage.setItem(
+        // setLocalData(
         //   "getMilestone",
         //   JSON.stringify({ ...getMilestoneDetails })
         // );
         setLevel(getMilestoneDetails?.data?.milestone_level?.replace("m", ""));
-        let session_id = localStorage.getItem("sessionId");
+        let session_id = getLocalData("sessionId");
 
         if (!session_id) {
           session_id = uniqueId();
-          localStorage.setItem("sessionId", session_id);
+          setLocalData("sessionId", session_id);
         }
 
-        localStorage.setItem("lang", lang || "ta");
+        setLocalData("lang", lang || "ta");
         if (
           process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-          localStorage.getItem("contentSessionId") !== null
+          getLocalData("contentSessionId") !== null
         ) {
           fetchUserPoints()
             .then((points) => {
@@ -628,11 +630,11 @@ const Assesment = ({ discoverStart }) => {
       (async () => {
         const language = lang;
         const getMilestoneDetails = await getFetchMilestoneDetails(language);
-        // localStorage.setItem(
+        // setLocalData(
         //   "getMilestone",
         //   JSON.stringify({ ...getMilestoneDetails })
         // );
-        StorageService.setItem(
+        setLocalData(
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
@@ -643,13 +645,13 @@ const Assesment = ({ discoverStart }) => {
 
         if (!sessionId || sessionId === "null") {
           sessionId = uniqueId();
-          localStorage.setItem("sessionId", sessionId);
+          setLocalData("sessionId", sessionId);
         }
 
         if (
           process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
           TOKEN &&
-          localStorage.getItem("contentSessionId") !== null
+          getLocalData("contentSessionId") !== null
         ) {
           fetchUserPoints()
             .then((points) => {
@@ -664,7 +666,9 @@ const Assesment = ({ discoverStart }) => {
     }
   }, [lang]);
 
-  const TOKEN = localStorage.getItem("apiToken");
+  // const TOKEN = getLocalData("apiToken");
+  const TOKEN = getLocalData("apiToken");
+
   let virtualId;
   // if (TOKEN) {
   //   const tokenDetails = jwtDecode(TOKEN);

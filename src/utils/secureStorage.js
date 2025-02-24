@@ -6,6 +6,7 @@ const StorageService = {
     const secretKey = dataDecrypt(
       secretKeyProp || localStorage.getItem("secretKey")
     );
+
     if (!secretKey) {
       return "No valid secret key found for encryption";
     }

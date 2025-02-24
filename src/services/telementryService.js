@@ -2,6 +2,7 @@ import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
 
 import { uniqueId } from "./utilService";
 import { jwtDecode } from "../../node_modules/jwt-decode/build/cjs/index";
+import { getLocalData, setLocalData } from "../utils/constants";
 
 let startTime; // Variable to store the timestamp when the start event is raised
 let contentSessionId;
@@ -9,22 +10,22 @@ let playSessionId;
 let url;
 let isBuddyLogin = checkTokenInLocalStorage();
 
-if (localStorage.getItem("token") !== null) {
-  let jwtToken = localStorage.getItem("token");
+if (getLocalData("token") !== null) {
+  let jwtToken = getLocalData("token");
   let userDetails = jwtDecode(jwtToken);
 }
 
 function checkTokenInLocalStorage() {
-  const token = localStorage.getItem("buddyToken");
+  const token = getLocalData("buddyToken");
   return !!token; // Returns true if token is present, false if token is null or undefined
 }
 
-if (localStorage.getItem("contentSessionId") !== null) {
-  contentSessionId = localStorage.getItem("contentSessionId");
+if (getLocalData("contentSessionId") !== null) {
+  contentSessionId = getLocalData("contentSessionId");
 } else {
-  contentSessionId =
-    localStorage.getItem("virtualStorySessionID") || uniqueId();
-  localStorage.setItem("allAppContentSessionId", contentSessionId);
+  contentSessionId = getLocalData("virtualStorySessionID") || uniqueId();
+
+  setLocalData("allAppContentSessionId", contentSessionId);
 }
 
 let getUrl = window.location.href;
@@ -214,7 +215,8 @@ function checkTelemetryMode(currentMode) {
 }
 
 const getVirtualId = () => {
-  const TOKEN = localStorage.getItem("apiToken");
+  const TOKEN = getLocalData("apiToken");
+
   let virtualId;
   if (TOKEN) {
     const tokenDetails = jwtDecode(TOKEN);
@@ -227,14 +229,14 @@ export const getEventOptions = () => {
   var emis_username = "anonymous";
   var buddyUserId = "";
 
-  if (localStorage.getItem("token") !== null) {
-    let jwtToken = localStorage.getItem("token");
+  if (getLocalData("token") !== null) {
+    let jwtToken = getLocalData("token");
     var userDetails = jwtDecode(jwtToken);
     emis_username = userDetails.emis_username;
   }
 
   if (isBuddyLogin) {
-    let jwtToken = localStorage.getItem("buddyToken");
+    let jwtToken = getLocalData("buddyToken");
     let buddyUserDetails = jwtDecode(jwtToken);
     buddyUserId = buddyUserDetails.emis_username;
   }
@@ -261,12 +263,12 @@ export const getEventOptions = () => {
       }`,
       cdata: [
         {
-          id: localStorage.getItem("virtualStorySessionID") || contentSessionId,
+          id: getLocalData("virtualStorySessionID") || contentSessionId,
           type: "ContentSession",
         },
         { id: playSessionId, type: "PlaySession" },
         { id: userId, type: userType },
-        { id: localStorage.getItem("lang") || "ta", type: "language" },
+        { id: getLocalData("lang") || "ta", type: "language" },
         { id: userDetails?.school_name, type: "school_name" },
         {
           id: userDetails?.class_studying_id,

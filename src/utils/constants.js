@@ -3,11 +3,13 @@ import * as React from "react";
 import StorageService from "./secureStorage";
 
 export const getLocalData = (item) => {
-  return localStorage.getItem(item);
+  // return localStorage.getItem(item);
+  return StorageService.getItem(item);
 };
 
 export const setLocalData = (item, value) => {
-  return localStorage.setItem(item, value);
+  // return localStorage.setItem(item, value);
+  return StorageService.setItem(item, value);
 };
 
 export function replaceAll(string, search, replace) {
@@ -2997,8 +2999,7 @@ export const AssesmentCompletePlane = (props) => (
 
 export const Diamond = (props) => {
   const milestone =
-    JSON.parse(StorageService.getItem("getMilestone")).data?.milestone_level ||
-    "m1";
+    JSON.parse(setLocalData("getMilestone")).data?.milestone_level || "m1";
 
   // const milestone =
   //   JSON.parse(localStorage.getItem("getMilestone")).data?.milestone_level ||

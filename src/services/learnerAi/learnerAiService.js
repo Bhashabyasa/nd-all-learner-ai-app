@@ -52,7 +52,7 @@ export const fetchGetSetResult = async (
   currentCollectionId,
   totalSyllableCount
 ) => {
-  const session_id = localStorage.getItem("sessionId");
+  const session_id = getLocalData("sessionId");
   const lang = getLocalData("lang");
 
   try {
@@ -90,7 +90,7 @@ export const getSetResultPractice = async ({
         contentType: currentContentType,
         session_id: sessionId,
         totalSyllableCount: totalSyllableCount,
-        language: localStorage.getItem("lang"),
+        language: getLocalData("lang"),
         is_mechanics: mechanism && mechanism?.id ? true : false,
       },
       getHeaders()

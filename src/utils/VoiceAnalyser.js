@@ -58,7 +58,7 @@ const AudioPath = {
     5: s6,
   },
 };
-const currentIndex = localStorage.getItem("index") || 1;
+const currentIndex = getLocalData("index") || 1;
 function VoiceAnalyser(props) {
   const [loadCnt, setLoadCnt] = useState(0);
   const [loader, setLoader] = useState(false);
@@ -82,8 +82,6 @@ function VoiceAnalyser(props) {
   const livesAddAudio = usePreloadAudio(livesAdd);
   const livesCutAudio = usePreloadAudio(livesCut);
 
-  //console.log('audio', recordedAudio, isMatching);
-
   useEffect(() => {
     if (!props.enableNext) {
       setRecordedAudio("");
@@ -91,7 +89,7 @@ function VoiceAnalyser(props) {
   }, [props.enableNext]);
 
   const initiateValues = async () => {
-    const currIndex = (await localStorage.getItem("index")) || 1;
+    const currIndex = (await getLocalData("index")) || 1;
     setCurrentIndex(currIndex);
   };
 
@@ -363,7 +361,7 @@ function VoiceAnalyser(props) {
         sub_session_id,
         contentId,
         contentType,
-        mechanics_id: localStorage.getItem("mechanism_id") || "",
+        mechanics_id: getLocalData("mechanism_id") || "",
       };
 
       if (props.selectedOption) {
@@ -403,7 +401,7 @@ function VoiceAnalyser(props) {
         setIsMatching(false);
       }
 
-      //console.log('textss', recordedAudio, isMatching, responseText, originalText);
+      // console.log('textss', recordedAudio, isMatching, responseText, originalText);
 
       const responseEndTime = new Date().getTime();
       const responseDuration = Math.round(
@@ -671,7 +669,7 @@ function VoiceAnalyser(props) {
       });
   };
 
-  //console.log('textss', recordedAudio, isMatching);
+  // console.log('textss', recordedAudio, isMatching);
 
   return (
     <div>

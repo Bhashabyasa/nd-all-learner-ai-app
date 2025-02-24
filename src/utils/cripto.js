@@ -31,7 +31,7 @@ export const dataEncrypt = (plainText) => {
 export const dataDecrypt = (encryptedText) => {
   let decryptedText = "";
 
-  for (let i = 0; i < encryptedText.length; i++) {
+  for (let i = 0; i < encryptedText?.length; i++) {
     const char = encryptedText[i];
 
     if (char >= "A" && char <= "Z") {

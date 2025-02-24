@@ -46,11 +46,11 @@ const AssesmentEnd = () => {
       let sessionId = getLocalData("sessionId");
       if (!sessionId) {
         sessionId = uniqueId();
-        localStorage.setItem("sessionId", sessionId);
+        setLocalData("sessionId", sessionId);
       }
       if (
         process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-        localStorage.getItem("contentSessionId") !== null
+        getLocalData("contentSessionId") !== null
       ) {
         fetchUserPoints()
           .then((points) => {

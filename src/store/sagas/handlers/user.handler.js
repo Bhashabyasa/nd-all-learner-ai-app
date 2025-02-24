@@ -5,6 +5,7 @@ import {
   generateOtp,
   verifyOtp,
 } from "../requests/user.request";
+import { getLocalData, setLocalData } from "../../../utils/constants";
 
 export function* handleSignin(action) {
   try {
@@ -18,8 +19,8 @@ export function* handleSignin(action) {
     const access = JSON.stringify(data.tokens.access);
     const refresh = JSON.stringify(data.tokens.refresh);
 
-    localStorage.setItem("accessToken", access);
-    localStorage.setItem("refreshToken", refresh);
+    setLocalData("accessToken", access);
+    setLocalData("refreshToken", refresh);
 
     yield put(setUser({ userData }));
     //console.log(userData);
@@ -31,7 +32,7 @@ export function* handleSignin(action) {
 export function* fetchOTP(action) {
   try {
     //console.log(action.payload);
-    const accessTokenObj = JSON.parse(localStorage.getItem("accessToken"));
+    const accessTokenObj = JSON.parse(getLocalData("accessToken"));
     //console.log(accessTokenObj);
     const response = yield retry(0, 0, generateOtp, accessTokenObj.token);
 
@@ -41,7 +42,7 @@ export function* fetchOTP(action) {
     // Otp Token Save to local Storage
 
     const otp = JSON.stringify(data.tokens.otp);
-    localStorage.setItem("otpToken", otp);
+    setLocalData("otpToken", otp);
 
     yield put(setOTPSent({ otpSent: true }));
   } catch (error) {
@@ -52,8 +53,8 @@ export function* fetchOTP(action) {
 export function* handleVerifyOtp(action) {
   try {
     //console.log(`handleVerifyOtp:: `, action.payload);
-    const accessTokenObj = JSON.parse(localStorage.getItem("accessToken"));
-    const otpTokenObj = JSON.parse(localStorage.getItem("otpToken"));
+    const accessTokenObj = JSON.parse(getLocalData("accessToken"));
+    const otpTokenObj = JSON.parse(getLocalData("otpToken"));
     action.payload.accessToken = accessTokenObj.token;
     action.payload.otpToken = otpTokenObj.token;
     //console.log('access:', action.payload.accessToken);

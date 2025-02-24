@@ -6,7 +6,18 @@ import "./assets/styles/index.scss";
 import store from "./store/configureStore";
 import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
+import { getCSP } from "./csp";
 
+// Dynamically inject CSP meta tag
+const injectCSP = () => {
+  const cspContent = getCSP(process.env); // Pass environment variables
+  const metaTag = document.createElement("meta");
+  metaTag.httpEquiv = "Content-Security-Policy";
+  metaTag.content = cspContent.trim();
+  document.head.appendChild(metaTag);
+};
+
+injectCSP();
 render(
   <React.StrictMode>
     <Router>

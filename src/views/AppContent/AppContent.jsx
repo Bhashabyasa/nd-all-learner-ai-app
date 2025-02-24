@@ -1,11 +1,12 @@
 import React, { useEffect, Fragment } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
-import { jwtDecode } from "jwt-decode";
+import { getLocalData } from "../../utils/constants";
 
 const PrivateRoute = (props) => {
   let virtualId;
-  const TOKEN = localStorage.getItem("apiToken");
+  const TOKEN = getLocalData("apiToken");
+
   // if (TOKEN) {
   //   const tokenDetails = jwtDecode(TOKEN);
   //   virtualId = JSON.stringify(tokenDetails?.virtual_id);

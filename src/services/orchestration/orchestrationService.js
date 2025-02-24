@@ -45,7 +45,7 @@ export const fetchUserPoints = async () => {
 };
 
 export const addPointer = async (points, milestone) => {
-  const sessionId = localStorage.getItem("sessionId");
+  const sessionId = getLocalData("sessionId");
   const lang = getLocalData("lang");
 
   try {
@@ -71,8 +71,8 @@ export const createLearnerProgress = async (
   milestoneLevel,
   totalSyllableCount
 ) => {
-  const sessionId = localStorage.getItem("sessionId");
-  const language = localStorage.getItem("lang");
+  const sessionId = getLocalData("sessionId");
+  const language = getLocalData("lang");
 
   try {
     const requestBody = {
