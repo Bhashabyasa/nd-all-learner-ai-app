@@ -36,7 +36,6 @@ const LoginPage = () => {
 
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
-        localStorage.clear();
         localStorage.setItem("apiToken", receivedToken);
         localStorage.setItem("secretKey", decriptedSecretKey);
         // localStorage.setItem("profileName", receivedUsername);
@@ -54,6 +53,11 @@ const LoginPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (localStorage.getItem("apiToken") !== null) {
+      navigate("/discover-start");
+    }
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password) {
