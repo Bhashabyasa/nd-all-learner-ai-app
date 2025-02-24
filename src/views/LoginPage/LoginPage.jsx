@@ -34,12 +34,6 @@ const LoginPage = () => {
         decriptKey: decriptedSecretKey,
       } = event.data;
 
-      console.log("ajsjsijsaij", {
-        receivedToken: receivedToken,
-        decriptedSecretKey: decriptedSecretKey,
-        username: receivedUsername,
-      });
-
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
         localStorage.clear();
@@ -48,12 +42,8 @@ const LoginPage = () => {
         // localStorage.setItem("profileName", receivedUsername);
         StorageServiceSet("profileName", receivedUsername);
         navigate("/discover-start");
-        console.log(
-          "🚀 ~ handleMessage ~ StorageServiceGet, receivedUsername);:",
-          StorageServiceGet("profileName")
-        );
       } else {
-        console.log("Incomplete data received, skipping state update.");
+        return "Incomplete data received, skipping state update.";
       }
     };
 
@@ -78,7 +68,10 @@ const LoginPage = () => {
       localStorage.setItem("apiToken", token);
       // const tokenDetails = jwtDecode(token);
       if (token) {
-        localStorage.setItem("secretKey", "e2I6%dJ3aU@6x!N7fC0kV$9tP1wZ8oY");
+        localStorage.setItem(
+          "secretKey",
+          process.env.REACT_APP_SECRET_KEY_STORAGE
+        );
         StorageServiceSet("profileName", username);
         // localStorage.setItem("profileName", username);
         // localStorage.setItem(

@@ -115,7 +115,6 @@ const SpeakSentenceComponent = () => {
 
   const send = (score) => {
     const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
-    console.log(trustedOrigin);
 
     if (process.env.REACT_APP_IS_APP_IFRAME === "true" && trustedOrigin) {
       window.parent.postMessage(

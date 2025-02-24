@@ -4,7 +4,6 @@ import { dataDecrypt } from "./cripto";
 const StorageService = {
   setItem: (key, value, secretKeyProp) => {
     const secretKey = secretKeyProp || localStorage.getItem("secretKey");
-    console.log(secretKey);
     if (!secretKey) {
       localStorage.setItem(key, value);
       return "No valid secret key found for encryption";

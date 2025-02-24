@@ -75,7 +75,6 @@ const Practice = () => {
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Get trusted origin
-  console.log(trustedOrigin);
 
   const gameOver = (data, isUserPass) => {
     const userWon = isUserPass;
