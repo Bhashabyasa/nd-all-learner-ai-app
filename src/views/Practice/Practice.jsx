@@ -434,12 +434,9 @@ const Practice = () => {
           });
       }
 
-      let userState = Number.isInteger(
-        Number(resLessons?.result?.result?.lesson)
-      )
-        ? Number(resLessons.result?.result?.lesson)
+      let userState = Number.isInteger(Number(resLessons?.result?.lesson))
+        ? Number(resLessons.result?.lesson)
         : 0;
-
       // TODO: revisit this - looks like not required
       let practiceProgress = JSON.parse(StorageServiceGet("practiceProgress"));
       // let practiceProgress = getLocalData("practiceProgress");
