@@ -17,6 +17,21 @@
       frame-ancestors 'self';
     "> -->
 
+
+  <!-- this is csp adding code  -->
+  <meta http-equiv="Content-Security-Policy"
+    content="
+    default-src 'self'; 
+    script-src 'self' 'nonce-def123456' 'unsafe-eval'; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data: https://images.squarespace-cdn.com; 
+    connect-src 'self' https://telemetry-dev.theall.ai https://www.learnerai.theall.ai/ https://all-learnerai-tn-staging.theall.ai blob:;">
+  <!-- this is csp adding code  -->
+
+
+
+
   <meta name="description" content="Base React App structure for Devigital Systems Projects" />
   <!-- <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />

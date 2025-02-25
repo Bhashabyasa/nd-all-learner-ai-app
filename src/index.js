@@ -9,16 +9,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { getCSP } from "./csp";
 
 // Dynamically inject CSP meta tag
-const injectCSP = () => {
-  const cspContent = getCSP(process.env); // Pass environment variables
-  const metaTag = document.createElement("meta");
-  metaTag.httpEquiv = "Content-Security-Policy";
-  metaTag.content = cspContent.trim();
-  document.head.appendChild(metaTag);
-};
+// const injectCSP = () => {
+//   const cspContent = getCSP(process.env); // Pass environment variables
+//   const metaTag = document.createElement("meta");
+//   metaTag.httpEquiv = "Content-Security-Policy";
+//   metaTag.content = cspContent.trim();
+//   document.head.appendChild(metaTag);
+// };
 
-// Inject CSP before rendering the app
-injectCSP();
+// // Inject CSP before rendering the app
+// injectCSP();
 
 render(
   <React.StrictMode>
