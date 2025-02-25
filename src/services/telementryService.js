@@ -1,7 +1,6 @@
-// import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
+import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
 import { uniqueId } from "./utilService";
 import { jwtDecode } from "../../node_modules/jwt-decode/build/cjs/index";
-let CsTelemetryModule = "";
 
 let startTime; // Variable to store the timestamp when the start event is raised
 let contentSessionId;
@@ -31,8 +30,6 @@ let getUrl = window.location.href;
 url = getUrl && getUrl.includes("#") && getUrl.split("#")[1].split("/")[1];
 
 export const initialize = async ({ context, config, metadata }) => {
-  return;
-
   playSessionId = uniqueId();
   if (!CsTelemetryModule.instance.isInitialised) {
     await CsTelemetryModule.instance.init({});
@@ -70,7 +67,6 @@ export const initialize = async ({ context, config, metadata }) => {
 };
 
 export const start = (duration) => {
-  return;
   try {
     startTime = Date.now(); // Record the start time
     CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
@@ -89,7 +85,6 @@ export const start = (duration) => {
 };
 
 export const response = (context, telemetryMode) => {
-  return;
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
       {
@@ -101,7 +96,6 @@ export const response = (context, telemetryMode) => {
 };
 
 export const Log = (context, pageid, telemetryMode) => {
-  return;
   if (checkTelemetryMode(telemetryMode)) {
     try {
       CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
@@ -124,8 +118,6 @@ export const Log = (context, pageid, telemetryMode) => {
 };
 
 export const end = (data) => {
-  return;
-
   try {
     const endTime = Date.now(); // Record the end time
     const duration = ((endTime - startTime) / 1000).toFixed(2); // Calculate duration in seconds
@@ -145,8 +137,6 @@ export const end = (data) => {
 };
 
 export const interact = (telemetryMode) => {
-  return;
-
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
       options: getEventOptions(),
@@ -156,8 +146,6 @@ export const interact = (telemetryMode) => {
 };
 
 export const search = (id) => {
-  return;
-
   CsTelemetryModule.instance.telemetryService.raiseSearchTelemetry({
     options: getEventOptions(),
     edata: {
@@ -174,7 +162,6 @@ export const search = (id) => {
 };
 
 export const impression = (currentPage, telemetryMode) => {
-  return;
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseImpressionTelemetry({
       options: getEventOptions(),
@@ -189,8 +176,6 @@ export const impression = (currentPage, telemetryMode) => {
 };
 
 export const error = (error, data, telemetryMode) => {
-  return;
-
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
@@ -205,8 +190,6 @@ export const error = (error, data, telemetryMode) => {
 };
 
 export const feedback = (data, contentId, telemetryMode) => {
-  return;
-
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
       options: getEventOptions(),
@@ -220,8 +203,6 @@ export const feedback = (data, contentId, telemetryMode) => {
 };
 
 function checkTelemetryMode(currentMode) {
-  return;
-
   return (
     (process.env.REACT_APP_TELEMETRY_MODE === "ET" && currentMode === "ET") ||
     (process.env.REACT_APP_TELEMETRY_MODE === "NT" &&
@@ -232,8 +213,6 @@ function checkTelemetryMode(currentMode) {
 }
 
 const getVirtualId = () => {
-  return;
-
   const TOKEN = localStorage.getItem("apiToken");
   // let virtualId;
   // if (TOKEN) {
@@ -244,8 +223,6 @@ const getVirtualId = () => {
 };
 
 export const getEventOptions = () => {
-  return;
-
   var emis_username = "anonymous";
   var buddyUserId = "";
 

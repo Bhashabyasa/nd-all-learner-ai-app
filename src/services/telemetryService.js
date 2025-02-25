@@ -1,9 +1,7 @@
-// import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
+import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
 const duration = new Date().getTime();
-let CsTelemetryModule = "";
 
 export const initialize = ({ did }) => {
-  return;
   if (!CsTelemetryModule.instance.isInitialised) {
     CsTelemetryModule.instance.init({});
     const telemetryConfig = {
@@ -44,8 +42,6 @@ export const initialize = ({ did }) => {
 };
 
 export const start = (duration) => {
-  return;
-
   CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
     options: getEventOptions(),
     edata: {
@@ -58,8 +54,6 @@ export const start = (duration) => {
 };
 
 export const getEventOptions = () => {
-  return;
-
   return {
     object: {},
     context: {
@@ -77,6 +71,5 @@ export const getEventOptions = () => {
 };
 
 export const startEvent = () => {
-  return;
   start(duration);
 };
