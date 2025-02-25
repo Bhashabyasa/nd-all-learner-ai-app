@@ -29,7 +29,7 @@ const LoginPage = () => {
         token: receivedToken,
         decriptKey: decriptedSecretKey,
       } = event.data;
-
+      // console.log("event.data", event.data);
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
         localStorage.setItem("apiToken", receivedToken);
