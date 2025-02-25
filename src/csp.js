@@ -8,7 +8,7 @@ export const getCSP = (envVariables) => {
   return `
       default-src 'none';
       manifest-src 'self';
-      script-src 'self' blob: nonce-def123456 ;
+      script-src 'self' blob: 'nonce-def123456' ;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com/;
       font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com;
       img-src 'self' data: https://images.squarespace-cdn.com ${REACT_APP_AWS_S3_BUCKET_CONTENT_URL} ${REACT_APP_AWS_S3_BUCKET_URL};
