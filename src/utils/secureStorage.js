@@ -48,7 +48,9 @@ const StorageService = {
 export default StorageService;
 
 export const StorageServiceSet = (key, value) => {
-  const secretKey = localStorage.getItem("discovery_id");
+  const secretKey =
+    localStorage.getItem("discovery_id") ||
+    process.env.REACT_APP_SECRET_KEY_STORAGE;
   const ciphertext = CryptoJS.AES.encrypt(
     JSON.stringify(value),
     secretKey
@@ -57,7 +59,9 @@ export const StorageServiceSet = (key, value) => {
 };
 
 export const StorageServiceGet = (key) => {
-  const secretKey = localStorage.getItem("discovery_id");
+  const secretKey =
+    localStorage.getItem("discovery_id") ||
+    process.env.REACT_APP_SECRET_KEY_STORAGE;
   const ciphertext = localStorage.getItem(key);
   if (!ciphertext) return null;
   const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
