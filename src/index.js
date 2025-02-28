@@ -17,10 +17,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 //   document.head.appendChild(metaTag);
 // };
 
-let interval = setInterval(() => {
-  // injectCSP();
-  clearInterval(interval); // Stops the interval after the first execution
-}, 5000);
+// let interval = setInterval(() => {
+// injectCSP();
+// clearInterval(interval); // Stops the interval after the first execution
+// }, 5000);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
