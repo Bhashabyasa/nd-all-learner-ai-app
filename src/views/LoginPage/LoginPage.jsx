@@ -17,7 +17,7 @@ const LoginPage = () => {
       const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
         ","
       ).map((origin) => origin.trim());
-      console.log(trustedOrigins);
+      // console.log(trustedOrigins);
 
       if (!trustedOrigins?.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
@@ -25,7 +25,7 @@ const LoginPage = () => {
       }
 
       const { username: receivedUsername, token: receivedToken } = event.data;
-      console.log("event.data", event.data);
+      // console.log("event.data", event.data);
 
       if (receivedUsername && receivedToken) {
         setUsername(receivedUsername);
