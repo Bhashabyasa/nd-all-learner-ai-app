@@ -12,29 +12,24 @@ const LoginPage = () => {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      // console.log("Received message from origin:", event.origin);
+      console.log("Received message from origin:", event.origin);
 
       const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
         ","
       ).map((origin) => origin.trim());
-      // console.log(trustedOrigins);
+      console.log(trustedOrigins);
 
       if (!trustedOrigins?.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
         return;
       }
 
-      const {
-        username: receivedUsername,
-        token: receivedToken,
-        decriptKey: decriptedSecretKey,
-      } = event.data;
-      // console.log("event.data", event.data);
+      const { username: receivedUsername, token: receivedToken } = event.data;
+      console.log("event.data", event.data);
 
-      if (receivedUsername && receivedToken && decriptedSecretKey) {
+      if (receivedUsername && receivedToken) {
         setUsername(receivedUsername);
         localStorage.setItem("apiToken", receivedToken);
-        localStorage.setItem("discovery_id", decriptedSecretKey);
         StorageServiceSet("profileName", receivedUsername);
         navigate("/discover-start");
       } else {
@@ -66,13 +61,9 @@ const LoginPage = () => {
     try {
       const usernameDetails = await fetchVirtualId(username);
       let token = usernameDetails?.result?.token;
-      localStorage.setItem("apiToken", token);
 
       if (token) {
-        localStorage.setItem(
-          "discovery_id",
-          process.env.REACT_APP_SECRET_KEY_STORAGE || "FallbackValue"
-        );
+        localStorage.setItem("apiToken", token);
         StorageServiceSet("profileName", username);
         navigate("/discover-start");
       } else {
