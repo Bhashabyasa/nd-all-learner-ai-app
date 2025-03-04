@@ -12,10 +12,11 @@ const LoginPage = () => {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      // console.log("Received message from origin:", event.origin);
+      console.log("Received message from origin:", event.origin);
       // List all the trusted origins you expect messages from
       // const trustedOrigins = "http://localhost:5173";
       const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN;
+      console.log(trustedOrigins);
       // const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
 
       // Log each condition being checked
@@ -29,7 +30,7 @@ const LoginPage = () => {
         token: receivedToken,
         decriptKey: decriptedSecretKey,
       } = event.data;
-      // console.log("event.data", event.data);
+      console.log("event.data", event.data);
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
         localStorage.setItem("apiToken", receivedToken);
