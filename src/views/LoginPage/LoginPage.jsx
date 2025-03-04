@@ -13,47 +13,38 @@ const LoginPage = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       console.log("Received message from origin:", event.origin);
-      console.log(
-        "🚀 Trusted Origins (from .env):",
-        process.env.REACT_APP_TRUSTED_ORIGIN
-      );
+      console.log("Received message data:", event.data);
 
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
-        ","
-      ).map((origin) => origin.trim());
-      console.log(trustedOrigins);
+      // Ensure trusted origins are correctly parsed
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
+        ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
+            origin.trim()
+          )
+        : [];
 
-      // Debug: Check if the received origin is being compared correctly
-      console.log(
-        "✅ Checking if origin is trusted:",
-        trustedOrigins.includes(event.origin)
-      );
+      console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
 
+      // Check if origin is in trusted list
       if (!trustedOrigins.includes(event.origin)) {
-        console.warn("Blocked message from an untrusted origin:", event.origin);
+        console.warn(
+          "⛔ Blocked message from an untrusted origin:",
+          event.origin
+        );
         return;
       }
 
-      const {
-        username: receivedUsername,
-        token: receivedToken,
-        decriptKey: decriptedSecretKey,
-      } = event.data;
+      const { username, token, decriptKey } = event.data || {};
 
-      console.log("🔹 Extracted Data:", {
-        receivedUsername,
-        receivedToken,
-        decriptedSecretKey,
-      });
+      console.log("🔹 Extracted Data:", { username, token, decriptKey });
 
-      if (receivedUsername && receivedToken && decriptedSecretKey) {
-        setUsername(receivedUsername);
-        localStorage.setItem("apiToken", receivedToken);
-        localStorage.setItem("discovery_id", decriptedSecretKey);
-        StorageServiceSet("profileName", receivedUsername);
+      if (username && token && decriptKey) {
+        setUsername(username);
+        localStorage.setItem("apiToken", token);
+        localStorage.setItem("discovery_id", decriptKey);
+        StorageServiceSet("profileName", username);
         navigate("/discover-start");
       } else {
-        return "Incomplete data received, skipping state update.";
+        console.warn("⚠️ Incomplete data received, skipping state update.");
       }
     };
 
