@@ -13,11 +13,21 @@ const LoginPage = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       console.log("Received message from origin:", event.origin);
+      console.log(
+        "🚀 Trusted Origins (from .env):",
+        process.env.REACT_APP_TRUSTED_ORIGIN
+      );
 
       const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
         ","
       ).map((origin) => origin.trim());
       console.log(trustedOrigins);
+
+      // Debug: Check if the received origin is being compared correctly
+      console.log(
+        "✅ Checking if origin is trusted:",
+        trustedOrigins.includes(event.origin)
+      );
 
       if (!trustedOrigins.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
@@ -30,7 +40,11 @@ const LoginPage = () => {
         decriptKey: decriptedSecretKey,
       } = event.data;
 
-      console.log("event.data", event.data);
+      console.log("🔹 Extracted Data:", {
+        receivedUsername,
+        receivedToken,
+        decriptedSecretKey,
+      });
 
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
