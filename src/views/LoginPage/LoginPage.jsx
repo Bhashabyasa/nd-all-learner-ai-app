@@ -12,13 +12,13 @@ const LoginPage = () => {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      // console.log("Received message from origin:", event.origin);
-      // List all the trusted origins you expect messages from
-      // const trustedOrigins = "http://localhost:5173";
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN;
-      // const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.trim(); // Read from .env
+      console.log("Received message from origin:", event.origin);
 
-      // Log each condition being checked
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
+        ","
+      ).map((origin) => origin.trim());
+      console.log(trustedOrigins);
+
       if (!trustedOrigins.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
         return;
@@ -29,12 +29,13 @@ const LoginPage = () => {
         token: receivedToken,
         decriptKey: decriptedSecretKey,
       } = event.data;
-      // console.log("event.data", event.data);
+
+      console.log("event.data", event.data);
+
       if (receivedUsername && receivedToken && decriptedSecretKey) {
         setUsername(receivedUsername);
         localStorage.setItem("apiToken", receivedToken);
         localStorage.setItem("discovery_id", decriptedSecretKey);
-        // localStorage.setItem("profileName", receivedUsername);
         StorageServiceSet("profileName", receivedUsername);
         navigate("/discover-start");
       } else {
@@ -66,18 +67,12 @@ const LoginPage = () => {
       const usernameDetails = await fetchVirtualId(username);
       let token = usernameDetails?.result?.token;
       localStorage.setItem("apiToken", token);
-      // const tokenDetails = jwtDecode(token);
       if (token) {
         localStorage.setItem(
           "discovery_id",
           process.env.REACT_APP_SECRET_KEY_STORAGE
         );
         StorageServiceSet("profileName", username);
-        // localStorage.setItem("profileName", username);
-        // localStorage.setItem(
-        //   "virtualId",
-        //   usernameDetails?.data?.result?.virtualID
-        // );
         navigate("/discover-start");
       } else {
         alert("Enter correct username and password");

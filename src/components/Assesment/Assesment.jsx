@@ -52,7 +52,7 @@ import { end } from "../../services/telementryService";
 import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
 import { fetchVirtualId } from "../../services/userservice/userService";
 import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
-import StorageService, {
+import {
   StorageServiceGet,
   StorageServiceSet,
 } from "../../utils/secureStorage";
@@ -597,10 +597,6 @@ const Assesment = ({ discoverStart }) => {
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
-        // StorageService.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
 
         // localStorage.setItem(
         //   "getMilestone",
@@ -643,10 +639,7 @@ const Assesment = ({ discoverStart }) => {
           "getMilestone",
           JSON.stringify({ ...getMilestoneDetails })
         );
-        // StorageService.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
+
         setLevel(
           Number(getMilestoneDetails?.data?.milestone_level?.replace("m", ""))
         );
