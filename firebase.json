@@ -18,10 +18,6 @@
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
           },
-          {
-            "key": "Content-Security-Policy",
-            "value": "frame-ancestors 'self' https://bhashabyasa.navadhiti.com https://nd-dev-ekstep-bhashabyasa.web.app"
-          },
           { "key": "Pragma", "value": "no-cache" }
         ]
       }
