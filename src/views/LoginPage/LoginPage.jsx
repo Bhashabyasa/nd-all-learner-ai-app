@@ -10,22 +10,32 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  window.addEventListener("message", (event) => {
-    const trustedOrigins = [
-      "https://bhashabyasa.navadhiti.com",
-      "https://nd-dev-ekstep-bhashabyasa.web.app",
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ];
+  useEffect(() => {
+    const GetMessageFromIframe = (event) => {
+      const trustedOrigins = [
+        "https://bhashabyasa.navadhiti.com",
+        "https://nd-dev-ekstep-bhashabyasa.web.app",
+        "http://localhost:3000",
+        "http://localhost:5173",
+      ];
 
-    if (!trustedOrigins.includes(event.origin)) {
-      console.warn("⚠️ Untrusted origin:", event.origin);
-      return;
-    }
+      if (!trustedOrigins.includes(event.origin)) {
+        console.warn("⚠️ Untrusted origin:", event.origin);
+        return;
+      }
 
-    const { username, token, decriptKey } = event.data?.message || {};
-    console.log("✅✅✅ Received:", username, token, decriptKey);
-  });
+      console.log("📩 Raw event data:", event.data);
+      const { username, token, decriptKey } = event.data?.message || {};
+
+      console.log("✅✅✅ Received:", username, token, decriptKey);
+    };
+
+    window.addEventListener("message", GetMessageFromIframe);
+
+    return () => {
+      window.removeEventListener("message", GetMessageFromIframe);
+    };
+  }, []);
 
   // useEffect(() => {
   //   const handleMessage = (event) => {
