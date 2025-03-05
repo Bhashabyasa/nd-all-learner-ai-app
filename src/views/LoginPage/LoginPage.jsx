@@ -1,52 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import config from "../../utils/urlConstants.json";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css"; // Import the CSS file
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const handleMessage = (event) => {
-      // console.log("Received message from origin:", event.origin);
-      // const trustedOrigins = ["http://localhost:3001", "http://localhost:3000"];
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
-        ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
-            origin.trim()
-          )
-        : [];
+    const params = new URLSearchParams(location.search);
+    const usernameParam = params.get("username");
+    const virtualIDParam = params.get("virtualID");
 
-      // console.log("Trusted Origins:", trustedOrigins);
+    if (usernameParam && virtualIDParam) {
+      setUsername(usernameParam);
+      localStorage.clear();
+      localStorage.setItem("profileName", usernameParam);
+      localStorage.setItem("virtualId", virtualIDParam);
+      navigate("/discover-start");
+    }
+  }, [location.search, navigate]);
 
-      if (!trustedOrigins.includes(event.origin)) {
-        console.warn("Blocked message from an untrusted origin:", event.origin);
-        return;
-      }
-
-      const { username: receivedUsername, virtualID: receivedVirtualID } =
-        event.data;
-
-      if (receivedUsername && receivedVirtualID) {
-        setUsername(receivedUsername);
-        localStorage.clear();
-        localStorage.setItem("profileName", receivedUsername);
-        localStorage.setItem("virtualId", receivedVirtualID);
-        navigate("/discover-start");
-      } else {
-        return "Incomplete data received, skipping state update.";
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("virtualId") !== null) {
+  //     navigate("/discover-start");
+  //   }
+  // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
