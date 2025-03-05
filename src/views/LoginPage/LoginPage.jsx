@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
@@ -10,24 +10,101 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  window.addEventListener(
-    "message",
-    (event) => {
-      // Define the allowed parent origin
-      const allowedOrigin = "https://bhashabyasa.navadhiti.com";
+  useEffect(() => {
+    const handleMessage = (event) => {
+      console.log("Received message from origin:", event.origin);
+      console.log("Received message data:", event.data);
 
-      // Check if the message is from the correct origin
-      if (event.origin !== allowedOrigin) {
-        console.error(
-          `Blocked message from unauthorized origin: ${event.origin}`
+      // Ensure trusted origins are correctly parsed
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
+        ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
+            origin.trim()
+          )
+        : [];
+
+      console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
+
+      // Check if origin is in trusted list
+      if (!trustedOrigins.includes(event.origin)) {
+        console.warn(
+          "⛔ Blocked message from an untrusted origin:",
+          event.origin
         );
         return;
       }
 
-      try {
+      const { username, token, decriptKey } = event.data || {};
+
+      console.log("🔹 Extracted Data:", { username, token, decriptKey });
+
+      if (username && token && decriptKey) {
+        setUsername(username);
+        localStorage.setItem("apiToken", token);
+        localStorage.setItem("discovery_id", decriptKey);
+        StorageServiceSet("profileName", username);
+        if (
+          localStorage.getItem("apiToken") !== null &&
+          localStorage.getItem("discovery_id") !== null
+        ) {
+          navigate("/discover-start");
+        } else {
+          window.location.reload();
+          localStorage.setItem("apiToken", token);
+          localStorage.setItem("discovery_id", decriptKey);
+          StorageServiceSet("profileName", username);
+          navigate("/discover-start");
+        }
+      } else {
+        console.warn("⚠️ Incomplete data received, skipping state update.");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  const apiToken = localStorage.getItem("apiToken");
+
+  useMemo(() => {
+    if (apiToken == null) {
+      const handleMessage = (event) => {
+        const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
+          ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
+              origin.trim()
+            )
+          : [];
+
+        console.log(
+          "✅✅✅✅✅✅Received message from origin:",
+          event.origin,
+          event.data,
+          trustedOrigins
+        );
+
+        // Check if origin is in trusted list
+        if (!trustedOrigins.includes(event.origin)) {
+          console.warn(
+            "⛔ Blocked message from an untrusted origin:",
+            event.origin
+          );
+          console.log(
+            "⛔⛔⛔⛔⛔⛔⛔⛔ Blocked message from an untrusted origin:",
+            event.origin
+          );
+          return;
+        }
+
         const { username, token, decriptKey } = event.data || {};
 
-        console.log("✅ Message received:", event.data);
+        console.log("🔹🔹🔹🔹🔹🔹 Extracted Data:", {
+          username,
+          token,
+          decriptKey,
+        });
+
         if (username && token && decriptKey) {
           setUsername(username);
           localStorage.setItem("apiToken", token);
@@ -45,79 +122,22 @@ const LoginPage = () => {
             StorageServiceSet("profileName", username);
             navigate("/discover-start");
           }
+        } else {
+          console.warn("⚠️ Incomplete data received, skipping state update.");
         }
-        // Process the received data here...
-      } catch (error) {
-        console.error("❌ Error processing message:", error);
-      }
-    },
-    []
-  );
+      };
 
-  const handleMessage = useCallback((event) => {
-    console.log("Received message from origin:", event.origin);
-    console.log("Received message data:", event.data);
-
-    // Ensure trusted origins are correctly parsed
-    const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
-      ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
-          origin.trim()
-        )
-      : [];
-
-    console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
-
-    // Check if origin is in trusted list
-    if (!trustedOrigins.includes(event.origin)) {
-      console.warn(
-        "⛔ Blocked message from an untrusted origin:",
-        event.origin
-      );
-      return;
-    }
-
-    const { username, token, decriptKey } = event.data || {};
-
-    console.log("🔹 Extracted Data:", { username, token, decriptKey });
-
-    if (username && token && decriptKey) {
-      setUsername(username);
-      localStorage.setItem("apiToken", token);
-      localStorage.setItem("discovery_id", decriptKey);
-      StorageServiceSet("profileName", username);
-      if (
-        localStorage.getItem("apiToken") !== null &&
-        localStorage.getItem("discovery_id") !== null
-      ) {
-        navigate("/discover-start");
-      } else {
-        window.location.reload();
-        localStorage.setItem("apiToken", token);
-        localStorage.setItem("discovery_id", decriptKey);
-        StorageServiceSet("profileName", username);
-        navigate("/discover-start");
-      }
-    } else {
-      console.warn("⚠️ Incomplete data received, skipping state update.");
-    }
-  });
-
-  useEffect(() => {
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, [handleMessage]);
-
-  useEffect(() => {
-    if (localStorage.getItem("apiToken") !== null) {
-      navigate("/discover-start");
       window.addEventListener("message", handleMessage);
 
       return () => {
         window.removeEventListener("message", handleMessage);
       };
+    }
+  }, [apiToken]);
+
+  useEffect(() => {
+    if (localStorage.getItem("apiToken") !== null) {
+      navigate("/discover-start");
     }
   }, []);
   const handleSubmit = async (e) => {
