@@ -11,12 +11,20 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   window.addEventListener("message", (event) => {
-    const trustedOrigin = process.env.REACT_APP_TRUSTED_ORIGIN;
+    const trustedOrigins = [
+      "https://bhashabyasa.navadhiti.com",
+      "https://nd-dev-ekstep-bhashabyasa.web.app",
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ];
 
-    if (event.origin === trustedOrigin) {
-      const { username, token, decriptKey } = event.data?.message || {};
-      console.log("✅✅✅✅✅✅✅✅✅", username, token, decriptKey);
+    if (!trustedOrigins.includes(event.origin)) {
+      console.warn("⚠️ Untrusted origin:", event.origin);
+      return;
     }
+
+    const { username, token, decriptKey } = event.data?.message || {};
+    console.log("✅✅✅ Received:", username, token, decriptKey);
   });
 
   // useEffect(() => {
