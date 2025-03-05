@@ -42,7 +42,18 @@ const LoginPage = () => {
         localStorage.setItem("apiToken", token);
         localStorage.setItem("discovery_id", decriptKey);
         StorageServiceSet("profileName", username);
-        navigate("/discover-start");
+        if (
+          localStorage.getItem("apiToken") !== null &&
+          localStorage.getItem("discovery_id") !== null
+        ) {
+          navigate("/discover-start");
+        } else {
+          window.location.reload();
+          localStorage.setItem("apiToken", token);
+          localStorage.setItem("discovery_id", decriptKey);
+          StorageServiceSet("profileName", username);
+          navigate("/discover-start");
+        }
       } else {
         console.warn("⚠️ Incomplete data received, skipping state update.");
       }
