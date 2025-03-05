@@ -10,55 +10,55 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    const handleMessage = (event) => {
-      console.log("Received message from origin:", event.origin);
-      console.log("Received message data:", event.data);
+  const handleMessage = (event) => {
+    console.log("Received message from origin:", event.origin);
+    console.log("Received message data:", event.data);
 
-      // Ensure trusted origins are correctly parsed
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
-        ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
-            origin.trim()
-          )
-        : [];
+    // Ensure trusted origins are correctly parsed
+    const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
+      ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
+          origin.trim()
+        )
+      : [];
 
-      console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
+    console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
 
-      // Check if origin is in trusted list
-      if (!trustedOrigins.includes(event.origin)) {
-        console.warn(
-          "⛔ Blocked message from an untrusted origin:",
-          event.origin
-        );
-        return;
-      }
+    // Check if origin is in trusted list
+    if (!trustedOrigins.includes(event.origin)) {
+      console.warn(
+        "⛔ Blocked message from an untrusted origin:",
+        event.origin
+      );
+      return;
+    }
 
-      const { username, token, decriptKey } = event.data || {};
+    const { username, token, decriptKey } = event.data || {};
 
-      console.log("🔹 Extracted Data:", { username, token, decriptKey });
+    console.log("🔹 Extracted Data:", { username, token, decriptKey });
 
-      if (username && token && decriptKey) {
-        setUsername(username);
+    if (username && token && decriptKey) {
+      setUsername(username);
+      localStorage.setItem("apiToken", token);
+      localStorage.setItem("discovery_id", decriptKey);
+      StorageServiceSet("profileName", username);
+      if (
+        localStorage.getItem("apiToken") !== null &&
+        localStorage.getItem("discovery_id") !== null
+      ) {
+        navigate("/discover-start");
+      } else {
+        window.location.reload();
         localStorage.setItem("apiToken", token);
         localStorage.setItem("discovery_id", decriptKey);
         StorageServiceSet("profileName", username);
-        if (
-          localStorage.getItem("apiToken") !== null &&
-          localStorage.getItem("discovery_id") !== null
-        ) {
-          navigate("/discover-start");
-        } else {
-          window.location.reload();
-          localStorage.setItem("apiToken", token);
-          localStorage.setItem("discovery_id", decriptKey);
-          StorageServiceSet("profileName", username);
-          navigate("/discover-start");
-        }
-      } else {
-        console.warn("⚠️ Incomplete data received, skipping state update.");
+        navigate("/discover-start");
       }
-    };
+    } else {
+      console.warn("⚠️ Incomplete data received, skipping state update.");
+    }
+  };
 
+  useEffect(() => {
     window.addEventListener("message", handleMessage);
 
     return () => {
@@ -69,6 +69,11 @@ const LoginPage = () => {
   useEffect(() => {
     if (localStorage.getItem("apiToken") !== null) {
       navigate("/discover-start");
+      window.addEventListener("message", handleMessage);
+
+      return () => {
+        window.removeEventListener("message", handleMessage);
+      };
     }
   }, []);
   const handleSubmit = async (e) => {
