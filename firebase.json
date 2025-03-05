@@ -3,29 +3,7 @@
     "site": "nd-dev-ekstep-bhashabyasa",
     "public": "build",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "headers": [
-      {
-        "source": "**",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=31536000" },
-          {
-            "key": "Strict-Transport-Security",
-            "value": "max-age=31536000; preload; includeSubDomains"
-          },
-          { "key": "X-Content-Type-Options", "value": "nosniff" },
-          { "key": "X-XSS-Protection", "value": "1; mode=block" },
-          {
-            "key": "Referrer-Policy",
-            "value": "strict-origin-when-cross-origin"
-          },
-          {
-            "key": "Content-Security-Policy",
-            "value": "default-src 'self'; frame-ancestors 'self' https://bhashabyasa.navadhiti.com https://nd-dev-ekstep-bhashabyasa.web.app; connect-src 'self' https://bhashabyasa.navadhiti.com https://nd-dev-ekstep-bhashabyasa.web.app; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://bhashabyasa.navadhiti.com https://nd-dev-ekstep-bhashabyasa.web.app"
-          },
-          { "key": "Pragma", "value": "no-cache" }
-        ]
-      }
-    ],
+    
     "rewrites": [
       {
         "source": "**",
