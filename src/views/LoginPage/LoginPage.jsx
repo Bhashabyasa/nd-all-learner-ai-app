@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
@@ -10,27 +10,51 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  window.addEventListener("message", (event) => {
-    // Define the allowed parent origin
-    const allowedOrigin = "https://bhashabyasa.navadhiti.com";
+  window.addEventListener(
+    "message",
+    (event) => {
+      // Define the allowed parent origin
+      const allowedOrigin = "https://bhashabyasa.navadhiti.com";
 
-    // Check if the message is from the correct origin
-    if (event.origin !== allowedOrigin) {
-      console.error(
-        `Blocked message from unauthorized origin: ${event.origin}`
-      );
-      return;
-    }
+      // Check if the message is from the correct origin
+      if (event.origin !== allowedOrigin) {
+        console.error(
+          `Blocked message from unauthorized origin: ${event.origin}`
+        );
+        return;
+      }
 
-    try {
-      console.log("✅ Message received:", event.data);
-      // Process the received data here...
-    } catch (error) {
-      console.error("❌ Error processing message:", error);
-    }
-  });
+      try {
+        const { username, token, decriptKey } = event.data || {};
 
-  const handleMessage = (event) => {
+        console.log("✅ Message received:", event.data);
+        if (username && token && decriptKey) {
+          setUsername(username);
+          localStorage.setItem("apiToken", token);
+          localStorage.setItem("discovery_id", decriptKey);
+          StorageServiceSet("profileName", username);
+          if (
+            localStorage.getItem("apiToken") !== null &&
+            localStorage.getItem("discovery_id") !== null
+          ) {
+            navigate("/discover-start");
+          } else {
+            window.location.reload();
+            localStorage.setItem("apiToken", token);
+            localStorage.setItem("discovery_id", decriptKey);
+            StorageServiceSet("profileName", username);
+            navigate("/discover-start");
+          }
+        }
+        // Process the received data here...
+      } catch (error) {
+        console.error("❌ Error processing message:", error);
+      }
+    },
+    []
+  );
+
+  const handleMessage = useCallback((event) => {
     console.log("Received message from origin:", event.origin);
     console.log("Received message data:", event.data);
 
@@ -76,7 +100,7 @@ const LoginPage = () => {
     } else {
       console.warn("⚠️ Incomplete data received, skipping state update.");
     }
-  };
+  });
 
   useEffect(() => {
     window.addEventListener("message", handleMessage);
@@ -84,7 +108,7 @@ const LoginPage = () => {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, []);
+  }, [handleMessage]);
 
   useEffect(() => {
     if (localStorage.getItem("apiToken") !== null) {
