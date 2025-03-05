@@ -43,52 +43,6 @@ const LoginPage = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const handleMessage = (event) => {
-  //     // console.log("Received message from origin:", event.origin);
-  //     // console.log("Received message data:", event.data);
-
-  //     // Ensure trusted origins are correctly parsed
-  //     const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
-  //       ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
-  //           origin.trim()
-  //         )
-  //       : [];
-
-  //     console.log("🚀 Trusted Origins (from .env):", trustedOrigins);
-
-  //     // Check if origin is in trusted list
-  //     if (!trustedOrigins.includes(event.origin)) {
-  //       console.warn(
-  //         "⛔ Blocked message from an untrusted origin:",
-  //         event.origin
-  //       );
-  //       return;
-  //     }
-
-  //     const { username, token, decriptKey } = event.data || {};
-
-  //     console.log("🔹 Extracted Data:", { username, token, decriptKey });
-
-  //     if (username && token && decriptKey) {
-  //       setUsername(username);
-  //       localStorage.setItem("apiToken", token);
-  //       localStorage.setItem("discovery_id", decriptKey);
-  //       StorageServiceSet("profileName", username);
-
-  //       navigate("/discover-start");
-  //     } else {
-  //       console.warn("⚠️ Incomplete data received, skipping state update.");
-  //     }
-  //   };
-
-  //   window.addEventListener("message", handleMessage);
-
-  //   return () => {
-  //     window.removeEventListener("message", handleMessage);
-  //   };
-  // }, []);
-
   useEffect(() => {
     if (localStorage.getItem("apiToken") !== null) {
       navigate("/discover-start");
