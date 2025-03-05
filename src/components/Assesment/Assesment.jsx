@@ -49,13 +49,6 @@ import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
 import { end } from "../../services/telementryService";
-import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
-import { fetchVirtualId } from "../../services/userservice/userService";
-import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
-import StorageService, {
-  StorageServiceGet,
-  StorageServiceSet,
-} from "../../utils/secureStorage";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -349,18 +342,14 @@ export const ProfileHeader = ({
   handleBack,
 }) => {
   const language = lang || getLocalData("lang");
-  const username = profileName || StorageServiceGet("profileName");
+  const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
 
   const handleProfileBack = () => {
     try {
       if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
-        window.parent.postMessage(
-          { type: "restore-iframe-content" },
-          window?.location?.ancestorOrigins?.[0] ||
-            window.parent.location.origin
-        );
+        window.parent.postMessage({ type: "restore-iframe-content" }, "*");
         navigate("/");
       } else {
         navigate("/discover-start");
@@ -561,7 +550,7 @@ const Assesment = ({ discoverStart }) => {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
-    // setLocalData("profileName", username);
+    setLocalData("profileName", username);
   }
   // const [searchParams, setSearchParams] = useSearchParams();
   // const [profileName, setProfileName] = useState(username);
@@ -580,33 +569,27 @@ const Assesment = ({ discoverStart }) => {
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
-    const TOKEN = localStorage.getItem("apiToken");
-    let virtualId;
-    // if (TOKEN) {
-    //   // const tokenDetails = jwtDecode(TOKEN);
-    //   // virtualId = tokenDetails?.virtual_id;
-    // }
-
-    if (discoverStart && username && !TOKEN) {
+    if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
-        StorageServiceSet("profileName", username);
-        const usernameDetails = await fetchVirtualId(username);
-        const getMilestoneDetails = await getFetchMilestoneDetails(lang);
-
-        StorageServiceSet(
-          "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails })
+        setLocalData("profileName", username);
+        const usernameDetails = await axios.post(
+          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
-        // StorageService.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
+        const getMilestoneDetails = await axios.get(
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
+        );
 
-        // localStorage.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
-        setLevel(getMilestoneDetails?.data?.milestone_level?.replace("m", ""));
+        localStorage.setItem(
+          "getMilestone",
+          JSON.stringify({ ...getMilestoneDetails.data })
+        );
+        setLevel(
+          getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
+        );
+        localStorage.setItem(
+          "virtualId",
+          usernameDetails?.data?.result?.virtualID
+        );
         let session_id = localStorage.getItem("sessionId");
 
         if (!session_id) {
@@ -615,40 +598,35 @@ const Assesment = ({ discoverStart }) => {
         }
 
         localStorage.setItem("lang", lang || "ta");
-        if (
-          process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-          localStorage.getItem("contentSessionId") !== null
-        ) {
-          fetchUserPoints()
-            .then((points) => {
-              setPoints(points);
-            })
-            .catch((error) => {
-              console.error("Error fetching user points:", error);
-              setPoints(0);
-            });
-        }
+        const getPointersDetails = await axios.get(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
+        );
+        setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
-        dispatch(setVirtualId(virtualId));
+        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
       })();
     } else {
       (async () => {
+        let virtualId;
+
+        if (getParameter("virtualId", window.location.search)) {
+          virtualId = getParameter("virtualId", window.location.search);
+        } else {
+          virtualId = localStorage.getItem("virtualId");
+        }
+        localStorage.setItem("virtualId", virtualId);
         const language = lang;
-        const getMilestoneDetails = await getFetchMilestoneDetails(language);
-        // localStorage.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
-        StorageServiceSet(
-          "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails })
+        const getMilestoneDetails = await axios.get(
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
-        // StorageService.setItem(
-        //   "getMilestone",
-        //   JSON.stringify({ ...getMilestoneDetails })
-        // );
+        localStorage.setItem(
+          "getMilestone",
+          JSON.stringify({ ...getMilestoneDetails.data })
+        );
         setLevel(
-          Number(getMilestoneDetails?.data?.milestone_level?.replace("m", ""))
+          Number(
+            getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
+          )
         );
         let sessionId = getLocalData("sessionId");
 
@@ -657,30 +635,17 @@ const Assesment = ({ discoverStart }) => {
           localStorage.setItem("sessionId", sessionId);
         }
 
-        if (
-          process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-          TOKEN &&
-          localStorage.getItem("contentSessionId") !== null
-        ) {
-          fetchUserPoints()
-            .then((points) => {
-              setPoints(points);
-            })
-            .catch((error) => {
-              console.error("Error fetching user points:", error);
-              setPoints(0);
-            });
+        if (virtualId) {
+          const getPointersDetails = await axios.get(
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+          );
+          setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }
       })();
     }
   }, [lang]);
 
-  const TOKEN = localStorage.getItem("apiToken");
-  let virtualId;
-  // if (TOKEN) {
-  //   const tokenDetails = jwtDecode(TOKEN);
-  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  // }
+  const { virtualId } = useSelector((state) => state.user);
 
   const handleOpenVideo = () => {
     if (process.env.REACT_APP_SHOW_HELP_VIDEO === "true") {
@@ -718,8 +683,8 @@ const Assesment = ({ discoverStart }) => {
 
   const navigate = useNavigate();
   const handleRedirect = () => {
-    const profileName = StorageServiceGet("profileName");
-    if (!username && !profileName && !TOKEN && level === 0) {
+    const profileName = getLocalData("profileName");
+    if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",
@@ -866,7 +831,6 @@ const Assesment = ({ discoverStart }) => {
                 lineHeight: { xs: "36px", md: "62px" },
                 textAlign: "center",
               }}
-              fontSize={{ md: "40px", xs: "30px" }}
             >
               {discoverStart
                 ? "Let's test your language skills"
@@ -882,7 +846,6 @@ const Assesment = ({ discoverStart }) => {
                   lineHeight: { xs: "30px", md: "50px" },
                   textAlign: "center",
                 }}
-                fontSize={{ md: "30px", xs: "20px" }}
               >
                 {level > 0
                   ? `Take the assessment to complete Level ${level}.`

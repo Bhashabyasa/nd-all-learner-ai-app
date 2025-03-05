@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
-import { fetchVirtualId } from "../../services/userservice/userService";
-import "./LoginPage.css";
-import { StorageServiceSet } from "../../utils/secureStorage";
+import config from "../../utils/urlConstants.json";
+import "./LoginPage.css"; // Import the CSS file
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -12,28 +12,32 @@ const LoginPage = () => {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      console.log("Received message from origin:", event.origin);
+      // console.log("Received message from origin:", event.origin);
+      // const trustedOrigins = ["http://localhost:3001", "http://localhost:3000"];
+      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
+        ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
+            origin.trim()
+          )
+        : [];
 
-      const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN?.split(
-        ","
-      ).map((origin) => origin.trim());
-      // console.log(trustedOrigins);
+      // console.log("Trusted Origins:", trustedOrigins);
 
-      if (!trustedOrigins?.includes(event.origin)) {
+      if (!trustedOrigins.includes(event.origin)) {
         console.warn("Blocked message from an untrusted origin:", event.origin);
         return;
       }
 
-      const { username: receivedUsername, token: receivedToken } = event.data;
-      // console.log("event.data", event.data);
+      const { username: receivedUsername, virtualID: receivedVirtualID } =
+        event.data;
 
-      if (receivedUsername && receivedToken) {
+      if (receivedUsername && receivedVirtualID) {
         setUsername(receivedUsername);
-        localStorage.setItem("apiToken", receivedToken);
-        StorageServiceSet("profileName", receivedUsername);
+        localStorage.clear();
+        localStorage.setItem("profileName", receivedUsername);
+        localStorage.setItem("virtualId", receivedVirtualID);
         navigate("/discover-start");
       } else {
-        console.error("Incomplete data received. Please login again.");
+        return "Incomplete data received, skipping state update.";
       }
     };
 
@@ -42,12 +46,6 @@ const LoginPage = () => {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, []);
-
-  useEffect(() => {
-    if (localStorage.getItem("apiToken") !== null) {
-      navigate("/discover-start");
-    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -59,18 +57,22 @@ const LoginPage = () => {
     localStorage.clear();
 
     try {
-      const usernameDetails = await fetchVirtualId(username);
-      let token = usernameDetails?.result?.token;
+      const usernameDetails = await axios.post(
+        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+      );
 
-      if (token) {
-        localStorage.setItem("apiToken", token);
-        StorageServiceSet("profileName", username);
+      if (usernameDetails?.data?.result?.virtualID) {
+        localStorage.setItem("profileName", username);
+        localStorage.setItem(
+          "virtualId",
+          usernameDetails?.data?.result?.virtualID
+        );
         navigate("/discover-start");
       } else {
         alert("Enter correct username and password");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error occurred:", error);
       alert("An error occurred. Please try again later.");
     }
   };

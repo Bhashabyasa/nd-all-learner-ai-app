@@ -1,8 +1,8 @@
 import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
+
 import { uniqueId } from "./utilService";
 import { jwtDecode } from "../../node_modules/jwt-decode/build/cjs/index";
 
-let startTime; // Variable to store the timestamp when the start event is raised
 let contentSessionId;
 let playSessionId;
 let url;
@@ -40,7 +40,7 @@ export const initialize = async ({ context, config, metadata }) => {
         channel: context.channel,
         did: context.did,
         authtoken: context.authToken || "",
-        uid: localStorage.getItem("apiToken"),
+        uid: "anonymous",
         sid: context.sid,
         batchsize: process.env.REACT_APP_BATCHSIZE,
         mode: context.mode,
@@ -61,14 +61,13 @@ export const initialize = async ({ context, config, metadata }) => {
         telemetryConfig
       );
     } catch (error) {
-      console.error(":e", error);
+      console.log(":e", error);
     }
   }
 };
 
 export const start = (duration) => {
   try {
-    startTime = Date.now(); // Record the start time
     CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
       options: getEventOptions(),
       edata: {
@@ -80,7 +79,7 @@ export const start = (duration) => {
       },
     });
   } catch (error) {
-    console.error("err", error);
+    console.log("err", error);
   }
 };
 
@@ -118,22 +117,15 @@ export const Log = (context, pageid, telemetryMode) => {
 };
 
 export const end = (data) => {
-  try {
-    const endTime = Date.now(); // Record the end time
-    const duration = ((endTime - startTime) / 1000).toFixed(2); // Calculate duration in seconds
-
-    CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
-      edata: {
-        type: "content",
-        mode: "play",
-        pageid: url,
-        summary: data?.summary || {},
-        duration: duration, // Log the calculated duration
-      },
-    });
-  } catch (error) {
-    console.error("Error in end telemetry event:", error);
-  }
+  CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
+    edata: {
+      type: "content",
+      mode: "play",
+      pageid: url,
+      summary: data?.summary || {},
+      duration: data?.duration || "000",
+    },
+  });
 };
 
 export const interact = (telemetryMode) => {
@@ -212,16 +204,6 @@ function checkTelemetryMode(currentMode) {
   );
 }
 
-const getVirtualId = () => {
-  const TOKEN = localStorage.getItem("apiToken");
-  // let virtualId;
-  // if (TOKEN) {
-  //   const tokenDetails = jwtDecode(TOKEN);
-  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  // }
-  return TOKEN;
-};
-
 export const getEventOptions = () => {
   var emis_username = "anonymous";
   var buddyUserId = "";
@@ -253,11 +235,11 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_ENV,
-      uid: getVirtualId(),
-      // `${isBuddyLogin
-      //   ? emis_username + "/" + buddyUserId
-      //   : emis_username || "anonymous"
-      //   }`,
+      uid: `${
+        isBuddyLogin
+          ? emis_username + "/" + buddyUserId
+          : emis_username || "anonymous"
+      }`,
       cdata: [
         {
           id: localStorage.getItem("virtualStorySessionID") || contentSessionId,
@@ -272,10 +254,6 @@ export const getEventOptions = () => {
           type: "class_studying_id",
         },
         { id: userDetails?.udise_code, type: "udise_code" },
-        {
-          id: getVirtualId() || null,
-          type: "virtualId",
-        },
       ],
       rollup: {},
     },

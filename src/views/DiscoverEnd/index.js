@@ -1,1 +1,1 @@
-export { default as DiscoverEnd } from './DiscoverEnd';
+export { default as DiscoverEnd } from "./DiscoverEnd";

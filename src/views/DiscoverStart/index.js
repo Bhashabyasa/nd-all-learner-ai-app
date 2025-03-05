@@ -1,1 +1,1 @@
-export { default as DiscoverStart } from './DiscoverStartPage';
+export { default as DiscoverStart } from "./DiscoverStartPage";

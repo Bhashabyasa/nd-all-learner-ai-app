@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Grid, Typography } from "@mui/material";
 import { APP_CONSTANTS } from "../../config/config";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import { Link, useNavigate } from "react-router-dom";
 
 const { PAGE_NOT_FOUND } = APP_CONSTANTS;
 
 const NoPageFound = () => {
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   navigate("/");
-  // }, []);
-
   return (
     <Grid
       container
@@ -23,14 +16,12 @@ const NoPageFound = () => {
       className="no-page-found"
     >
       <Grid item>
-        <Link to="/?username=sasas">
-          <Typography
-            variant="h1"
-            sx={{ color: "#ef534f", fontSize: "198px", fontWeight: "bold" }}
-          >
-            404
-          </Typography>
-        </Link>
+        <Typography
+          variant="h1"
+          sx={{ color: "#ef534f", fontSize: "198px", fontWeight: "bold" }}
+        >
+          404
+        </Typography>
 
         <Stack sx={{ width: "100%" }} spacing={2}>
           <Alert

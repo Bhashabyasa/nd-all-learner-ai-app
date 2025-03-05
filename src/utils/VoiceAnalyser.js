@@ -33,9 +33,6 @@ import config from "./urlConstants.json";
 import { filterBadWords } from "./Badwords";
 import S3Client from "../config/awsS3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import usePreloadAudio from "../hooks/usePreloadAudio";
-import { updateLearnerProfile } from "../services/learnerAi/learnerAiService";
-import { StorageServiceGet } from "./secureStorage";
 /* eslint-disable */
 
 const AudioPath = {
@@ -66,7 +63,6 @@ function VoiceAnalyser(props) {
   const [pauseAudio, setPauseAudio] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState("");
   const [recordedAudioBase64, setRecordedAudioBase64] = useState("");
-  const [enableAfterLoad, setEnableAfterLoad] = useState(false);
   const [audioPermission, setAudioPermission] = useState(null);
   const [apiResponse, setApiResponse] = useState("");
   const [currentIndex, setCurrentIndex] = useState();
@@ -80,8 +76,6 @@ function VoiceAnalyser(props) {
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
   const [isMatching, setIsMatching] = useState(false);
-  const livesAddAudio = usePreloadAudio(livesAdd);
-  const livesCutAudio = usePreloadAudio(livesCut);
 
   //console.log('audio', recordedAudio, isMatching);
 
@@ -154,7 +148,7 @@ function VoiceAnalyser(props) {
         alert("Failed to load the audio. Please try again.");
       });
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
@@ -280,16 +274,9 @@ function VoiceAnalyser(props) {
         const lang = getLocalData("lang") || "ta";
         fetchASROutput(lang, recordedAudioBase64);
         setLoader(true);
-        setEnableAfterLoad(false);
       }
     }
   }, [props.isNextButtonCalled]);
-
-  useEffect(() => {
-    if (props.originalText) {
-      setEnableAfterLoad(true);
-    }
-  }, [props.originalText]);
 
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
@@ -364,7 +351,6 @@ function VoiceAnalyser(props) {
         sub_session_id,
         contentId,
         contentType,
-        mechanics_id: StorageServiceGet("mechanism_id") || "",
       };
 
       if (props.selectedOption) {
@@ -376,8 +362,13 @@ function VoiceAnalyser(props) {
       }
 
       if (callUpdateLearner) {
-        const updateLearnerData = await updateLearnerProfile(lang, requestBody);
+        const { data: updateLearnerData } = await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
+          requestBody
+        );
+
         //TODO: handle  Errors
+
         data = updateLearnerData;
         responseText = data.responseText;
         profanityWord = await filterBadWords(data.responseText);
@@ -545,7 +536,7 @@ function VoiceAnalyser(props) {
       }
       setRecordedAudioBase64("");
       setApiResponse("error");
-      console.error("err", error);
+      console.log("err", error);
     }
   };
 
@@ -629,14 +620,14 @@ function VoiceAnalyser(props) {
         } else {
           isLiveLost = false;
         }
-        const audio = new Audio(isLiveLost ? livesCutAudio : livesAddAudio);
+        const audio = new Audio(isLiveLost ? livesCut : livesAdd);
         audio.play();
 
         // Update the state or data structure with the new lives data.
         setLivesData(newLivesData);
       }
     } catch (e) {
-      console.error("error", e);
+      console.log("error", e);
     }
   };
 
@@ -666,7 +657,7 @@ function VoiceAnalyser(props) {
         setAudioPermission(true);
       })
       .catch((error) => {
-        console.error("Permission Denied");
+        console.log("Permission Denied");
         setAudioPermission(false);
         //alert("Microphone Permission Denied");
       });
@@ -704,7 +695,6 @@ function VoiceAnalyser(props) {
                     setEnableNext={props.setEnableNext}
                     showOnlyListen={props.showOnlyListen}
                     setOpenMessageDialog={props.setOpenMessageDialog}
-                    enableAfterLoad={enableAfterLoad}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>

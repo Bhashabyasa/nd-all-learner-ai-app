@@ -1,28 +1,34 @@
 import React, { useEffect, useRef } from "react";
 import { ThemeProvider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { StyledEngineProvider } from "@mui/material/styles";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import routes from "./routes";
 import { AppContent } from "./views";
 import theme from "./assets/styles/theme";
-import { initialize, end } from "./services/telementryService";
+import { initialize } from "./services/telementryService";
 import { startEvent } from "./services/callTelemetryIntract";
-import "@tekdi/all-telemetry-sdk/index.js";
-
-import axios from "axios";
+import "@project-sunbird/telemetry-sdk/index.js";
+import { getParameter } from "./utils/constants";
 
 const App = () => {
-  const navigate = useNavigate();
   const ranonce = useRef(false);
   useEffect(() => {
-    const initService = async (visitorId) => {
+    const initService = async () => {
+      var did;
+      if (localStorage.getItem("fpDetails_v2") !== null) {
+        let fpDetails_v2 = localStorage.getItem("fpDetails_v2");
+        did = fpDetails_v2.result;
+      } else {
+        did = localStorage.getItem("did");
+      }
+
       await initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: "", // Auth key to make  api calls
-          did: localStorage.getItem("deviceId") || visitorId, // Unique id to identify the device or browser
-          uid: localStorage.getItem("apiToken"),
+          did: did, // Unique id to identify the device or browser
+          uid: "anonymous",
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_ENV,
 
@@ -57,64 +63,44 @@ const App = () => {
       const fp = await FingerprintJS.load();
 
       const { visitorId } = await fp.get();
-      // //if (!localStorage.getItem("did")) {
-      //   localStorage.setItem("did", visitorId);
-      // //}
-      initService(visitorId);
+      if (!localStorage.getItem("did")) {
+        localStorage.setItem("did", visitorId);
+      }
+      initService();
     };
 
     setFp();
   }, []);
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      window.telemetry &&
-        window.telemetry.syncEvents &&
-        window.telemetry.syncEvents();
-    };
+    let virtualId;
 
-    // Add the event listener
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    if (getParameter("virtualId", window.location.search)) {
+      virtualId = getParameter("virtualId", window.location.search);
+    } else {
+      virtualId = localStorage.getItem("virtualId");
+    }
+    localStorage.setItem("virtualId", virtualId);
 
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response && error.response.status === 401) {
-          if (error?.response?.data?.error === "Unauthorized") {
-            if (
-              localStorage.getItem("contentSessionId") &&
-              process.env.REACT_APP_IS_APP_IFRAME === "true"
-            ) {
-              window.parent.postMessage(
-                {
-                  message: "Unauthorized",
-                },
-                window?.location?.ancestorOrigins?.[0] ||
-                  window.parent.location.origin
-              );
-            } else {
-              localStorage.clear();
-              sessionStorage.clear();
-              navigate("/login");
-            }
-          }
-        }
-        return Promise.reject(error);
-      }
+    const contentSessionId = getParameter(
+      "contentSessionId",
+      window.location.search
     );
+    if (contentSessionId) {
+      localStorage.setItem("contentSessionId", contentSessionId);
+    }
+    const token = getParameter("token", window.location.search);
+    if (token) {
+      localStorage.setItem("token", token);
+    }
   }, []);
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-        <AppContent routes={routes} />
+        <Router>
+          <AppContent routes={routes} />
+        </Router>
       </ThemeProvider>
     </StyledEngineProvider>
   );

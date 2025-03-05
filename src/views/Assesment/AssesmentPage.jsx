@@ -1,8 +1,8 @@
-import React from 'react';
-import Assesment from '../../components/Assesment/Assesment';
+import React from "react";
+import Assesment from "../../components/Assesment/Assesment";
 
 const AssesmentPage = () => {
-    return <Assesment />;
+  return <Assesment />;
 };
 
 export default AssesmentPage;

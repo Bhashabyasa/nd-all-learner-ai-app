@@ -1,1 +1,1 @@
-export { AppBarComponent } from './AppBarComponent';
+export { AppBarComponent } from "./AppBarComponent";

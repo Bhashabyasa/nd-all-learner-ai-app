@@ -66,12 +66,12 @@ const routData = [
     requiresAuth: false,
   },
 ];
-
 // add login route for test rig
-const TOKEN = localStorage.getItem("apiToken");
+
+const virtualId = localStorage.getItem("virtualId");
 const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true";
 
-if (isLogin && !TOKEN) {
+if (isLogin && !virtualId) {
   routData.push({
     id: "route-000",
     path: "*",

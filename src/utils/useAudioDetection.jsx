@@ -12,16 +12,19 @@ const useAudioDetection = () => {
   const startDetection = async () => {
     try {
       // Initialize audio context and analyser
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.fftSize = 2048;
 
       // Get user media
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      microphoneRef.current = audioContextRef.current.createMediaStreamSource(stream);
+      microphoneRef.current =
+        audioContextRef.current.createMediaStreamSource(stream);
 
       // Create script processor
-      scriptProcessorRef.current = audioContextRef.current.createScriptProcessor(1024, 1, 1);
+      scriptProcessorRef.current =
+        audioContextRef.current.createScriptProcessor(1024, 1, 1);
 
       // Connect nodes
       microphoneRef.current.connect(analyserRef.current);
@@ -50,7 +53,7 @@ const useAudioDetection = () => {
 
       setIsRunning(true);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      console.error("Error accessing microphone:", error);
     }
   };
 

@@ -1,9 +1,9 @@
-import { interact, start } from '../services/telementryService';
+import { interact, start } from "../services/telementryService";
 const duration = new Date().getTime();
 export const interactCall = (telemetryMode) => {
-    interact(telemetryMode);
+  interact(telemetryMode);
 };
 
 export const startEvent = () => {
-    start(duration);
+  start(duration);
 };

@@ -163,70 +163,27 @@ const MainLayout = (props) => {
     }
   };
 
-  const [audioCache, setAudioCache] = useState({});
-
-  useEffect(() => {
-    const preloadAudio = async () => {
-      try {
-        const urls = [LevelCompleteAudio, gameLoseAudio];
-        const cache = {};
-
-        for (const url of urls) {
-          const response = await fetch(url);
-          const audioBlob = await response.blob();
-          const audioUrl = URL.createObjectURL(audioBlob);
-          cache[url] = audioUrl;
-        }
-
-        setAudioCache(cache);
-      } catch (error) {
-        console.error("Error preloading audio:", error);
-      }
-    };
-
-    preloadAudio();
-
-    // Cleanup cached audio URLs on unmount
-    return () => {
-      Object.values(audioCache).forEach((audioUrl) =>
-        URL.revokeObjectURL(audioUrl)
-      );
-    };
-  }, []);
-
   useEffect(() => {
     if (isShowCase && gameOverData) {
-      setShake(gameOverData.userWon ?? true);
+      setShake(gameOverData ? gameOverData.userWon : true);
 
-      let audioSrc;
+      let audio = "";
       if (gameOverData) {
-        audioSrc = gameOverData.userWon
-          ? audioCache[LevelCompleteAudio]
-          : audioCache[gameLoseAudio];
-      } else {
-        audioSrc = audioCache[LevelCompleteAudio];
-      }
-
-      if (audioSrc) {
-        const audio = new Audio(audioSrc);
-        audio.play().catch((error) => {
-          console.error("Error playing audio:", error);
-        });
-
+        audio = new Audio(
+          gameOverData.userWon ? LevelCompleteAudio : gameLoseAudio
+        );
         if (!gameOverData?.userWon) {
           callConfettiSnow();
         }
+      } else {
+        audio = new Audio(LevelCompleteAudio);
       }
-
-      const shakeTimeout = setTimeout(() => {
+      audio.play();
+      setTimeout(() => {
         setShake(false);
       }, 4000);
-
-      return () => {
-        clearTimeout(shakeTimeout);
-      };
     }
-  }, [startShowCase, isShowCase, gameOverData, audioCache]);
+  }, [startShowCase, isShowCase, gameOverData]);
 
   let currentPracticeStep = progressData?.currentPracticeStep;
   let currentPracticeProgress = progressData?.currentPracticeProgress || 0;
@@ -240,11 +197,7 @@ const MainLayout = (props) => {
     backgroundPosition: "center center", // Center the image
     backgroundRepeat: "no-repeat", // Do not repeat the image
     minHeight: "100vh",
-    // padding: "30px 100px",
-    display: "flex",
-    paddingTop: { md: "0px", xs: "20px" },
-    justifyContent: "center",
-    alignItems: "center",
+    padding: "30px 100px",
     boxSizing: "border-box",
     background: props?.background || levelsImages?.[LEVEL]?.backgroundColor,
     position: "relative",
@@ -795,7 +748,7 @@ const MainLayout = (props) => {
                         >
                           <Stack justifyContent="center" alignItems="center">
                             <img
-                              src={`https://raw.githubusercontent.com/Sunbird-ALL/all-learner-ai-app/refs/heads/all-1.3/src/assets/images/gameLost.svg`}
+                              src={gameLost}
                               alt="gameLost"
                               style={{ height: 340 }}
                             />
@@ -1194,17 +1147,16 @@ const MainLayout = (props) => {
                             }
                           }}
                         >
-                          <Typography
+                          <span
                             style={{
                               color: "#FFFFFF",
                               fontWeight: 600,
                               fontSize: "20px",
                               fontFamily: "Quicksand",
                             }}
-                            fontSize={{ md: "14px", xs: "10px" }}
                           >
                             {!gameOverData ? "Start Game ➜" : "Practice ➜"}
-                          </Typography>
+                          </span>
                           {/* <NextButton /> */}
                         </Box>
                       </Box>
@@ -1239,9 +1191,6 @@ MainLayout.propTypes = {
   storedData: PropTypes.array,
   resetStoredData: PropTypes.func,
   pageName: PropTypes.string,
-  gameOverData: PropTypes.shape({
-    userWon: PropTypes.bool,
-  }),
 };
 
 export default MainLayout;

@@ -1,22 +1,23 @@
 import React, { useEffect, Fragment } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
-import { jwtDecode } from "jwt-decode";
+import { getParameter } from "../../utils/constants";
 
 const PrivateRoute = (props) => {
   let virtualId;
-  const TOKEN = localStorage.getItem("apiToken");
-  // if (TOKEN) {
-  //   const tokenDetails = jwtDecode(TOKEN);
-  //   virtualId = JSON.stringify(tokenDetails?.virtual_id);
-  // }
+
+  if (getParameter("virtualId", window.location.search)) {
+    virtualId = getParameter("virtualId", window.location.search);
+  } else {
+    virtualId = localStorage.getItem("virtualId");
+  }
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!TOKEN && props.requiresAuth) {
+    if (!virtualId && props.requiresAuth) {
       navigate("/login");
     }
-  }, [TOKEN]);
+  }, [virtualId]);
 
   return <>{props.children}</>;
 };

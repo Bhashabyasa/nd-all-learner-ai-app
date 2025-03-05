@@ -18,54 +18,41 @@ import { ProfileHeader } from "../Assesment/Assesment";
 import desktopLevel5 from "../../assets/images/assesmentComplete.png";
 import config from "../../utils/urlConstants.json";
 import { uniqueId } from "../../services/utilService";
-import usePreloadAudio from "../../hooks/usePreloadAudio";
-import { fetchUserPoints } from "../../services/orchestration/orchestrationService";
-import { getFetchMilestoneDetails } from "../../services/learnerAi/learnerAiService";
 
 const AssesmentEnd = () => {
   const [shake, setShake] = useState(true);
   const [level, setLevel] = useState("");
   const [previousLevel, setPreviousLevel] = useState("");
   const [points, setPoints] = useState(0);
-  const levelCompleteAudioSrc = usePreloadAudio(LevelCompleteAudio);
 
   useEffect(() => {
     (async () => {
-      if (levelCompleteAudioSrc) {
-        let audio = new Audio(levelCompleteAudioSrc);
-        audio.play();
-      }
+      let audio = new Audio(LevelCompleteAudio);
+      audio.play();
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const previous_level = getLocalData("previous_level");
       setPreviousLevel(previous_level?.replace("m", ""));
-      const getMilestoneDetails = await getFetchMilestoneDetails(lang);
+      const getMilestoneDetails = await axios.get(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+      );
       const { data } = getMilestoneDetails;
-      setLevel(data.milestone_level);
-      setLocalData("userLevel", data.milestone_level?.replace("m", ""));
+      setLevel(data.data.milestone_level);
+      setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
       let sessionId = getLocalData("sessionId");
       if (!sessionId) {
         sessionId = uniqueId();
         localStorage.setItem("sessionId", sessionId);
       }
-      if (
-        process.env.REACT_APP_IS_APP_IFRAME !== "true" &&
-        localStorage.getItem("contentSessionId") !== null
-      ) {
-        fetchUserPoints()
-          .then((points) => {
-            setPoints(points);
-          })
-          .catch((error) => {
-            console.error("Error fetching user points:", error);
-            setPoints(0);
-          });
-      }
+      const getPointersDetails = await axios.get(
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+      );
+      setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
     })();
     setTimeout(() => {
       setShake(false);
     }, 4000);
-  }, [levelCompleteAudioSrc]);
+  }, []);
 
   const navigate = useNavigate();
   let newLevel = level.replace("m", "");

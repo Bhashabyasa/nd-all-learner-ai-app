@@ -1,6 +1,5 @@
 import confetti from "canvas-confetti";
 import * as React from "react";
-import StorageService, { StorageServiceGet } from "./secureStorage";
 
 export const getLocalData = (item) => {
   return localStorage.getItem(item);
@@ -2997,14 +2996,8 @@ export const AssesmentCompletePlane = (props) => (
 
 export const Diamond = (props) => {
   const milestone =
-    StorageServiceGet("getMilestone").data?.milestone_level || "m1";
-
-  // JSON.parse(StorageService.getItem("getMilestone")).data?.milestone_level ||
-  // "m1";
-
-  // const milestone =
-  //   JSON.parse(localStorage.getItem("getMilestone")).data?.milestone_level ||
-  //   "m1";
+    JSON.parse(localStorage.getItem("getMilestone")).data?.milestone_level ||
+    "m1";
 
   // Define color mapping for each milestone
   const colorMap = {
