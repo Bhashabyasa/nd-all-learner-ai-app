@@ -42,18 +42,8 @@ const LoginPage = () => {
         localStorage.setItem("apiToken", token);
         localStorage.setItem("discovery_id", decriptKey);
         StorageServiceSet("profileName", username);
-        if (
-          localStorage.getItem("apiToken") !== null &&
-          localStorage.getItem("discovery_id") !== null
-        ) {
-          navigate("/discover-start");
-        } else {
-          window.location.reload();
-          localStorage.setItem("apiToken", token);
-          localStorage.setItem("discovery_id", decriptKey);
-          StorageServiceSet("profileName", username);
-          navigate("/discover-start");
-        }
+
+        navigate("/discover-start");
       } else {
         console.warn("⚠️ Incomplete data received, skipping state update.");
       }
@@ -65,75 +55,6 @@ const LoginPage = () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
-
-  const apiToken = localStorage.getItem("apiToken");
-
-  useMemo(() => {
-    if (apiToken == null) {
-      const handleMessage = (event) => {
-        const trustedOrigins = process.env.REACT_APP_TRUSTED_ORIGIN
-          ? process.env.REACT_APP_TRUSTED_ORIGIN.split(",").map((origin) =>
-              origin.trim()
-            )
-          : [];
-
-        console.log(
-          "✅✅✅✅✅✅Received message from origin:",
-          event.origin,
-          event.data,
-          trustedOrigins
-        );
-
-        // Check if origin is in trusted list
-        if (!trustedOrigins.includes(event.origin)) {
-          console.warn(
-            "⛔ Blocked message from an untrusted origin:",
-            event.origin
-          );
-          console.log(
-            "⛔⛔⛔⛔⛔⛔⛔⛔ Blocked message from an untrusted origin:",
-            event.origin
-          );
-          return;
-        }
-
-        const { username, token, decriptKey } = event.data || {};
-
-        console.log("🔹🔹🔹🔹🔹🔹 Extracted Data:", {
-          username,
-          token,
-          decriptKey,
-        });
-
-        if (username && token && decriptKey) {
-          setUsername(username);
-          localStorage.setItem("apiToken", token);
-          localStorage.setItem("discovery_id", decriptKey);
-          StorageServiceSet("profileName", username);
-          if (
-            localStorage.getItem("apiToken") !== null &&
-            localStorage.getItem("discovery_id") !== null
-          ) {
-            navigate("/discover-start");
-          } else {
-            window.location.reload();
-            localStorage.setItem("apiToken", token);
-            localStorage.setItem("discovery_id", decriptKey);
-            StorageServiceSet("profileName", username);
-            navigate("/discover-start");
-          }
-        } else {
-          console.warn("⚠️ Incomplete data received, skipping state update.");
-        }
-      };
-
-      window.addEventListener("message", handleMessage);
-
-      return () => {
-        window.removeEventListener("message", handleMessage);
-      };
-    }
-  }, [apiToken]);
 
   useEffect(() => {
     if (localStorage.getItem("apiToken") !== null) {
