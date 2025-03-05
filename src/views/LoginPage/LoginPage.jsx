@@ -10,6 +10,26 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  window.addEventListener("message", (event) => {
+    // Define the allowed parent origin
+    const allowedOrigin = "https://bhashabyasa.navadhiti.com";
+
+    // Check if the message is from the correct origin
+    if (event.origin !== allowedOrigin) {
+      console.error(
+        `Blocked message from unauthorized origin: ${event.origin}`
+      );
+      return;
+    }
+
+    try {
+      console.log("✅ Message received:", event.data);
+      // Process the received data here...
+    } catch (error) {
+      console.error("❌ Error processing message:", error);
+    }
+  });
+
   const handleMessage = (event) => {
     console.log("Received message from origin:", event.origin);
     console.log("Received message data:", event.data);
