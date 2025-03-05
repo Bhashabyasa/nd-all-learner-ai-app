@@ -11,14 +11,13 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
+    const trustedOrigins = [
+      "https://bhashabyasa.navadhiti.com",
+      "https://nd-dev-ekstep-bhashabyasa.web.app",
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ];
     const GetMessageFromIframe = (event) => {
-      const trustedOrigins = [
-        "https://bhashabyasa.navadhiti.com",
-        "https://nd-dev-ekstep-bhashabyasa.web.app",
-        "http://localhost:3000",
-        "http://localhost:5173",
-      ];
-
       if (!trustedOrigins.includes(event.origin)) {
         console.warn("⚠️ Untrusted origin:", event.origin);
         return;
@@ -31,6 +30,8 @@ const LoginPage = () => {
     };
 
     window.addEventListener("message", GetMessageFromIframe);
+
+    window.parent.postMessage({ type: "REQUEST_DATA" }, trustedOrigins);
 
     return () => {
       window.removeEventListener("message", GetMessageFromIframe);
