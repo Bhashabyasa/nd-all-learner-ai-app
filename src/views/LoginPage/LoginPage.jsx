@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 import { fetchVirtualId } from "../../services/userservice/userService";
@@ -11,27 +11,32 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const trustedOrigins = [
-      "https://bhashabyasa.navadhiti.com",
-      "https://nd-dev-ekstep-bhashabyasa.web.app",
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ];
+    const trustedOrigins =
+      process.env.REACT_APP_TRUSTED_ORIGINS?.split(",") || [];
     const GetMessageFromIframe = (event) => {
       if (!trustedOrigins.includes(event.origin)) {
         console.warn("⚠️ Untrusted origin:", event.origin);
         return;
       }
 
-      console.log("📩 Raw event data:", event.data);
       const { username, token, decriptKey } = event.data?.message || {};
 
-      console.log("✅✅✅ Received:", username, token, decriptKey);
+      if (username && token && decriptKey) {
+        setUsername(username);
+        localStorage.setItem("apiToken", token);
+        localStorage.setItem("discovery_id", decriptKey);
+        StorageServiceSet("profileName", username);
+        navigate("/discover-start");
+      } else {
+        console.warn("⚠️ Incomplete data received, skipping state update.");
+      }
     };
 
     window.addEventListener("message", GetMessageFromIframe);
 
-    window.parent.postMessage({ type: "REQUEST_DATA" }, trustedOrigins);
+    trustedOrigins.forEach((origin) => {
+      window.parent.postMessage({ type: "REQUEST_DATA" }, origin);
+    });
 
     return () => {
       window.removeEventListener("message", GetMessageFromIframe);
